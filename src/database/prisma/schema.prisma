@@ -1,0 +1,697 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client"
+  output   = "generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum PlanType {
+  ESSENTIELLE
+
+  PRO
+
+  SIGNATURE
+}
+
+enum Role {
+  CLIENT
+
+  ADMIN
+}
+
+enum SubscriptionStatus {
+  PENDING // demande de changement de formule, en attente de validation ou de paiement
+
+  ACTIVE
+
+  EXPIRED
+
+  CANCELED
+}
+
+// Suspension décidée par l'admin. L'expiration, elle, se lit sur l'abonnement (endsAt).
+
+enum StatutFiche {
+  ACTIVE
+
+  SUSPENDUE
+}
+
+enum Secteur {
+  RESTAURANT
+
+  IMMOBILIER
+
+  COMMERCE
+
+  HOTEL
+
+  INDEPENDANT
+
+  BEAUTE
+}
+
+enum PremierBouton {
+  WHATSAPP
+
+  APPEL
+
+  EMAIL
+}
+
+enum Disposition {
+  PORTRAIT
+
+  LOGO
+
+  BANNIERE
+
+  DUO
+}
+
+enum Taille {
+  S
+
+  M
+
+  L
+}
+
+enum Theme {
+  OR
+
+  CLAIR
+
+  BLEU
+
+  NUIT
+}
+
+// 14 types de blocs (TAB_TYPES)
+
+enum TabType {
+  PRESENTATION
+
+  MENU
+
+  BIENS
+
+  CATALOGUE
+
+  GALERIE
+
+  VIDEOS
+
+  LIENS
+
+  RENDEZVOUS
+
+  RAPPEL
+
+  HORAIRES
+
+  AVIS
+
+  RESEAUX
+
+  LOCALISATION
+
+  TEXTE
+}
+
+enum MediaType {
+  IMAGE
+
+  VIDEO
+}
+
+enum BienType {
+  VENTE
+
+  LOCATION
+}
+
+// ───────────────────────── Fiche ─────────────────────────
+
+model Fiche {
+  id Int @id @default(autoincrement())
+
+  slug String @unique // URL publique : https://supportconnecte.com/f/<slug>
+
+  // Identité
+
+  prenom String // prénom ou nom commercial
+
+  nom String @default("")
+
+  fonction String?
+
+  entreprise String?
+
+  photo String?
+
+  logo String?
+
+  // Contact
+
+  telephone String?
+
+  whatsapp String?
+
+  email String?
+
+  site String?
+
+  adresse String?
+
+  googlePlaceId String?
+
+  premierBouton PremierBouton @default(WHATSAPP)
+
+  messageWhatsapp String?
+
+  // État (la formule et l'échéance viennent de l'abonnement actif : voir Subscription)
+
+  statut StatutFiche @default(ACTIVE)
+
+  enLigneSeule Boolean @default(false) // affiche le badge « Créée gratuitement avec Support Connecté »
+
+  scansTotal Int @default(0)
+
+  // Propriétaire
+
+  userId Int?
+
+  claimCode String? @unique // code de rattachement d'une carte physique ; null une fois utilisé
+
+  // Contenu
+
+  secteur Secteur?
+
+  presentation String?
+
+  rdvLabel String? // data.rendezVous.label
+
+  rdvUrl String? // data.rendezVous.url (vide = WhatsApp avec le message pré-rempli)
+
+  // Entête (data.entete) — seule la formule SIGNATURE peut s'écarter du défaut
+
+  enteteDisposition Disposition @default(PORTRAIT)
+
+  enteteTaille Taille @default(M)
+
+  enteteTheme Theme? // null = thème par défaut de la formule
+
+  enteteCouverture String?
+
+  createdAt DateTime @default(now())
+
+  updatedAt DateTime @updatedAt
+
+  user User? @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  subscriptions Subscription[]
+
+  onglets FicheOnglet[]
+
+  reseaux FicheReseau[]
+
+  liens FicheLien[]
+
+  horaires FicheHoraire[]
+
+  medias FicheMedia[]
+
+  catalogueSections CatalogueSection[]
+
+  menuSections MenuSection[]
+
+  biens Bien[]
+
+  @@index([userId])
+  @@index([statut])
+  @@map("fiches")
+}
+
+// Ordre, visibilité et titre des blocs (data.onglets)
+
+model FicheOnglet {
+  id String @id @default(cuid())
+
+  ficheId Int
+
+  type TabType
+
+  titre String? // renommage (Signature)
+
+  contenu String? // uniquement pour TEXTE (onglet libre)
+
+  visible Boolean @default(true)
+
+  position Int
+
+  fiche Fiche @relation(fields: [ficheId], references: [id], onDelete: Cascade)
+
+  @@index([ficheId, position])
+  @@map("fiche_onglets")
+}
+
+// data.reseauxSociaux
+
+model FicheReseau {
+  id Int @id @default(autoincrement())
+
+  ficheId Int
+
+  label String
+
+  url String
+
+  position Int @default(0)
+
+  fiche Fiche @relation(fields: [ficheId], references: [id], onDelete: Cascade)
+
+  @@index([ficheId])
+  @@map("fiche_reseaux")
+}
+
+// data.liens
+
+model FicheLien {
+  id Int @id @default(autoincrement())
+
+  ficheId Int
+
+  label String
+
+  url String
+
+  position Int @default(0)
+
+  fiche Fiche @relation(fields: [ficheId], references: [id], onDelete: Cascade)
+
+  @@index([ficheId])
+  @@map("fiche_liens")
+}
+
+// data.horaires : 7 lignes (Lundi → Dimanche)
+
+model FicheHoraire {
+  id Int @id @default(autoincrement())
+
+  ficheId Int
+
+  jour Int // 0 = Lundi … 6 = Dimanche
+
+  horaire String // ex. "12:00 – 23:00", "Fermé", "Sur rendez-vous"
+
+  fiche Fiche @relation(fields: [ficheId], references: [id], onDelete: Cascade)
+
+  @@unique([ficheId, jour])
+  @@map("fiche_horaires")
+}
+
+// data.galerie (photos, et vidéos comptées dans maxVideos)
+
+model FicheMedia {
+  id Int @id @default(autoincrement())
+
+  ficheId Int
+
+  type MediaType @default(IMAGE)
+
+  url String
+
+  alt String?
+
+  position Int @default(0)
+
+  fiche Fiche @relation(fields: [ficheId], references: [id], onDelete: Cascade)
+
+  @@index([ficheId, position])
+  @@map("fiche_medias")
+}
+
+// ───────────────────────── Catalogue (Pro et Signature) ─────────────────────────
+
+model CatalogueSection {
+  id Int @id @default(autoincrement())
+
+  ficheId Int
+
+  titre String
+
+  position Int @default(0)
+
+  fiche Fiche @relation(fields: [ficheId], references: [id], onDelete: Cascade)
+
+  articles CatalogueArticle[]
+
+  @@index([ficheId, position])
+  @@map("catalogue_sections")
+}
+
+model CatalogueArticle {
+  id Int @id @default(autoincrement())
+
+  sectionId Int
+
+  nom String
+
+  description String?
+
+  photo String?
+
+  prix Int? // FCFA, renseignable seulement en Signature
+
+  badge String? // ex. "nouveau", "signature"
+
+  position Int @default(0)
+
+  section CatalogueSection @relation(fields: [sectionId], references: [id], onDelete: Cascade)
+
+  @@index([sectionId, position])
+  @@map("catalogue_articles")
+}
+
+// ───────────────────────── Menu interactif (Signature) ─────────────────────────
+
+model MenuSection {
+  id Int @id @default(autoincrement())
+
+  ficheId Int
+
+  titre String
+
+  position Int @default(0)
+
+  fiche Fiche @relation(fields: [ficheId], references: [id], onDelete: Cascade)
+
+  plats MenuPlat[]
+
+  @@index([ficheId, position])
+  @@map("menu_sections")
+}
+
+model MenuPlat {
+  id Int @id @default(autoincrement())
+
+  sectionId Int
+
+  nom String
+
+  prix Int? // FCFA
+
+  description String?
+
+  image String?
+
+  video String? // mp4, verticale 9:16, 30 s max, sans son
+
+  videoWebm String?
+
+  badge String? // "signature", "nouveau"…
+
+  position Int @default(0)
+
+  section MenuSection @relation(fields: [sectionId], references: [id], onDelete: Cascade)
+
+  @@index([sectionId, position])
+  @@map("menu_plats")
+}
+
+// ───────────────────────── Biens immobiliers (Signature) ─────────────────────────
+
+model Bien {
+  id Int @id @default(autoincrement())
+
+  ficheId Int
+
+  titre String
+
+  type BienType
+
+  prix Int? // FCFA
+
+  periode String? // "mois" pour une location
+
+  ville String?
+
+  surface Int?
+
+  terrain Int?
+
+  chambres Int?
+
+  sdb Int?
+
+  atouts String[] // Piscine, Jardin, Titre foncier…
+
+  description String?
+
+  position Int @default(0)
+
+  fiche Fiche @relation(fields: [ficheId], references: [id], onDelete: Cascade)
+
+  photos BienPhoto[]
+
+  @@index([ficheId, position])
+  @@map("biens")
+}
+
+model BienPhoto {
+  id Int @id @default(autoincrement())
+
+  bienId Int
+
+  url String
+
+  position Int @default(0)
+
+  bien Bien @relation(fields: [bienId], references: [id], onDelete: Cascade)
+
+  @@index([bienId, position])
+  @@map("bien_photos")
+}
+
+// ───────────────────────── Comptes ─────────────────────────
+
+model User {
+  id Int @id @default(autoincrement())
+
+  email String @unique
+
+  passwordHash String
+
+  role Role @default(CLIENT) // ADMIN créé à la main, jamais via l'inscription
+
+  nom String?
+
+  emailVerifiedAt DateTime? // null tant que l'e-mail n'est pas confirmé
+
+  createdAt DateTime @default(now())
+
+  fiches Fiche[]
+
+  tokens AuthToken[]
+
+  @@map("users")
+}
+
+model AuthToken {
+  id Int @id @default(autoincrement())
+
+  userId Int
+
+  type String // "verify_email" | "reset_password"
+
+  tokenHash String @unique
+
+  expiresAt DateTime
+
+  usedAt DateTime?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("auth_tokens")
+}
+
+// ───────────────────────── Formules, droits et abonnements ─────────────────────────
+
+// Catalogue des formules (3 lignes, alimentées par prisma/seed.ts)
+
+model Plan {
+  id Int @id @default(autoincrement())
+
+  type PlanType @unique
+
+  nom String // "Essentielle", "Pro", "Signature"
+
+  themeDefaut Theme // PLANS[x].theme
+
+  prixFcfa Int? // à confirmer
+
+  dureeMois Int? // durée d'un abonnement ; null = sans échéance
+
+  actif Boolean @default(true)
+
+  limits PlanLimit?
+
+  subscriptions Subscription[]
+
+  @@map("plans")
+}
+
+// Droits et quotas d'une formule (reprend PLANS de src/lib/plans.js). Le serveur s'appuie dessus pour valider fiches.update.
+
+model PlanLimit {
+  planId Int @id
+
+  plan Plan @relation(fields: [planId], references: [id], onDelete: Cascade)
+
+  // Blocs et mise en page
+
+  tabsAutorises TabType[]
+
+  headerLayouts Disposition[]
+
+  themes Theme[]
+
+  canReorder Boolean @default(false)
+
+  canHide Boolean @default(false)
+
+  canAdd Boolean @default(false)
+
+  canRename Boolean @default(false)
+
+  maxCustomTabs Int @default(0)
+
+  // Quotas
+
+  maxPresentation Int
+
+  maxSocial Int
+
+  maxLinks Int
+
+  maxPhotos Int
+
+  maxVideos Int
+
+  maxCatalogSections Int @default(0)
+
+  maxCatalogArticlesPerSection Int @default(0)
+
+  catalogPrices Boolean @default(false)
+
+  maxMenuSections Int @default(0)
+
+  maxMenuItemsPerSection Int @default(0)
+
+  menuVideoPerItem Boolean @default(false)
+
+  maxMenuVideoSeconds Int @default(0)
+
+  maxBiens Int @default(0)
+
+  maxPhotosPerBien Int @default(0)
+
+  // Fonctions
+
+  hasCatalog Boolean @default(false)
+
+  hasMenu Boolean @default(false)
+
+  hasBiens Boolean @default(false)
+
+  hasGoogleReview Boolean @default(false)
+
+  hasStats Boolean @default(false)
+
+  hasForm Boolean @default(false)
+
+  hasDashboard Boolean @default(false)
+
+  @@map("plan_limits")
+}
+
+// Abonnement d'UNE fiche à UNE formule. La formule effective d'une fiche = son abonnement ACTIVE non expiré.
+
+model Subscription {
+  id Int @id @default(autoincrement())
+
+  ficheId Int
+
+  planId Int
+
+  status SubscriptionStatus @default(ACTIVE)
+
+  startsAt DateTime @default(now())
+
+  endsAt DateTime? // null = sans échéance (ex. Essentielle gratuite)
+
+  canceledAt DateTime?
+
+  amountFcfa Int?
+
+  paymentRef String? // référence du paiement (Wave, Orange Money, etc.)
+
+  createdAt DateTime @default(now())
+
+  fiche Fiche @relation(fields: [ficheId], references: [id], onDelete: Cascade)
+
+  plan Plan @relation(fields: [planId], references: [id])
+
+  @@index([ficheId, status])
+  @@index([endsAt])
+  @@map("subscriptions")
+}
+
+// ⚠️ Prisma ne sait pas déclarer un index unique partiel. À ajouter dans la migration SQL
+
+// pour garantir UN SEUL abonnement actif par fiche :
+
+// CREATE UNIQUE INDEX "subscriptions_one_active_per_fiche" ON "subscriptions" ("ficheId") WHERE "status" = 'ACTIVE';
+
+// ───────────────────────── OPTIONNEL (absent du code actuel) ─────────────────────────
+
+// À n'ajouter que si tu le décides :
+
+//
+
+// model Scan { // passages NFC/QR détaillés (aujourd'hui : seulement Fiche.scansTotal)
+
+// id Int @id @default(autoincrement())
+// ficheId Int
+// source String // "nfc" | "qr"
+// at DateTime @default(now())
+// fiche Fiche @relation(fields: [ficheId], references: [id], onDelete: Cascade)
+
+// @@index([ficheId, at])
+
+// }
+
+// model DemandeRappel { // le bloc « Être rappelé » n'enregistre rien aujourd'hui
+
+// id Int @id @default(autoincrement())
+
+// ficheId Int
+
+// nom String
+
+// telephone String
+
+// createdAt DateTime @default(now())
+
+// fiche Fiche @relation(fields: [ficheId], references: [id], onDelete: Cascade)
+
+// }
