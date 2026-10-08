@@ -1,5 +1,4 @@
 import { Router } from "express";
-import { asyncHandler } from "../../lib/asyncHandler";
 import { requireAuth } from "../../middlewares/auth";
 import { validate } from "../../middlewares/validate";
 import { AuthController } from "./auth.controller";
@@ -22,7 +21,7 @@ authRouter.post(
 authRouter.post(
   "/login",
   validate({ body: loginSchema }),
-    AuthController.login
+  AuthController.login
 );
 
 authRouter.post(
@@ -43,6 +42,10 @@ authRouter.post(
   AuthController.forgotPassword
 );
 
-authRouter.post("/reset-password", validate({ body: resetPasswordSchema }));
+authRouter.post(
+  "/reset-password",
+  validate({ body: resetPasswordSchema }),
+  AuthController.resetPassword
+);
 
 authRouter.get("/me", requireAuth, AuthController.me);

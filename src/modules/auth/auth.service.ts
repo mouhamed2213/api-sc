@@ -4,7 +4,7 @@ import { prisma } from "../../database/prisma/prisma-client";
 import { consumeAuthToken, createAuthToken } from "../../lib/authTokens";
 import { badRequest, conflict, unauthorized } from "../../lib/httpError";
 import { signToken } from "../../lib/jwt";
-import { sendMail, sendVerificationEmail } from "../../lib/mailer";
+import { sendForgotPasswordMail, sendMail, sendVerificationEmail } from "../../lib/mailer";
 import { hashPassword, verifyPassword } from "../../lib/password";
 
 export const publicUser = (u: User) => ({
@@ -81,12 +81,8 @@ export const AuthService = {
   forgotPassword: async (email: string) => {
     const user = await prisma.user.findUnique({ where: { email } });
     if (!user) return;
-    const token = await createAuthToken(user.id, "reset_password", 30);
-    await sendMail(
-      user.email,
-      "Réinitialisation du mot de passe",
-      `${env.APP_URL}/nouveau-mot-de-passe?token=${token}`
-    );
+    await sendForgotPasswordMail(user)
+
   },
 
   resetPassword: async (token: string, password: string) => {

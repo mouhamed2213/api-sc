@@ -5,8 +5,18 @@ import { MailtrapTransport } from "mailtrap";
 import nodemailer from "nodemailer";
 import { env } from "../config/env";
 import { User } from "../database/prisma/generated/prisma/client";
-import { verificationEmailTemplate } from "../lib/mailer/verification-template";
 import { createAuthToken } from "./authTokens";
+import { resetPasswordEmailTemplate } from "./mailer/reset-password-template";
+import { verificationEmailTemplate } from "./mailer/verification-template";
+
+type SendParams = {
+  to: string;
+  subject: string;
+  html: any;
+  text: string;
+};
+
+const LOGO_URL = "";
 
 const transport = selectTransport(env.NODE_ENV);
 
@@ -19,40 +29,65 @@ const recipients = ["anomshacket@gmail.com"];
 export const sendVerificationEmail = async (user: User) => {
   const token = await createAuthToken(user.id, "verify_email", 60 * 24);
   const verifyUrl = `${env.APP_URL}/verifier-email?token=${token}`;
-  const LOGO_URL = "";
-  await sendMail(
-    user.email,
-    "Confirme ton adresse e-mail",
-    verificationEmailTemplate(LOGO_URL, user.nom ?? "", verifyUrl, "24 heures"),
-    `Bonjour ${user.nom ?? ""}, confirmez votre e-mail : ${verifyUrl}`
-  );
+  const verificationPayload: SendParams = {
+    to: user.email,
+    subject: "Confirme ton adresse e-mail",
+    html: verificationEmailTemplate(
+      LOGO_URL,
+      user.nom ?? "",
+      verifyUrl,
+      "24 heures"
+    ),
+    text: `Bonjour ${user.nom ?? ""}, confirmez votre e-mail : ${verifyUrl}`,
+  };
+  await sendMail(verificationPayload);
+};
+
+// ? send forgot password email
+export const sendForgotPasswordMail = async (user: User) => {
+  const token = await createAuthToken(user.id, "reset_password", 30);
+  const verifyUrl = `${env.APP_URL}/forgot-password?token=${token}`;
+
+  const forgotPayload: SendParams = {
+    to: user.email,
+    subject: "Réinitialisation du mot de passe",
+    html: resetPasswordEmailTemplate(
+      LOGO_URL,
+      user.nom ?? "",
+      verifyUrl,
+      "24 heures"
+    ),
+    text: `Bonjour ${user.nom ?? ""}, clicker sur ce lien pou réinitialisée votre mot de passe : ${verifyUrl}`,
+  };
+
+  await sendMail(forgotPayload);
 };
 
 // ? dynamic send email function
-export async function sendMail(
-  to: string,
-  subject: string,
-  html: any,
-  text: string
-) {
-  // Check email
-
+export const sendMail = async (data: {
+  to: string;
+  subject: string;
+  html: any;
+  text: string;
+}) => {
   try {
     await transport.sendMail({
       from: sender,
-      to: recipients,
-      html,
-      text,
-      subject,
+      to: data.to,
+      html: data.html,
+      text: data.text,
+      subject: data.subject,
     });
 
-    console.log("Email envoye avec succes a ", to);
+    console.log("Email envoye avec succes a ", data.to);
   } catch (e) {
     console.log("Erreur lor's de l'envoi de mail");
   }
 
-  console.log(`\n📧 [mail] à: ${to}\n   objet: ${subject}\n   ${text}\n`);
-}
+  console.log(
+    `\n📧 [mail] à: ${data.to}\n   objet: ${data.subject}\n   ${data.text}\n`
+  );
+};
 
 // ? Selected trasport depending on environment
 function selectTransport(nodeEnv: string) {
