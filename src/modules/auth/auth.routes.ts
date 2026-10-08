@@ -16,17 +16,13 @@ export const authRouter = Router();
 authRouter.post(
   "/register",
   validate({ body: registerSchema }),
-  asyncHandler(async (req, res) => {
-    AuthController.register;
-  })
+  AuthController.register
 );
 
 authRouter.post(
   "/login",
   validate({ body: loginSchema }),
-  asyncHandler(async (req, res) => {
-    AuthController.login;
-  })
+    AuthController.login
 );
 
 authRouter.post(

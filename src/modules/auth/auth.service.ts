@@ -1,5 +1,5 @@
-import type { User } from "../../database/prisma/generated/prisma/client";
 import { env } from "../../config/env";
+import type { User } from "../../database/prisma/generated/prisma/client";
 import { prisma } from "../../database/prisma/prisma-client";
 import { consumeAuthToken, createAuthToken } from "../../lib/authTokens";
 import { badRequest, conflict, unauthorized } from "../../lib/httpError";
@@ -20,6 +20,7 @@ const DUMMY_HASH =
   "$2a$12$C6UzMDM.H6dfI/f/IKcEeO5vLq6o3k1p6n4wP6b4v0Y0o0o0o0o0o";
 
 export const AuthService = {
+  // ? Register
   register: async (input: {
     email: string;
     password: string;
@@ -43,10 +44,12 @@ export const AuthService = {
         role: "CLIENT",
       },
     });
+
     await sendVerificationEmail(user);
     return { user: publicUser(user), token: signToken(user.id) };
   },
 
+  // Login
   login: async (input: { email: string; password: string }) => {
     const user = await prisma.user.findUnique({
       where: { email: input.email },
@@ -59,45 +62,39 @@ export const AuthService = {
     return { user: publicUser(user), token: signToken(user.id) };
   },
 
-   verifyEmail : async(token: string) => {
-  const userId = await consumeAuthToken(token, "verify_email");
-  if (!userId) throw badRequest("TOKEN_INVALIDE", "Lien invalide ou expiré");
-  await prisma.user.update({
-    where: { id: userId },
-    data: { emailVerifiedAt: new Date() },
-  });
-},
+  verifyEmail: async (token: string) => {
+    const userId = await consumeAuthToken(token, "verify_email");
+    if (!userId) throw badRequest("TOKEN_INVALIDE", "Lien invalide ou expiré");
+    await prisma.user.update({
+      where: { id: userId },
+      data: { emailVerifiedAt: new Date() },
+    });
+  },
 
-// ==========================================
-resendVerification  : async (userId: number) =>  {
-  const user = await prisma.user.findUniqueOrThrow({ where: { id: userId } });
-  if (user.emailVerifiedAt) return;
-  await sendVerificationEmail(user);
-},
+  // ==========================================
+  resendVerification: async (userId: number) => {
+    const user = await prisma.user.findUniqueOrThrow({ where: { id: userId } });
+    if (user.emailVerifiedAt) return;
+    await sendVerificationEmail(user);
+  },
 
+  forgotPassword: async (email: string) => {
+    const user = await prisma.user.findUnique({ where: { email } });
+    if (!user) return;
+    const token = await createAuthToken(user.id, "reset_password", 30);
+    await sendMail(
+      user.email,
+      "Réinitialisation du mot de passe",
+      `${env.APP_URL}/nouveau-mot-de-passe?token=${token}`
+    );
+  },
 
-
-forgotPassword : async (email: string) =>  {
-  const user = await prisma.user.findUnique({ where: { email } });
-  if (!user) return;
-  const token = await createAuthToken(user.id, "reset_password", 30);
-  await sendMail(
-    user.email,
-    "Réinitialisation du mot de passe",
-    `${env.APP_URL}/nouveau-mot-de-passe?token=${token}`
-  );
-},
-
-
-resetPassword : async (token: string, password: string) => {
-  const userId = await consumeAuthToken(token, "reset_password");
-  if (!userId) throw badRequest("TOKEN_INVALIDE", "Lien invalide ou expiré");
-  await prisma.user.update({
-    where: { id: userId },
-    data: { passwordHash: await hashPassword(password) },
-  });
-}
-
-
-
+  resetPassword: async (token: string, password: string) => {
+    const userId = await consumeAuthToken(token, "reset_password");
+    if (!userId) throw badRequest("TOKEN_INVALIDE", "Lien invalide ou expiré");
+    await prisma.user.update({
+      where: { id: userId },
+      data: { passwordHash: await hashPassword(password) },
+    });
+  },
 };

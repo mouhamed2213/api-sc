@@ -1,36 +1,39 @@
+import type { Request, Response } from "express";
 import { prisma } from "../../database/prisma/prisma-client";
 import { asyncHandler } from "../../lib/asyncHandler";
 import { AuthService as auth, publicUser } from "./auth.service";
 
 export const AuthController = {
-  register: asyncHandler(async (req, res) => {
-    res.status(201).json(await auth.register(req.body));
+  register: asyncHandler(async (req: Request, res: Response) => {
+    console.log("req.body", req.body);
+    const result = await auth.register(req.body);
+    return res.status(201).json({ status: "ok", data: result });
   }),
 
-  login: asyncHandler(async (req, res) => {
+  login: asyncHandler(async (req: Request, res: Response) => {
     res.json(await auth.login(req.body));
   }),
-  verifyEmail: asyncHandler(async (req, res) => {
+  verifyEmail: asyncHandler(async (req: Request, res: Response) => {
     await auth.verifyEmail(req.body.token);
     res.json({ ok: true });
   }),
 
-  resendVerificationEmail: asyncHandler(async (req, res) => {
+  resendVerificationEmail: asyncHandler(async (req: Request, res: Response) => {
     await auth.resendVerification(req.user!.id);
     res.json({ ok: true });
   }),
 
-  forgotPassword: asyncHandler(async (req, res) => {
+  forgotPassword: asyncHandler(async (req: Request, res: Response) => {
     await auth.forgotPassword(req.body.email);
     res.json({ ok: true }); // toujours la même réponse
   }),
 
-  resetPassword: asyncHandler(async (req, res) => {
+  resetPassword: asyncHandler(async (req: Request, res: Response) => {
     await auth.resetPassword(req.body.token, req.body.password);
     res.json({ ok: true });
   }),
 
-  me: asyncHandler(async (req, res) => {
+  me: asyncHandler(async (req: Request, res: Response       ) => {
     const user = await prisma.user.findUniqueOrThrow({
       where: { id: req.user!.id },
     });

@@ -18,6 +18,9 @@ const schema = z.object({
     .default("false")
     .transform(v => v === "true"),
   MAX_FICHES_PER_USER: z.coerce.number().int().positive().default(3),
+
+  MAILTRAP_API_TOKEN: z.string().min(1, "MAILTRAP_API_TOKEN est requis"),
+  SERVER: z.string().default("http://localhost:4000/api"),
 });
 
 const parsed = schema.safeParse(process.env);
