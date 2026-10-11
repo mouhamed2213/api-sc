@@ -28,7 +28,7 @@ const recipients = ["anomshacket@gmail.com"];
 
 export const sendVerificationEmail = async (user: User) => {
   const token = await createAuthToken(user.id, "verify_email", 60 * 24);
-  const verifyUrl = `${env.APP_URL}/verifier-email?token=${token}`;
+  const verifyUrl = `${env.APP_URL}/verify-email?token=${token}`;
   const verificationPayload: SendParams = {
     to: user.email,
     subject: "Confirme ton adresse e-mail",
@@ -46,7 +46,7 @@ export const sendVerificationEmail = async (user: User) => {
 // ? send forgot password email
 export const sendForgotPasswordMail = async (user: User) => {
   const token = await createAuthToken(user.id, "reset_password", 30);
-  const verifyUrl = `${env.APP_URL}/forgot-password?token=${token}`;
+  const verifyUrl = `${env.APP_URL}/reset-password?token=${token}`;
 
   const forgotPayload: SendParams = {
     to: user.email,

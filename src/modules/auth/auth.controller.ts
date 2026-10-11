@@ -5,16 +5,18 @@ import { AuthService as auth, publicUser } from "./auth.service";
 
 export const AuthController = {
   register: asyncHandler(async (req: Request, res: Response) => {
-    console.log("req.body", req.body);
     const result = await auth.register(req.body);
+
     return res.status(201).json({ status: "ok", data: result });
   }),
 
   login: asyncHandler(async (req: Request, res: Response) => {
     res.json(await auth.login(req.body));
   }),
+
   verifyEmail: asyncHandler(async (req: Request, res: Response) => {
     await auth.verifyEmail(req.body.token);
+    console.log("email verifier");
     res.json({ ok: true });
   }),
 
@@ -33,7 +35,7 @@ export const AuthController = {
     res.json({ ok: true });
   }),
 
-  me: asyncHandler(async (req: Request, res: Response       ) => {
+  me: asyncHandler(async (req: Request, res: Response) => {
     const user = await prisma.user.findUniqueOrThrow({
       where: { id: req.user!.id },
     });

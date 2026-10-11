@@ -8,8 +8,8 @@ import { adminRouter } from "./modules/admin/admin.routes";
 import { authRouter } from "./modules/auth/auth.routes";
 import { fichesRouter } from "./modules/fiches/fiches.routes";
 import { plansRouter } from "./modules/plans/plans.routes";
-
 export const app = express();
+
 
 app.set("trust proxy", 1); // derrière Nginx : indispensable pour que le rate limit voie la vraie IP
 app.use(helmet());

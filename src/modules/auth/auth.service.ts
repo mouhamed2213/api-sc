@@ -1,10 +1,12 @@
-import { env } from "../../config/env";
 import type { User } from "../../database/prisma/generated/prisma/client";
 import { prisma } from "../../database/prisma/prisma-client";
-import { consumeAuthToken, createAuthToken } from "../../lib/authTokens";
+import { consumeAuthToken } from "../../lib/authTokens";
 import { badRequest, conflict, unauthorized } from "../../lib/httpError";
 import { signToken } from "../../lib/jwt";
-import { sendForgotPasswordMail, sendMail, sendVerificationEmail } from "../../lib/mailer";
+import {
+  sendForgotPasswordMail,
+  sendVerificationEmail,
+} from "../../lib/mailer";
 import { hashPassword, verifyPassword } from "../../lib/password";
 
 export const publicUser = (u: User) => ({
@@ -80,9 +82,12 @@ export const AuthService = {
 
   forgotPassword: async (email: string) => {
     const user = await prisma.user.findUnique({ where: { email } });
-    if (!user) return;
-    await sendForgotPasswordMail(user)
+    if (!user) {
+      console.log("Attemps to reset password with unexisted email", [email]);
 
+      return;
+    }
+    await sendForgotPasswordMail(user);
   },
 
   resetPassword: async (token: string, password: string) => {
