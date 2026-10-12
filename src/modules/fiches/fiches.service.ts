@@ -23,8 +23,8 @@ import {
   type CreateFicheInput,
   type UpdateFicheInput,
 } from "./fiches.schemas";
+import { AuthUser } from "../../types/user";
 
-type AuthUser = NonNullable<Express.Request["user"]>;
 
 const isAdmin = (u: AuthUser) => u.role === "ADMIN";
 const up = <T extends string>(v: string) => v.toUpperCase() as T;

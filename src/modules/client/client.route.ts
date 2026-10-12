@@ -7,5 +7,4 @@ const clientRoute = Router();
 clientRoute.use(requireAuth);
 clientRoute.get("/dashboard/fiches", ClientController.getFichesDetail);
 
-
 export default clientRoute
