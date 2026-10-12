@@ -16,7 +16,6 @@ export const AuthController = {
 
   verifyEmail: asyncHandler(async (req: Request, res: Response) => {
     await auth.verifyEmail(req.body.token);
-    console.log("email verifier");
     res.json({ ok: true });
   }),
 

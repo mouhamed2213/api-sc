@@ -29,6 +29,10 @@ npm run dev                   # http://localhost:4000/api/health
 
 Production : `npm run build && npm run prisma:deploy && npm start` (PM2 + Nginx comme d'habitude).
 
+## Journalisation
+
+Les logs sont produits par Winston en JSON horodaté sur la console (stdout/stderr), sans fichier local. Chaque requête HTTP est journalisée avec un identifiant de corrélation retourné dans l'en-tête `X-Request-Id`, la méthode, la route, le code HTTP et sa durée. Les authentifications, actions sur les fiches, opérations administrateur, erreurs et tâches d'expiration importantes sont également journalisées. Les corps de requête, mots de passe, jetons, adresses e-mail et références de paiement ne sont pas consignés.
+
 ## Structure
 
 ```

@@ -11,6 +11,7 @@ import type {
 } from "../../database/prisma/generated/prisma/client";
 import { prisma } from "../../database/prisma/prisma-client";
 import { HttpError, forbidden, notFound } from "../../lib/httpError";
+import { logger } from "../../lib/logger";
 import {
   getEffectiveSubscription,
   type EffectiveSubscription,
@@ -93,6 +94,7 @@ export const FicheService = {
       },
       include: ficheInclude,
     });
+    logger.info("Fiche created", { ficheId: fiche.id, userId: user.id });
     return dtoFor(fiche);
   },
   getFiche: async (user: AuthUser, id: number) => {
@@ -325,6 +327,7 @@ export const FicheService = {
     );
 
     const updated = await loadFull(id);
+    logger.info("Fiche updated", { ficheId: id, userId: user.id });
     return toFicheDto(updated!, sub);
   },
 };

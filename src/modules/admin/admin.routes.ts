@@ -7,6 +7,7 @@ import type {
 import { prisma } from "../../database/prisma/prisma-client";
 import { asyncHandler } from "../../lib/asyncHandler";
 import { notFound } from "../../lib/httpError";
+import { logger } from "../../lib/logger";
 import { requireAuth, requireRole } from "../../middlewares/auth";
 import { validate } from "../../middlewares/validate";
 import { ficheInclude, toFicheDto } from "../fiches/fiches.dto";
@@ -54,6 +55,11 @@ adminRouter.patch(
       },
       include: ficheInclude,
     });
+    logger.info("Admin updated fiche", {
+      ficheId: id,
+      adminUserId: req.user!.id,
+      changedFields: Object.keys(req.body),
+    });
     res.json({ fiche: toFicheDto(fiche, await getEffectiveSubscription(id)) });
   })
 );
@@ -92,6 +98,12 @@ adminRouter.post(
             : new Date(b.endsAt),
       amountFcfa: b.amountFcfa,
       paymentRef: b.paymentRef,
+    });
+    logger.info("Admin activated subscription", {
+      subscriptionId: subscription.id,
+      ficheId: id,
+      adminUserId: req.user!.id,
+      plan: b.plan,
     });
     res.status(201).json({ subscription });
   })

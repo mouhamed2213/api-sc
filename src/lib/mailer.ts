@@ -1,11 +1,12 @@
 // Envoi d'e-mails : à brancher sur ton fournisseur (Resend, Brevo, SMTP…).
-// En développement, le message est simplement affiché dans la console.
+// En développement, les messages utilisent le transport SMTP de test.
 
 import { MailtrapTransport } from "mailtrap";
 import nodemailer from "nodemailer";
 import { env } from "../config/env";
 import { User } from "../database/prisma/generated/prisma/client";
 import { createAuthToken } from "./authTokens";
+import { logger } from "./logger";
 import { resetPasswordEmailTemplate } from "./mailer/reset-password-template";
 import { verificationEmailTemplate } from "./mailer/verification-template";
 
@@ -78,15 +79,14 @@ export const sendMail = async (data: {
       text: data.text,
       subject: data.subject,
     });
-
-    console.log("Email envoye avec succes a ", data.to);
+    logger.info("Email sent", { subject: data.subject });
   } catch (e) {
-    console.log("Erreur lor's de l'envoi de mail");
+    logger.error("Email delivery failed", {
+      subject: data.subject,
+      errorName: e instanceof Error ? e.name : "UnknownError",
+    });
+    throw e;
   }
-
-  console.log(
-    `\n📧 [mail] à: ${data.to}\n   objet: ${data.subject}\n   ${data.text}\n`
-  );
 };
 
 // ? Selected trasport depending on environment

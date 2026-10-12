@@ -3,6 +3,7 @@ import { prisma } from "../../database/prisma/prisma-client";
 import { consumeAuthToken } from "../../lib/authTokens";
 import { badRequest, conflict, unauthorized } from "../../lib/httpError";
 import { signToken } from "../../lib/jwt";
+import { logger } from "../../lib/logger";
 import {
   sendForgotPasswordMail,
   sendVerificationEmail,
@@ -47,6 +48,7 @@ export const AuthService = {
       },
     });
 
+    logger.info("User registered", { userId: user.id });
     await sendVerificationEmail(user);
     return { user: publicUser(user), token: signToken(user.id) };
   },
@@ -60,7 +62,11 @@ export const AuthService = {
       input.password,
       user?.passwordHash ?? DUMMY_HASH
     );
-    if (!user || !ok) throw unauthorized("E-mail ou mot de passe incorrect");
+    if (!user || !ok) {
+      logger.warn("Authentication failed", { reason: "invalid_credentials" });
+      throw unauthorized("E-mail ou mot de passe incorrect");
+    }
+    logger.info("User authenticated", { userId: user.id });
     return { user: publicUser(user), token: signToken(user.id) };
   },
 
@@ -71,23 +77,30 @@ export const AuthService = {
       where: { id: userId },
       data: { emailVerifiedAt: new Date() },
     });
+    logger.info("User email verified", { userId });
   },
 
   // ==========================================
   resendVerification: async (userId: number) => {
     const user = await prisma.user.findUniqueOrThrow({ where: { id: userId } });
-    if (user.emailVerifiedAt) return;
+    if (user.emailVerifiedAt) {
+      logger.info("Verification email request skipped", {
+        userId,
+        reason: "email_already_verified",
+      });
+      return;
+    }
     await sendVerificationEmail(user);
+    logger.info("Verification email resent", { userId });
   },
 
   forgotPassword: async (email: string) => {
     const user = await prisma.user.findUnique({ where: { email } });
     if (!user) {
-      console.log("Attemps to reset password with unexisted email", [email]);
-
       return;
     }
     await sendForgotPasswordMail(user);
+    logger.info("Password reset email requested", { userId: user.id });
   },
 
   resetPassword: async (token: string, password: string) => {
@@ -97,5 +110,6 @@ export const AuthService = {
       where: { id: userId },
       data: { passwordHash: await hashPassword(password) },
     });
+    logger.info("User password reset", { userId });
   },
 };

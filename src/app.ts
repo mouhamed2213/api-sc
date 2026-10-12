@@ -4,14 +4,16 @@ import rateLimit from "express-rate-limit";
 import helmet from "helmet";
 import { env } from "./config/env";
 import { errorHandler, notFoundHandler } from "./middlewares/errorHandler";
+import { requestLogger } from "./middlewares/requestLogger";
 import { adminRouter } from "./modules/admin/admin.routes";
 import { authRouter } from "./modules/auth/auth.routes";
+import clientRoute from "./modules/client/client.route";
 import { fichesRouter } from "./modules/fiches/fiches.routes";
 import { plansRouter } from "./modules/plans/plans.routes";
 export const app = express();
 
-
 app.set("trust proxy", 1); // derrière Nginx : indispensable pour que le rate limit voie la vraie IP
+app.use(requestLogger);
 app.use(helmet());
 app.use(cors({ origin: env.CORS_ORIGIN.split(",").map(o => o.trim()) }));
 app.use(express.json({ limit: "1mb" }));
@@ -41,6 +43,7 @@ app.use("/api/auth", authRouter);
 app.use("/api/plans", plansRouter);
 app.use("/api/fiches", fichesRouter);
 app.use("/api/admin", adminRouter);
+app.use("/api/client", clientRoute);
 
 app.use(notFoundHandler);
 app.use(errorHandler);

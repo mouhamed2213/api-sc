@@ -6,6 +6,7 @@ import {
   Theme,
 } from "../database/prisma/generated/prisma/client";
 import { prisma } from "../database/prisma/prisma-client";
+import { logger } from "../lib/logger";
 
 const TOUS_LES_BLOCS: TabType[] = [
   "PRESENTATION",
@@ -167,13 +168,18 @@ async function main() {
       create: { planId: plan.id, ...p.limits },
     });
 
-    console.log(`✔ Formule ${p.nom} (id ${plan.id})`);
+    logger.info("Plan seeded", { planId: plan.id, plan: p.nom });
   }
 }
 
 main()
   .catch(e => {
-    console.error(e);
+    logger.error("Plan seeding failed", {
+      error:
+        e instanceof Error
+          ? { name: e.name, message: e.message, stack: e.stack }
+          : String(e),
+    });
     process.exit(1);
   })
   .finally(() => prisma.$disconnect());
