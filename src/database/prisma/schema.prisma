@@ -633,6 +633,8 @@ model Subscription {
 
   planId Int
 
+  
+
   status SubscriptionStatus @default(ACTIVE)
 
   startsAt DateTime @default(now())
@@ -656,7 +658,6 @@ model Subscription {
   @@map("subscriptions")
 }
 
-// ⚠️ Prisma ne sait pas déclarer un index unique partiel. À ajouter dans la migration SQL
 
 // pour garantir UN SEUL abonnement actif par fiche :
 
