@@ -31,7 +31,7 @@ Production : `npm run build && npm run prisma:deploy && npm start` (PM2 + Nginx 
 
 ## Journalisation
 
-Les logs sont produits par Winston en JSON horodaté sur la console (stdout/stderr), sans fichier local. Chaque requête HTTP est journalisée avec un identifiant de corrélation retourné dans l'en-tête `X-Request-Id`, la méthode, la route, le code HTTP et sa durée. Les authentifications, actions sur les fiches, opérations administrateur, erreurs et tâches d'expiration importantes sont également journalisées. Les corps de requête, mots de passe, jetons, adresses e-mail et références de paiement ne sont pas consignés.
+Les logs sont produits par Winston sur la console (stdout/stderr), sans fichier local. En développement, ils sont affichés sur une ligne horodatée et colorée, avec les détails dans un format facile à lire (`INFO HTTP request completed | method="GET" statusCode=200`). En production, ils restent en JSON structuré pour les collecteurs de logs. Chaque requête HTTP est journalisée avec un identifiant de corrélation retourné dans l'en-tête `X-Request-Id`, la méthode, la route, le code HTTP et sa durée. Les authentifications, actions sur les fiches, opérations administrateur, erreurs et tâches d'expiration importantes sont également journalisées. Les corps de requête, mots de passe, jetons, adresses e-mail et références de paiement ne sont pas consignés.
 
 ## Structure
 
