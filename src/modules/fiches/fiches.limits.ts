@@ -186,6 +186,21 @@ export function enforcePlanLimits(
           : `${limits.maxCustomTabs} onglets libres maximum`
       );
 
+    // Les formules sans ajout ne peuvent pas dépasser le nombre de blocs autorisés.
+    // Les blocs « texte » sont contrôlés séparément via maxCustomTabs.
+    const nonCustomTabs = onglets.filter(o => o.type !== "texte");
+    if (nonCustomTabs.length > limits.tabsAutorises.length)
+      add("data.onglets", "Le nombre de blocs dépasse ce que permet cette formule");
+
+    // Sans droit de réorganisation, l'ordre doit rester celui défini par le plan.
+    if (!limits.canReorder) {
+      const positions = nonCustomTabs.map(o =>
+        limits.tabsAutorises.indexOf(o.type.toUpperCase() as TabType)
+      );
+      if (positions.some((position, i) => position < 0 || (i > 0 && position < positions[i - 1])))
+        add("data.onglets", "La réorganisation des blocs n'est pas disponible avec cette formule");
+    }
+
     // Nettoyage silencieux : on ignore ce que la formule ne permet pas.
     onglets = onglets.map(o => ({
       ...o,
