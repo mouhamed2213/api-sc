@@ -3,27 +3,50 @@ import type { Role } from "../database/prisma/generated/prisma/client";
 import { prisma } from "../database/prisma/prisma-client";
 import { forbidden, unauthorized } from "../lib/httpError";
 import { verifyToken } from "../lib/jwt";
+import { logger } from "../lib/logger";
 
 // Exige un « Authorization: Bearer <token> » valide et recharge l'utilisateur en base
 // (un compte supprimé ou rétrogradé perd ses droits immédiatement).
 export async function requireAuth(
   req: Request,
-  _res: Response,
+  res: Response,
   next: NextFunction
 ) {
   try {
     const header = req.headers.authorization;
-    if (!header?.startsWith("Bearer ")) throw unauthorized();
+    console.log(header);
+    const rejectAuthentication = (reason: string, message?: string): never => {
+      logger.warn("Authentication failed", {
+        requestId: res.locals.requestId,
+        method: req.method,
+        path: req.path,
+        reason,
+      });
+      throw unauthorized(message);
+    };
+
+    if (!header) return rejectAuthentication("missing_authorization_header");
+    if (!header.startsWith("Bearer "))
+      return rejectAuthentication("invalid_authorization_scheme");
 
     let userId: number;
     try {
       userId = Number(verifyToken(header.slice(7)).sub);
     } catch {
-      throw unauthorized("Session invalide ou expirée");
+      return rejectAuthentication(
+        "invalid_or_expired_token",
+        "Session invalide ou expirée"
+      );
     }
+    if (!Number.isSafeInteger(userId) || userId <= 0)
+      return rejectAuthentication(
+        "invalid_token_subject",
+        "Session invalide ou expirée"
+      );
 
     const user = await prisma.user.findUnique({ where: { id: userId } });
-    if (!user) throw unauthorized("Compte introuvable");
+    if (!user)
+      return rejectAuthentication("user_not_found", "Compte introuvable");
 
     req.user = {
       id: user.id,
