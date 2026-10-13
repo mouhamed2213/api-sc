@@ -9,6 +9,7 @@ import { adminRouter } from "./modules/admin/admin.routes";
 import { authRouter } from "./modules/auth/auth.routes";
 import clientRoute from "./modules/client/client.route";
 import { fichesRouter } from "./modules/fiches/fiches.routes";
+import { mediaRouter } from "./modules/media/media.routes";
 import { plansRouter } from "./modules/plans/plans.routes";
 export const app = express();
 
@@ -42,6 +43,7 @@ app.get("/api/health", (_req, res) => res.json({ ok: true }));
 app.use("/api/auth", authRouter);
 app.use("/api/plans", plansRouter);
 app.use("/api/fiches", fichesRouter);
+app.use("/api/media", mediaRouter);
 app.use("/api/admin", adminRouter);
 app.use("/api/client", clientRoute);
 
