@@ -4,6 +4,7 @@ import type {
 } from "../../database/prisma/generated/prisma/client";
 import { prisma } from "../../database/prisma/prisma-client";
 import { notFound } from "../../lib/httpError";
+import { Kpi } from "./subscription.type";
 
 const planInclude = {
   plan: { include: { limits: true } },
@@ -84,3 +85,47 @@ export async function expireDueSubscriptions() {
   });
   return count;
 }
+
+export const subscriptionKpi = async (): Promise<Kpi> => {
+  // 1. Nombre total de fiches
+  const nbrFiche = await prisma.fiche.count();
+
+  // 2. Nombre de fiches actives — utilise count() au lieu de findMany()
+  const nbrFicheActive = await prisma.fiche.count({
+    where: { statut: "ACTIVE" },
+  });
+
+  // 3. Nombre de fiches payantes (plan != "ESSENTIELLE")
+  const nbrPayingFiche = await prisma.fiche.count({
+    where: {
+      subscriptions: {
+        some: {
+          plan: {
+            is: {
+              type: { not: "ESSENTIELLE" },
+            },
+          },
+        },
+      },
+    },
+  });
+
+  const dtoKpi = {
+    nbrFiche,
+    nbrFicheActive,
+    nbrPayingFiche,
+  };
+  return dtoKpi;
+};
+
+export const filter = async (plan: string) => {
+  const filterByPlan = await prisma.plan.findMany({
+    where: {
+      type: "ESSENTIELLE", // remplace par la valeur souhaitée
+    },
+  });
+
+  // console.log(filterByPlan.map(f => {f.}));
+
+  return filterByPlan;
+};

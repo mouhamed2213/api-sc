@@ -14,7 +14,6 @@ export async function requireAuth(
 ) {
   try {
     const header = req.headers.authorization;
-    console.log(header);
     const rejectAuthentication = (reason: string, message?: string): never => {
       logger.warn("Authentication failed", {
         requestId: res.locals.requestId,

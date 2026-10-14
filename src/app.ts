@@ -10,6 +10,7 @@ import { authRouter } from "./modules/auth/auth.routes";
 import clientRoute from "./modules/client/client.route";
 import { fichesRouter } from "./modules/fiches/fiches.routes";
 import { plansRouter } from "./modules/plans/plans.routes";
+import subscriptionRoute from "./modules/subscriptions/subsctiption.route";
 export const app = express();
 
 app.set("trust proxy", 1); // derrière Nginx : indispensable pour que le rate limit voie la vraie IP
@@ -43,6 +44,7 @@ app.use("/api/auth", authRouter);
 app.use("/api/plans", plansRouter);
 app.use("/api/fiches", fichesRouter);
 app.use("/api/admin", adminRouter);
+app.use("/api/subscription", subscriptionRoute);
 app.use("/api/client", clientRoute);
 
 app.use(notFoundHandler);
