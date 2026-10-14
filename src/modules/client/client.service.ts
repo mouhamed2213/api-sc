@@ -5,6 +5,9 @@ export const ClientService = {
   detailFiche: async (user: AuthUser) => {
     const getFiche = await prisma.fiche.findMany({
       where: { userId: user.id },
+      include: {
+        subscriptions: { select: { plan: { select: { type: true } } } },
+      },
     });
 
     return getFiche;

@@ -633,8 +633,6 @@ model Subscription {
 
   planId Int
 
-  
-
   status SubscriptionStatus @default(ACTIVE)
 
   startsAt DateTime @default(now())
