@@ -5,6 +5,7 @@ const subscriptionRoute = Router();
 
 subscriptionRoute.use(requireAuth);
 subscriptionRoute.get("/kpi", SubscriptionController.subscriptionKpi);
+subscriptionRoute.post("/upgrade", SubscriptionController.upgradePlan);
 subscriptionRoute.get("/filter", SubscriptionController.filter);
 
 export default subscriptionRoute;

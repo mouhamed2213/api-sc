@@ -1,6 +1,6 @@
 import { responseSuccess } from "../../lib/apiResponse";
 import { asyncHandler } from "../../lib/asyncHandler";
-import { filter, subscriptionKpi } from "./subscriptions.service";
+import { filter, subscriptionKpi, upgrade } from "./subscriptions.service";
 
 export const SubscriptionController = {
   subscriptionKpi: asyncHandler(async (req, res) => {
@@ -14,6 +14,11 @@ export const SubscriptionController = {
       },
       200
     );
+  }),
+
+  upgradePlan: asyncHandler(async (req, res) => {
+    // const planData = await
+    const upgradeRes = await upgrade(1, "PRO");
   }),
 
   filter: asyncHandler(async (req, res) => {

@@ -86,6 +86,11 @@ export async function expireDueSubscriptions() {
   return count;
 }
 
+// Upgrade plan subscrption
+export async function upgrade(id: number, planType: PlanType) {
+  return;
+}
+
 export const subscriptionKpi = async (): Promise<Kpi> => {
   // 1. Nombre total de fiches
   const nbrFiche = await prisma.fiche.count();
