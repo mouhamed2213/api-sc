@@ -67,7 +67,8 @@ export const ModelName = {
   AuthToken: 'AuthToken',
   Plan: 'Plan',
   PlanLimit: 'PlanLimit',
-  Subscription: 'Subscription'
+  Subscription: 'Subscription',
+  Payment: 'Payment'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -348,6 +349,25 @@ export const SubscriptionScalarFieldEnum = {
 } as const
 
 export type SubscriptionScalarFieldEnum = (typeof SubscriptionScalarFieldEnum)[keyof typeof SubscriptionScalarFieldEnum]
+
+
+export const PaymentScalarFieldEnum = {
+  id: 'id',
+  ficheId: 'ficheId',
+  subscriptionId: 'subscriptionId',
+  planId: 'planId',
+  provider: 'provider',
+  status: 'status',
+  amountFcfa: 'amountFcfa',
+  currency: 'currency',
+  providerReference: 'providerReference',
+  failureReason: 'failureReason',
+  paidAt: 'paidAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type PaymentScalarFieldEnum = (typeof PaymentScalarFieldEnum)[keyof typeof PaymentScalarFieldEnum]
 
 
 export const SortOrder = {

@@ -36,6 +36,25 @@ export const SubscriptionStatus = {
 export type SubscriptionStatus = (typeof SubscriptionStatus)[keyof typeof SubscriptionStatus]
 
 
+export const PaymentProvider = {
+  SIMULATION: 'SIMULATION',
+  WAVE: 'WAVE',
+  ORANGE_MONEY: 'ORANGE_MONEY'
+} as const
+
+export type PaymentProvider = (typeof PaymentProvider)[keyof typeof PaymentProvider]
+
+
+export const PaymentStatus = {
+  PENDING: 'PENDING',
+  SUCCEEDED: 'SUCCEEDED',
+  FAILED: 'FAILED',
+  CANCELLED: 'CANCELLED'
+} as const
+
+export type PaymentStatus = (typeof PaymentStatus)[keyof typeof PaymentStatus]
+
+
 export const StatutFiche = {
   ACTIVE: 'ACTIVE',
   SUSPENDUE: 'SUSPENDUE'

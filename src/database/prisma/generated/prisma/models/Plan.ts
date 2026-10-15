@@ -242,6 +242,7 @@ export type PlanWhereInput = {
   actif?: Prisma.BoolFilter<"Plan"> | boolean
   limits?: Prisma.XOR<Prisma.PlanLimitNullableScalarRelationFilter, Prisma.PlanLimitWhereInput> | null
   subscriptions?: Prisma.SubscriptionListRelationFilter
+  payments?: Prisma.PaymentListRelationFilter
 }
 
 export type PlanOrderByWithRelationInput = {
@@ -254,6 +255,7 @@ export type PlanOrderByWithRelationInput = {
   actif?: Prisma.SortOrder
   limits?: Prisma.PlanLimitOrderByWithRelationInput
   subscriptions?: Prisma.SubscriptionOrderByRelationAggregateInput
+  payments?: Prisma.PaymentOrderByRelationAggregateInput
 }
 
 export type PlanWhereUniqueInput = Prisma.AtLeast<{
@@ -269,6 +271,7 @@ export type PlanWhereUniqueInput = Prisma.AtLeast<{
   actif?: Prisma.BoolFilter<"Plan"> | boolean
   limits?: Prisma.XOR<Prisma.PlanLimitNullableScalarRelationFilter, Prisma.PlanLimitWhereInput> | null
   subscriptions?: Prisma.SubscriptionListRelationFilter
+  payments?: Prisma.PaymentListRelationFilter
 }, "id" | "type">
 
 export type PlanOrderByWithAggregationInput = {
@@ -308,6 +311,7 @@ export type PlanCreateInput = {
   actif?: boolean
   limits?: Prisma.PlanLimitCreateNestedOneWithoutPlanInput
   subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutPlanInput
+  payments?: Prisma.PaymentCreateNestedManyWithoutPlanInput
 }
 
 export type PlanUncheckedCreateInput = {
@@ -320,6 +324,7 @@ export type PlanUncheckedCreateInput = {
   actif?: boolean
   limits?: Prisma.PlanLimitUncheckedCreateNestedOneWithoutPlanInput
   subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutPlanInput
+  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutPlanInput
 }
 
 export type PlanUpdateInput = {
@@ -331,6 +336,7 @@ export type PlanUpdateInput = {
   actif?: Prisma.BoolFieldUpdateOperationsInput | boolean
   limits?: Prisma.PlanLimitUpdateOneWithoutPlanNestedInput
   subscriptions?: Prisma.SubscriptionUpdateManyWithoutPlanNestedInput
+  payments?: Prisma.PaymentUpdateManyWithoutPlanNestedInput
 }
 
 export type PlanUncheckedUpdateInput = {
@@ -343,6 +349,7 @@ export type PlanUncheckedUpdateInput = {
   actif?: Prisma.BoolFieldUpdateOperationsInput | boolean
   limits?: Prisma.PlanLimitUncheckedUpdateOneWithoutPlanNestedInput
   subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutPlanNestedInput
+  payments?: Prisma.PaymentUncheckedUpdateManyWithoutPlanNestedInput
 }
 
 export type PlanCreateManyInput = {
@@ -457,6 +464,20 @@ export type PlanUpdateOneRequiredWithoutSubscriptionsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.PlanUpdateToOneWithWhereWithoutSubscriptionsInput, Prisma.PlanUpdateWithoutSubscriptionsInput>, Prisma.PlanUncheckedUpdateWithoutSubscriptionsInput>
 }
 
+export type PlanCreateNestedOneWithoutPaymentsInput = {
+  create?: Prisma.XOR<Prisma.PlanCreateWithoutPaymentsInput, Prisma.PlanUncheckedCreateWithoutPaymentsInput>
+  connectOrCreate?: Prisma.PlanCreateOrConnectWithoutPaymentsInput
+  connect?: Prisma.PlanWhereUniqueInput
+}
+
+export type PlanUpdateOneRequiredWithoutPaymentsNestedInput = {
+  create?: Prisma.XOR<Prisma.PlanCreateWithoutPaymentsInput, Prisma.PlanUncheckedCreateWithoutPaymentsInput>
+  connectOrCreate?: Prisma.PlanCreateOrConnectWithoutPaymentsInput
+  upsert?: Prisma.PlanUpsertWithoutPaymentsInput
+  connect?: Prisma.PlanWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.PlanUpdateToOneWithWhereWithoutPaymentsInput, Prisma.PlanUpdateWithoutPaymentsInput>, Prisma.PlanUncheckedUpdateWithoutPaymentsInput>
+}
+
 export type PlanCreateWithoutLimitsInput = {
   type: $Enums.PlanType
   nom: string
@@ -465,6 +486,7 @@ export type PlanCreateWithoutLimitsInput = {
   dureeMois?: number | null
   actif?: boolean
   subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutPlanInput
+  payments?: Prisma.PaymentCreateNestedManyWithoutPlanInput
 }
 
 export type PlanUncheckedCreateWithoutLimitsInput = {
@@ -476,6 +498,7 @@ export type PlanUncheckedCreateWithoutLimitsInput = {
   dureeMois?: number | null
   actif?: boolean
   subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutPlanInput
+  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutPlanInput
 }
 
 export type PlanCreateOrConnectWithoutLimitsInput = {
@@ -502,6 +525,7 @@ export type PlanUpdateWithoutLimitsInput = {
   dureeMois?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   actif?: Prisma.BoolFieldUpdateOperationsInput | boolean
   subscriptions?: Prisma.SubscriptionUpdateManyWithoutPlanNestedInput
+  payments?: Prisma.PaymentUpdateManyWithoutPlanNestedInput
 }
 
 export type PlanUncheckedUpdateWithoutLimitsInput = {
@@ -513,6 +537,7 @@ export type PlanUncheckedUpdateWithoutLimitsInput = {
   dureeMois?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   actif?: Prisma.BoolFieldUpdateOperationsInput | boolean
   subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutPlanNestedInput
+  payments?: Prisma.PaymentUncheckedUpdateManyWithoutPlanNestedInput
 }
 
 export type PlanCreateWithoutSubscriptionsInput = {
@@ -523,6 +548,7 @@ export type PlanCreateWithoutSubscriptionsInput = {
   dureeMois?: number | null
   actif?: boolean
   limits?: Prisma.PlanLimitCreateNestedOneWithoutPlanInput
+  payments?: Prisma.PaymentCreateNestedManyWithoutPlanInput
 }
 
 export type PlanUncheckedCreateWithoutSubscriptionsInput = {
@@ -534,6 +560,7 @@ export type PlanUncheckedCreateWithoutSubscriptionsInput = {
   dureeMois?: number | null
   actif?: boolean
   limits?: Prisma.PlanLimitUncheckedCreateNestedOneWithoutPlanInput
+  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutPlanInput
 }
 
 export type PlanCreateOrConnectWithoutSubscriptionsInput = {
@@ -560,6 +587,7 @@ export type PlanUpdateWithoutSubscriptionsInput = {
   dureeMois?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   actif?: Prisma.BoolFieldUpdateOperationsInput | boolean
   limits?: Prisma.PlanLimitUpdateOneWithoutPlanNestedInput
+  payments?: Prisma.PaymentUpdateManyWithoutPlanNestedInput
 }
 
 export type PlanUncheckedUpdateWithoutSubscriptionsInput = {
@@ -571,6 +599,69 @@ export type PlanUncheckedUpdateWithoutSubscriptionsInput = {
   dureeMois?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   actif?: Prisma.BoolFieldUpdateOperationsInput | boolean
   limits?: Prisma.PlanLimitUncheckedUpdateOneWithoutPlanNestedInput
+  payments?: Prisma.PaymentUncheckedUpdateManyWithoutPlanNestedInput
+}
+
+export type PlanCreateWithoutPaymentsInput = {
+  type: $Enums.PlanType
+  nom: string
+  themeDefaut: $Enums.Theme
+  prixFcfa?: number | null
+  dureeMois?: number | null
+  actif?: boolean
+  limits?: Prisma.PlanLimitCreateNestedOneWithoutPlanInput
+  subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutPlanInput
+}
+
+export type PlanUncheckedCreateWithoutPaymentsInput = {
+  id?: number
+  type: $Enums.PlanType
+  nom: string
+  themeDefaut: $Enums.Theme
+  prixFcfa?: number | null
+  dureeMois?: number | null
+  actif?: boolean
+  limits?: Prisma.PlanLimitUncheckedCreateNestedOneWithoutPlanInput
+  subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutPlanInput
+}
+
+export type PlanCreateOrConnectWithoutPaymentsInput = {
+  where: Prisma.PlanWhereUniqueInput
+  create: Prisma.XOR<Prisma.PlanCreateWithoutPaymentsInput, Prisma.PlanUncheckedCreateWithoutPaymentsInput>
+}
+
+export type PlanUpsertWithoutPaymentsInput = {
+  update: Prisma.XOR<Prisma.PlanUpdateWithoutPaymentsInput, Prisma.PlanUncheckedUpdateWithoutPaymentsInput>
+  create: Prisma.XOR<Prisma.PlanCreateWithoutPaymentsInput, Prisma.PlanUncheckedCreateWithoutPaymentsInput>
+  where?: Prisma.PlanWhereInput
+}
+
+export type PlanUpdateToOneWithWhereWithoutPaymentsInput = {
+  where?: Prisma.PlanWhereInput
+  data: Prisma.XOR<Prisma.PlanUpdateWithoutPaymentsInput, Prisma.PlanUncheckedUpdateWithoutPaymentsInput>
+}
+
+export type PlanUpdateWithoutPaymentsInput = {
+  type?: Prisma.EnumPlanTypeFieldUpdateOperationsInput | $Enums.PlanType
+  nom?: Prisma.StringFieldUpdateOperationsInput | string
+  themeDefaut?: Prisma.EnumThemeFieldUpdateOperationsInput | $Enums.Theme
+  prixFcfa?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  dureeMois?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  actif?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  limits?: Prisma.PlanLimitUpdateOneWithoutPlanNestedInput
+  subscriptions?: Prisma.SubscriptionUpdateManyWithoutPlanNestedInput
+}
+
+export type PlanUncheckedUpdateWithoutPaymentsInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  type?: Prisma.EnumPlanTypeFieldUpdateOperationsInput | $Enums.PlanType
+  nom?: Prisma.StringFieldUpdateOperationsInput | string
+  themeDefaut?: Prisma.EnumThemeFieldUpdateOperationsInput | $Enums.Theme
+  prixFcfa?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  dureeMois?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  actif?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  limits?: Prisma.PlanLimitUncheckedUpdateOneWithoutPlanNestedInput
+  subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutPlanNestedInput
 }
 
 
@@ -580,10 +671,12 @@ export type PlanUncheckedUpdateWithoutSubscriptionsInput = {
 
 export type PlanCountOutputType = {
   subscriptions: number
+  payments: number
 }
 
 export type PlanCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   subscriptions?: boolean | PlanCountOutputTypeCountSubscriptionsArgs
+  payments?: boolean | PlanCountOutputTypeCountPaymentsArgs
 }
 
 /**
@@ -603,6 +696,13 @@ export type PlanCountOutputTypeCountSubscriptionsArgs<ExtArgs extends runtime.Ty
   where?: Prisma.SubscriptionWhereInput
 }
 
+/**
+ * PlanCountOutputType without action
+ */
+export type PlanCountOutputTypeCountPaymentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.PaymentWhereInput
+}
+
 
 export type PlanSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -614,6 +714,7 @@ export type PlanSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   actif?: boolean
   limits?: boolean | Prisma.Plan$limitsArgs<ExtArgs>
   subscriptions?: boolean | Prisma.Plan$subscriptionsArgs<ExtArgs>
+  payments?: boolean | Prisma.Plan$paymentsArgs<ExtArgs>
   _count?: boolean | Prisma.PlanCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["plan"]>
 
@@ -651,6 +752,7 @@ export type PlanOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = run
 export type PlanInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   limits?: boolean | Prisma.Plan$limitsArgs<ExtArgs>
   subscriptions?: boolean | Prisma.Plan$subscriptionsArgs<ExtArgs>
+  payments?: boolean | Prisma.Plan$paymentsArgs<ExtArgs>
   _count?: boolean | Prisma.PlanCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type PlanIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -661,6 +763,7 @@ export type $PlanPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   objects: {
     limits: Prisma.$PlanLimitPayload<ExtArgs> | null
     subscriptions: Prisma.$SubscriptionPayload<ExtArgs>[]
+    payments: Prisma.$PaymentPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
@@ -1066,6 +1169,7 @@ export interface Prisma__PlanClient<T, Null = never, ExtArgs extends runtime.Typ
   readonly [Symbol.toStringTag]: "PrismaPromise"
   limits<T extends Prisma.Plan$limitsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Plan$limitsArgs<ExtArgs>>): Prisma.Prisma__PlanLimitClient<runtime.Types.Result.GetResult<Prisma.$PlanLimitPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   subscriptions<T extends Prisma.Plan$subscriptionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Plan$subscriptionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SubscriptionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  payments<T extends Prisma.Plan$paymentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Plan$paymentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PaymentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1535,6 +1639,30 @@ export type Plan$subscriptionsArgs<ExtArgs extends runtime.Types.Extensions.Inte
   take?: number
   skip?: number
   distinct?: Prisma.SubscriptionScalarFieldEnum | Prisma.SubscriptionScalarFieldEnum[]
+}
+
+/**
+ * Plan.payments
+ */
+export type Plan$paymentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Payment
+   */
+  select?: Prisma.PaymentSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Payment
+   */
+  omit?: Prisma.PaymentOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PaymentInclude<ExtArgs> | null
+  where?: Prisma.PaymentWhereInput
+  orderBy?: Prisma.PaymentOrderByWithRelationInput | Prisma.PaymentOrderByWithRelationInput[]
+  cursor?: Prisma.PaymentWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.PaymentScalarFieldEnum | Prisma.PaymentScalarFieldEnum[]
 }
 
 /**
