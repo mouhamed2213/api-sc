@@ -182,36 +182,29 @@ export async function upgrade(
   });
 }
 
-export const subscriptionKpi = async (): Promise<Kpi> => {
-  // 1. Nombre total de fiches
-  const nbrFiche = await prisma.fiche.count();
+export const subscriptionKpi = async (user: AuthUser): Promise<Kpi> => {
+  const ficheScope = user.role === "ADMIN" ? {} : { userId: user.id };
 
-  // 2. Nombre de fiches actives — utilise count() au lieu de findMany()
-  const nbrFicheActive = await prisma.fiche.count({
-    where: { statut: "ACTIVE" },
-  });
-
-  // 3. Nombre de fiches payantes (plan != "ESSENTIELLE")
-  const nbrPayingFiche = await prisma.fiche.count({
-    where: {
-      subscriptions: {
-        some: {
-          plan: {
-            is: {
-              type: { not: "ESSENTIELLE" },
-            },
+  const [nbrFiche, nbrFicheActive, nbrPayingFiche] = await Promise.all([
+    prisma.fiche.count({ where: ficheScope }),
+    prisma.fiche.count({
+      where: { ...ficheScope, statut: "ACTIVE" },
+    }),
+    prisma.fiche.count({
+      where: {
+        ...ficheScope,
+        subscriptions: {
+          some: {
+            status: "ACTIVE",
+            OR: [{ endsAt: null }, { endsAt: { gt: new Date() } }],
+            plan: { is: { type: { not: "ESSENTIELLE" } } },
           },
         },
       },
-    },
-  });
+    }),
+  ]);
 
-  const dtoKpi = {
-    nbrFiche,
-    nbrFicheActive,
-    nbrPayingFiche,
-  };
-  return dtoKpi;
+  return { nbrFiche, nbrFicheActive, nbrPayingFiche };
 };
 
 export const filter = async (plan: string) => {
