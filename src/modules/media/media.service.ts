@@ -27,32 +27,6 @@ function publicUrl(ficheId: number, fileName: string) {
   return `${base}/api/media/${ficheId}/${fileName}`;
 }
 
-function collectStoredMediaKeys(value: unknown, ficheId: number): Set<string> {
-  const keys = new Set<string>();
-  const seen = new Set<object>();
-  const pattern = /\/api\/media\/(\d+)\/([0-9a-f-]{36}\.(?:jpg|png|webp|mp4|webm))/gi;
-
-  const visit = (current: unknown) => {
-    if (typeof current === "string") {
-      pattern.lastIndex = 0;
-      for (const match of current.matchAll(pattern)) {
-        if (Number(match[1]) === ficheId) keys.add(match[2]);
-      }
-      return;
-    }
-    if (!current || typeof current !== "object" || seen.has(current)) return;
-    seen.add(current);
-    if (Array.isArray(current)) {
-      current.forEach(visit);
-      return;
-    }
-    Object.values(current as Record<string, unknown>).forEach(visit);
-  };
-
-  visit(value);
-  return keys;
-}
-
 export const MediaService = {
   async upload(user: AuthUser, ficheId: number, body: Buffer, rawMime?: string) {
     if (!Buffer.isBuffer(body) || body.length === 0) {
@@ -130,5 +104,4 @@ export const MediaService = {
     await getStorage().delete(`fiches/${ficheId}/${fileName}`);
   },
 
-  collectStoredMediaKeys,
 };

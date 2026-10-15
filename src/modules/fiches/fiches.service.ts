@@ -25,6 +25,7 @@ import {
 } from "./fiches.schemas";
 import { AuthUser } from "../../types/user";
 import { MediaService } from "../media/media.service";
+import { collectStoredMediaKeys } from "../media/media.validation";
 
 
 const isAdmin = (u: AuthUser) => u.role === "ADMIN";
@@ -384,8 +385,8 @@ export const FicheService = {
 
     const updated = await loadFull(id);
     if (previousSnapshot && updated) {
-      const previousKeys = MediaService.collectStoredMediaKeys(previousSnapshot, id);
-      const currentKeys = MediaService.collectStoredMediaKeys(updated, id);
+      const previousKeys = collectStoredMediaKeys(previousSnapshot, id);
+      const currentKeys = collectStoredMediaKeys(updated, id);
       const removedKeys = [...previousKeys].filter(key => !currentKeys.has(key));
       for (const key of removedKeys) {
         try {

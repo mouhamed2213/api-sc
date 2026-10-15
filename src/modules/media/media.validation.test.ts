@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { MediaService } from "./media.service";
+import { collectStoredMediaKeys } from "./media.validation";
 import {
   mediaMaxBytes,
   resolveMediaMime,
@@ -35,7 +35,7 @@ describe("media validation", () => {
 
 describe("stored media references", () => {
   it("collects only media keys belonging to the target fiche", () => {
-    const keys = MediaService.collectStoredMediaKeys({
+    const keys = collectStoredMediaKeys({
       photo: "https://api.example.test/api/media/7/123e4567-e89b-12d3-a456-426614174000.webp",
       gallery: [
         { url: "/api/media/7/123e4567-e89b-12d3-a456-426614174001.mp4" },
