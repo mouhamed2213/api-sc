@@ -1,3 +1,4 @@
+import { randomUUID } from "node:crypto";
 import type {
   PlanType,
   Prisma,
@@ -147,9 +148,34 @@ export async function upgrade(
       ? addMonths(now, targetPlan.dureeMois)
       : null;
 
-    // Référence explicitement simulée : ce n’est pas une preuve de paiement réel.
-    const paymentRef = `SIMULATED-${ficheId}-${Date.now()}`;
+    // Étape 1 : créer une trace de paiement en attente.
+    // En mode réel, cette étape renverra le client vers le fournisseur et
+    // laissera le paiement PENDING jusqu'à une confirmation serveur vérifiée.
+    const paymentRef = `SIMULATED-${ficheId}-${randomUUID()}`;
+    const pendingPayment = await tx.payment.create({
+      data: {
+        ficheId,
+        provider: "SIMULATION",
+        status: "PENDING",
+        amountFcfa: targetPlan.prixFcfa ?? 0,
+        currency: "XOF",
+        providerReference: paymentRef,
+      },
+    });
 
+    // Étape 2 : adaptateur de simulation. Seul le code de confirmation fait
+    // passer le paiement à SUCCEEDED ; l'activation arrive après cette étape.
+    // Remplacer cet adaptateur par la confirmation vérifiée de Wave/Orange Money
+    // lors de l'intégration réelle, sans changer les règles d'activation.
+    const confirmedPayment = await tx.payment.update({
+      where: { id: pendingPayment.id },
+      data: {
+        status: "SUCCEEDED",
+        paidAt: now,
+      },
+    });
+
+    // Étape 3 : appliquer la formule uniquement après confirmation.
     await tx.subscription.updateMany({
       where: { ficheId, status: "ACTIVE" },
       data: { status: "CANCELED", canceledAt: now },
@@ -163,8 +189,13 @@ export async function upgrade(
         startsAt: now,
         endsAt,
         amountFcfa: targetPlan.prixFcfa ?? 0,
-        paymentRef,
+        paymentRef: confirmedPayment.providerReference,
       },
+    });
+
+    await tx.payment.update({
+      where: { id: confirmedPayment.id },
+      data: { subscriptionId: subscription.id },
     });
 
     const updatedFiche = await tx.fiche.findUnique({
@@ -177,7 +208,12 @@ export async function upgrade(
     return {
       subscription,
       fiche: toFicheDto(updatedFiche, effectiveSubscription),
-      payment: { mode: "simulation" as const, status: "confirmed" as const },
+      payment: {
+        id: confirmedPayment.id,
+        reference: confirmedPayment.providerReference,
+        mode: "simulation" as const,
+        status: "confirmed" as const,
+      },
     };
   });
 }
