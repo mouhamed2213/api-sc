@@ -6,6 +6,7 @@ CREATE TABLE "payments" (
     "id" SERIAL NOT NULL,
     "ficheId" INTEGER NOT NULL,
     "subscriptionId" INTEGER,
+    "planId" INTEGER NOT NULL,
     "provider" "PaymentProvider" NOT NULL DEFAULT 'SIMULATION',
     "status" "PaymentStatus" NOT NULL DEFAULT 'PENDING',
     "amountFcfa" INTEGER NOT NULL,
@@ -31,3 +32,8 @@ ALTER TABLE "payments"
   ADD CONSTRAINT "payments_subscriptionId_fkey"
   FOREIGN KEY ("subscriptionId") REFERENCES "subscriptions"("id")
   ON DELETE SET NULL ON UPDATE CASCADE;
+
+ALTER TABLE "payments"
+  ADD CONSTRAINT "payments_planId_fkey"
+  FOREIGN KEY ("planId") REFERENCES "plans"("id")
+  ON DELETE RESTRICT ON UPDATE CASCADE;
