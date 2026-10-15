@@ -567,6 +567,8 @@ model Plan {
 
   subscriptions Subscription[]
 
+  payments Payment[]
+
   @@map("plans")
 }
 
@@ -685,6 +687,8 @@ model Payment {
 
   subscriptionId Int?
 
+  planId Int
+
   provider PaymentProvider @default(SIMULATION)
 
   status PaymentStatus @default(PENDING)
@@ -704,6 +708,8 @@ model Payment {
   updatedAt DateTime @updatedAt
 
   fiche Fiche @relation(fields: [ficheId], references: [id], onDelete: Cascade)
+
+  plan Plan @relation(fields: [planId], references: [id])
 
   subscription Subscription? @relation(fields: [subscriptionId], references: [id], onDelete: SetNull)
 
