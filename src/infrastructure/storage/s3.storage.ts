@@ -1,12 +1,13 @@
 import {
   DeleteObjectCommand,
+  ListObjectsV2Command,
   GetObjectCommand,
   PutObjectCommand,
 } from "@aws-sdk/client-s3";
 import type { S3Client } from "@aws-sdk/client-s3";
 import type { Readable } from "node:stream";
 import { getS3Client } from "../../config/s3";
-import type { StorageObject, StorageProvider } from "./storage.interface";
+import type { StorageListItem, StorageObject, StorageProvider } from "./storage.interface";
 
 export class S3StorageProvider implements StorageProvider {
   private readonly client: S3Client;
@@ -47,5 +48,22 @@ export class S3StorageProvider implements StorageProvider {
 
   async delete(key: string): Promise<void> {
     await this.client.send(new DeleteObjectCommand({ Bucket: this.bucket, Key: key }));
+  }
+
+  async list(prefix: string): Promise<StorageListItem[]> {
+    const objects: StorageListItem[] = [];
+    let continuationToken: string | undefined;
+    do {
+      const page = await this.client.send(new ListObjectsV2Command({
+        Bucket: this.bucket,
+        Prefix: prefix,
+        ContinuationToken: continuationToken,
+      }));
+      for (const item of page.Contents ?? []) {
+        if (item.Key) objects.push({ key: item.Key, lastModified: item.LastModified });
+      }
+      continuationToken = page.IsTruncated ? page.NextContinuationToken : undefined;
+    } while (continuationToken);
+    return objects;
   }
 }
