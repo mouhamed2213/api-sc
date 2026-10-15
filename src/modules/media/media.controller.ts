@@ -8,11 +8,12 @@ export const MediaController = {
     if (!Buffer.isBuffer(req.body)) {
       throw new HttpError(400, "CORPS_MEDIA_INVALIDE", "Le fichier doit être envoyé en binaire");
     }
+    const contentType = req.headers["content-type"];
     const media = await MediaService.upload(
       req.user!,
       Number(req.params.id),
       req.body,
-      req.headers["content-type"]
+      Array.isArray(contentType) ? contentType[0] : contentType
     );
     res.status(201).json({ media });
   }),
@@ -34,4 +35,4 @@ export const MediaController = {
     });
     media.body.pipe(res);
   }),
-};
+}

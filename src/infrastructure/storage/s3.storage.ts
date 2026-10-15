@@ -3,12 +3,13 @@ import {
   GetObjectCommand,
   PutObjectCommand,
 } from "@aws-sdk/client-s3";
+import type { S3Client } from "@aws-sdk/client-s3";
 import type { Readable } from "node:stream";
 import { getS3Client } from "../../config/s3";
 import type { StorageObject, StorageProvider } from "./storage.interface";
 
 export class S3StorageProvider implements StorageProvider {
-  private readonly client;
+  private readonly client: S3Client;
   private readonly bucket: string;
 
   constructor() {
@@ -44,8 +45,6 @@ export class S3StorageProvider implements StorageProvider {
   }
 
   async delete(key: string): Promise<void> {
-    await this.client.send(
-      new DeleteObjectCommand({ Bucket: this.bucket, Key: key })
-    );
+    await this.client.send(new DeleteObjectCommand({ Bucket: this.bucket, Key: key }));
   }
 }
