@@ -229,9 +229,24 @@ export async function confirmSimulatedPayment(
       );
 
     const now = new Date();
-    const confirmedPayment = await tx.payment.update({
-      where: { id: payment.id },
+    // Réclamation atomique du paiement : deux confirmations simultanées ne
+    // peuvent pas activer deux abonnements pour la même tentative.
+    const claimed = await tx.payment.updateMany({
+      where: {
+        id: payment.id,
+        status: "PENDING",
+        provider: "SIMULATION",
+      },
       data: { status: "SUCCEEDED", paidAt: now },
+    });
+    if (claimed.count !== 1)
+      throw conflict(
+        "PAIEMENT_DEJA_TRAITE",
+        "Ce paiement a déjà été confirmé ou traité"
+      );
+
+    const confirmedPayment = await tx.payment.findUniqueOrThrow({
+      where: { id: payment.id },
     });
 
     // L'abonnement n'est remplacé qu'après confirmation du paiement.
