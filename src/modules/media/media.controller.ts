@@ -21,10 +21,16 @@ export const MediaController = {
   getPublic: asyncHandler(async (req: Request, res: Response) => {
     const media = await MediaService.getPublic(
       Number(req.params.ficheId),
-      String(req.params.key)
+      String(req.params.key),
+      typeof req.headers.range === "string" ? req.headers.range : undefined
     );
     res.setHeader("Content-Type", media.contentType);
     res.setHeader("Cache-Control", "public, max-age=31536000, immutable");
+    res.setHeader("Accept-Ranges", "bytes");
+    if (media.contentRange) {
+      res.status(206);
+      res.setHeader("Content-Range", media.contentRange);
+    }
     res.setHeader("X-Content-Type-Options", "nosniff");
     if (media.contentLength !== undefined) {
       res.setHeader("Content-Length", String(media.contentLength));

@@ -78,7 +78,7 @@ export const MediaService = {
     return { url: publicUrl(ficheId, fileName), type: finalFormat.kind, alt: "", size: optimized.body.length };
   },
 
-  async getPublic(ficheId: number, fileName: string) {
+  async getPublic(ficheId: number, fileName: string, range?: string) {
     if (!/^[0-9a-f-]{36}\.(jpg|png|webp|mp4|webm)$/i.test(fileName)) {
       throw notFound("Média introuvable");
     }
@@ -94,7 +94,7 @@ export const MediaService = {
       extension === "png" ? "image/png" :
       extension === "webp" ? "image/webp" :
       extension === "mp4" ? "video/mp4" : "video/webm";
-    const object = await getStorage().get(`fiches/${ficheId}/${fileName}`);
+    const object = await getStorage().get(`fiches/${ficheId}/${fileName}`, range);
     return { ...object, contentType: object.contentType ?? contentType };
   },
 

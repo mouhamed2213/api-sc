@@ -4,10 +4,11 @@ export interface StorageObject {
   body: Readable;
   contentType?: string;
   contentLength?: number;
+  contentRange?: string;
 }
 
 export interface StorageProvider {
   put(input: { key: string; body: Buffer; contentType: string }): Promise<void>;
-  get(key: string): Promise<StorageObject>;
+  get(key: string, range?: string): Promise<StorageObject>;
   delete(key: string): Promise<void>;
 }

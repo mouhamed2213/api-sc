@@ -30,9 +30,9 @@ export class S3StorageProvider implements StorageProvider {
     );
   }
 
-  async get(key: string): Promise<StorageObject> {
+  async get(key: string, range?: string): Promise<StorageObject> {
     const result = await this.client.send(
-      new GetObjectCommand({ Bucket: this.bucket, Key: key })
+      new GetObjectCommand({ Bucket: this.bucket, Key: key, ...(range ? { Range: range } : {}) })
     );
     if (!result.Body || !("pipe" in result.Body)) {
       throw new Error("Le stockage n'a retourné aucun flux média");
@@ -41,6 +41,7 @@ export class S3StorageProvider implements StorageProvider {
       body: result.Body as Readable,
       contentType: result.ContentType,
       contentLength: result.ContentLength,
+      contentRange: result.ContentRange,
     };
   }
 
