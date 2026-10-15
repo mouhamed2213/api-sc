@@ -671,10 +671,10 @@ model Subscription {
 
   plan Plan @relation(fields: [planId], references: [id])
 
-  @@index([ficheId, status])
-  @@index([endsAt])
   payments Payment[]
 
+  @@index([ficheId, status])
+  @@index([endsAt])
   @@map("subscriptions")
 }
 
