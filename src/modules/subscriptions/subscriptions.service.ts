@@ -103,6 +103,12 @@ export async function upgrade(
   ficheId: number,
   planType: PlanType
 ) {
+  if (env.NODE_ENV === "production")
+    throw forbidden(
+      "PAIEMENT_NON_CONFIGURE",
+      "Le paiement réel n'est pas encore configuré. Le changement de formule est temporairement indisponible."
+    );
+
   if (user.role !== "CLIENT")
     throw forbidden("ACCES_REFUSE", "Cette action est réservée aux clients");
 
