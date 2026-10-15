@@ -6,7 +6,8 @@ import type { AuthUser } from "../../types/user";
 import { getEffectiveSubscription } from "../subscriptions/subscriptions.service";
 import { S3StorageProvider } from "../../infrastructure/storage/s3.storage";
 
-const storage = new S3StorageProvider();
+let storage: S3StorageProvider | undefined;
+const getStorage = () => (storage ??= new S3StorageProvider());
 
 const MIME = {
   "image/jpeg": { extension: "jpg", kind: "image" },
@@ -95,7 +96,7 @@ export const MediaService = {
     validateSignature(body, mime);
     const fileName = `${randomUUID()}.${extension}`;
     const storageKey = `fiches/${ficheId}/${fileName}`;
-    await storage.put({ key: storageKey, body, contentType: mime });
+    await getStorage().put({ key: storageKey, body, contentType: mime });
 
     return {
       url: publicUrl(ficheId, fileName),
@@ -121,7 +122,7 @@ export const MediaService = {
       extension === "png" ? "image/png" :
       extension === "webp" ? "image/webp" :
       extension === "mp4" ? "video/mp4" : "video/webm";
-    const object = await storage.get(`fiches/${ficheId}/${fileName}`);
+    const object = await getStorage().get(`fiches/${ficheId}/${fileName}`);
     return { ...object, contentType: object.contentType ?? contentType };
   },
 };
