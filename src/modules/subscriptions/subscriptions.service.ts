@@ -96,8 +96,8 @@ const PLAN_RANK: Record<PlanType, number> = {
   SIGNATURE: 2,
 };
 
-// Upgrade simulé : aucun prestataire de paiement réel n’est appelé.
-// La formule et ses limites deviennent immédiatement effectives en base.
+// Crée une demande de changement de formule et un paiement PENDING.
+// Aucune formule n'est activée à cette étape.
 export async function upgrade(
   user: AuthUser,
   ficheId: number,
@@ -118,7 +118,6 @@ export async function upgrade(
       select: { id: true, userId: true, statut: true },
     });
 
-    // Ne pas révéler l’existence d’une fiche qui appartient à un autre compte.
     if (!fiche || fiche.userId !== user.id)
       throw notFound("Fiche introuvable");
 
@@ -130,7 +129,7 @@ export async function upgrade(
 
     const [currentSubscription, targetPlan] = await Promise.all([
       getEffectiveSubscription(ficheId, tx),
-      tx.plan.findUnique({ where: { type: planType }, include: { limits: true } }),
+      tx.plan.findUnique({ where: { type: planType } }),
     ]);
 
     if (!targetPlan || !targetPlan.actif)
@@ -143,52 +142,116 @@ export async function upgrade(
         "Choisis une formule supérieure à celle actuellement active"
       );
 
-    const now = new Date();
-    const endsAt = targetPlan.dureeMois
-      ? addMonths(now, targetPlan.dureeMois)
-      : null;
-
-    // Étape 1 : créer une trace de paiement en attente.
-    // En mode réel, cette étape renverra le client vers le fournisseur et
-    // laissera le paiement PENDING jusqu'à une confirmation serveur vérifiée.
-    const paymentRef = `SIMULATED-${ficheId}-${randomUUID()}`;
-    const pendingPayment = await tx.payment.create({
+    const payment = await tx.payment.create({
       data: {
         ficheId,
+        planId: targetPlan.id,
         provider: "SIMULATION",
         status: "PENDING",
         amountFcfa: targetPlan.prixFcfa ?? 0,
         currency: "XOF",
-        providerReference: paymentRef,
+        providerReference: `SIMULATED-${ficheId}-${randomUUID()}`,
       },
     });
 
-    // Étape 2 : adaptateur de simulation. Seul le code de confirmation fait
-    // passer le paiement à SUCCEEDED ; l'activation arrive après cette étape.
-    // Remplacer cet adaptateur par la confirmation vérifiée de Wave/Orange Money
-    // lors de l'intégration réelle, sans changer les règles d'activation.
+    return {
+      payment: {
+        id: payment.id,
+        reference: payment.providerReference,
+        mode: "simulation" as const,
+        status: "pending" as const,
+      },
+    };
+  });
+}
+
+// Confirmation de simulation séparée : en production, cette route est désactivée.
+// Un fournisseur réel devra appeler le même cœur d'activation après vérification
+// serveur de sa notification/statut, jamais sur la seule confiance du navigateur.
+export async function confirmSimulatedPayment(
+  user: AuthUser,
+  paymentId: number
+) {
+  if (env.NODE_ENV === "production")
+    throw forbidden(
+      "SIMULATION_DESACTIVEE",
+      "La confirmation simulée est désactivée en production"
+    );
+
+  if (user.role !== "CLIENT")
+    throw forbidden("ACCES_REFUSE", "Cette action est réservée aux clients");
+
+  if (env.REQUIRE_EMAIL_VERIFICATION && !user.emailVerified)
+    throw forbidden(
+      "EMAIL_NON_VERIFIE",
+      "Confirme ton adresse e-mail avant de changer de formule"
+    );
+
+  return prisma.$transaction(async tx => {
+    const payment = await tx.payment.findUnique({
+      where: { id: paymentId },
+      include: {
+        fiche: { select: { id: true, userId: true, statut: true } },
+        plan: true,
+      },
+    });
+
+    if (!payment || payment.fiche.userId !== user.id)
+      throw notFound("Paiement introuvable");
+
+    if (payment.status !== "PENDING")
+      throw conflict(
+        "PAIEMENT_NON_EN_ATTENTE",
+        "Ce paiement a déjà été traité ou ne peut plus être confirmé"
+      );
+
+    if (payment.provider !== "SIMULATION")
+      throw forbidden(
+        "FOURNISSEUR_INVALIDE",
+        "Ce paiement ne peut pas être confirmé par la simulation"
+      );
+
+    if (payment.fiche.statut === "SUSPENDUE")
+      throw forbidden(
+        "FICHE_SUSPENDUE",
+        "Cette fiche est suspendue : changement de formule impossible"
+      );
+
+    if (!payment.plan.actif)
+      throw notFound("Formule introuvable ou désactivée");
+
+    const currentSubscription = await getEffectiveSubscription(payment.ficheId, tx);
+    const currentPlanType = currentSubscription?.plan.type ?? "ESSENTIELLE";
+    if (PLAN_RANK[payment.plan.type] <= PLAN_RANK[currentPlanType])
+      throw conflict(
+        "FORMULE_NON_SUPERIEURE",
+        "La formule demandée n'est plus supérieure à la formule active"
+      );
+
+    const now = new Date();
     const confirmedPayment = await tx.payment.update({
-      where: { id: pendingPayment.id },
-      data: {
-        status: "SUCCEEDED",
-        paidAt: now,
-      },
+      where: { id: payment.id },
+      data: { status: "SUCCEEDED", paidAt: now },
     });
 
-    // Étape 3 : appliquer la formule uniquement après confirmation.
+    // L'abonnement n'est remplacé qu'après confirmation du paiement.
     await tx.subscription.updateMany({
-      where: { ficheId, status: "ACTIVE" },
+      where: { ficheId: payment.ficheId, status: "ACTIVE" },
       data: { status: "CANCELED", canceledAt: now },
     });
 
+    const endsAt = payment.plan.dureeMois
+      ? addMonths(now, payment.plan.dureeMois)
+      : null;
+
     const subscription = await tx.subscription.create({
       data: {
-        ficheId,
-        planId: targetPlan.id,
+        ficheId: payment.ficheId,
+        planId: payment.planId,
         status: "ACTIVE",
         startsAt: now,
         endsAt,
-        amountFcfa: targetPlan.prixFcfa ?? 0,
+        amountFcfa: payment.amountFcfa,
         paymentRef: confirmedPayment.providerReference,
       },
     });
@@ -199,12 +262,12 @@ export async function upgrade(
     });
 
     const updatedFiche = await tx.fiche.findUnique({
-      where: { id: ficheId },
+      where: { id: payment.ficheId },
       include: ficheInclude,
     });
     if (!updatedFiche) throw notFound("Fiche introuvable");
 
-    const effectiveSubscription = await getEffectiveSubscription(ficheId, tx);
+    const effectiveSubscription = await getEffectiveSubscription(payment.ficheId, tx);
     return {
       subscription,
       fiche: toFicheDto(updatedFiche, effectiveSubscription),
