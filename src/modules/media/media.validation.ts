@@ -51,7 +51,7 @@ export function validateMediaSignature(body: Buffer, mime: SupportedMediaMime) {
   }
 }
 
-function collectStoredMediaKeys(value: unknown, ficheId: number): Set<string> {
+export function collectStoredMediaKeys(value: unknown, ficheId: number): Set<string> {
   const keys = new Set<string>();
   const seen = new Set<object>();
   const pattern = /\/api\/media\/(\d+)\/([0-9a-f-]{36}\.(?:jpg|png|webp|mp4|webm))/gi;

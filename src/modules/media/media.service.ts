@@ -5,16 +5,15 @@ import { forbidden, notFound, unprocessable } from "../../lib/httpError";
 import type { AuthUser } from "../../types/user";
 import { getEffectiveSubscription } from "../subscriptions/subscriptions.service";
 import { S3StorageProvider } from "../../infrastructure/storage/s3.storage";
-
-let storage: S3StorageProvider | undefined;
-const getStorage = () => (storage ??= new S3StorageProvider());
-
 import {
   MEDIA_FORMATS,
   mediaMaxBytes,
   resolveMediaMime,
   validateMediaSignature,
 } from "./media.validation";
+
+let storage: S3StorageProvider | undefined;
+const getStorage = () => (storage ??= new S3StorageProvider());
 
 function assertAccess(user: AuthUser, fiche: { userId: number | null }) {
   if (user.role !== "ADMIN" && fiche.userId !== user.id) {
