@@ -1,7 +1,7 @@
 import type { PlanType } from "../../database/prisma/generated/prisma/client";
 import { responseSuccess } from "../../lib/apiResponse";
 import { asyncHandler } from "../../lib/asyncHandler";
-import { filter, subscriptionKpi, upgrade } from "./subscriptions.service";
+import { confirmSimulatedPayment, filter, subscriptionKpi, upgrade } from "./subscriptions.service";
 
 export const SubscriptionController = {
   subscriptionKpi: asyncHandler(async (req, res) => {
@@ -30,9 +30,15 @@ export const SubscriptionController = {
     responseSuccess(
       res,
       result,
-      200,
-      "Formule mise à niveau (paiement simulé)"
+      201,
+      "Demande de paiement créée ; la formule reste inchangée jusqu’à confirmation"
     );
+  }),
+
+  confirmSimulatedPayment: asyncHandler(async (req, res) => {
+    const paymentId = Number(req.params.paymentId);
+    const result = await confirmSimulatedPayment(req.user!, paymentId);
+    responseSuccess(res, result, 200, "Paiement simulé confirmé et formule activée");
   }),
 
   filter: asyncHandler(async (req, res) => {
