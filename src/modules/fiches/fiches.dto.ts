@@ -1,4 +1,5 @@
 import type { Prisma } from '../../database/prisma/generated/prisma/client';
+import { env } from '../../config/env';
 import type { EffectiveSubscription } from '../subscriptions/subscriptions.service';
 
 // Tout ce qu'il faut charger pour reconstruire l'objet attendu par le front.
@@ -18,6 +19,13 @@ export type FicheFull = Prisma.FicheGetPayload<{ include: typeof ficheInclude }>
 const JOURS = ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche'];
 const s = (v: string | null | undefined) => v ?? ''; // le front attend '' plutôt que null
 const lower = (v: string) => v.toLowerCase();
+// Les références persistées restent relatives et indépendantes du fournisseur de stockage.
+const mediaUrl = (v: string | null | undefined) => {
+  const value = s(v);
+  if (!value.startsWith('/api/media/')) return value;
+  const apiOrigin = env.SERVER.replace(/\/api\/?$/, '').replace(/\/$/, '');
+  return `${apiOrigin}${value}`;
+};
 const n = (v: number | null) => v ?? undefined;
 const price = (v: number | null) => (v === null ? undefined : String(v)); // le front manipule des prix en texte
 
@@ -34,8 +42,8 @@ export function toFicheDto(f: FicheFull, sub: EffectiveSubscription | null) {
     nom: f.nom,
     fonction: s(f.fonction),
     entreprise: s(f.entreprise),
-    photo: s(f.photo),
-    logo: s(f.logo),
+    photo: mediaUrl(f.photo),
+    logo: mediaUrl(f.logo),
     telephone: s(f.telephone),
     whatsapp: s(f.whatsapp),
     email: s(f.email),
@@ -52,13 +60,13 @@ export function toFicheDto(f: FicheFull, sub: EffectiveSubscription | null) {
       reseauxSociaux: f.reseaux.map((r) => ({ label: r.label, url: r.url })),
       liens: f.liens.map((l) => ({ label: l.label, url: l.url })),
       horaires: f.horaires.map((h) => ({ jour: JOURS[h.jour], horaire: h.horaire })),
-      galerie: f.medias.map((m) => ({ type: lower(m.type), url: m.url, alt: s(m.alt) })),
+      galerie: f.medias.map((m) => ({ type: lower(m.type), url: mediaUrl(m.url), alt: s(m.alt) })),
       sections: f.catalogueSections.map((sec) => ({
         titre: sec.titre,
         articles: sec.articles.map((a) => ({
           nom: a.nom,
           description: s(a.description),
-          photo: s(a.photo),
+          photo: mediaUrl(a.photo),
           prix: price(a.prix),
           badge: a.badge ?? undefined,
         })),
@@ -70,9 +78,9 @@ export function toFicheDto(f: FicheFull, sub: EffectiveSubscription | null) {
             nom: p.nom,
             prix: price(p.prix),
             description: s(p.description),
-            image: s(p.image),
-            video: p.video ?? undefined,
-            videoWebm: p.videoWebm ?? undefined,
+            image: mediaUrl(p.image),
+            video: mediaUrl(p.video),
+            videoWebm: mediaUrl(p.videoWebm),
             badge: p.badge ?? undefined,
           })),
         })),
@@ -89,7 +97,7 @@ export function toFicheDto(f: FicheFull, sub: EffectiveSubscription | null) {
         sdb: n(b.sdb),
         atouts: b.atouts,
         description: s(b.description),
-        photos: b.photos.map((p) => p.url),
+        photos: b.photos.map((p) => mediaUrl(p.url)),
       })),
       rendezVous: { label: s(f.rdvLabel), url: s(f.rdvUrl) },
       onglets: f.onglets.map((o) => ({
@@ -103,7 +111,7 @@ export function toFicheDto(f: FicheFull, sub: EffectiveSubscription | null) {
         disposition: lower(f.enteteDisposition),
         taille: lower(f.enteteTaille),
         theme: f.enteteTheme ? lower(f.enteteTheme) : undefined,
-        couverture: s(f.enteteCouverture),
+        couverture: mediaUrl(f.enteteCouverture),
       },
     },
   };
