@@ -5,7 +5,7 @@ import { filter, subscriptionKpi, upgrade } from "./subscriptions.service";
 
 export const SubscriptionController = {
   subscriptionKpi: asyncHandler(async (req, res) => {
-    const kpi = await subscriptionKpi();
+    const kpi = await subscriptionKpi(req.user!);
     responseSuccess(
       res,
       {
