@@ -24,8 +24,10 @@ export async function optimizeMedia(body: Buffer, mime: SupportedMediaMime, ffmp
     await new Promise<void>((resolve, reject) => {
       const child = spawn(ffmpegPath, args, { stdio: ["ignore", "ignore", "pipe"] });
       let stderr = "";
-      child.stderr.setEncoding("utf8");
-      child.stderr.on("data", chunk => { stderr = (stderr + chunk).slice(-4000); });
+      if (child.stderr) {
+        child.stderr.setEncoding("utf8");
+        child.stderr.on("data", chunk => { stderr = (stderr + chunk).slice(-4000); });
+      }
       child.once("error", error => {
         if ("code" in error && error.code === "ENOENT") {
           reject(new HttpError(503, "MEDIA_PROCESSOR_UNAVAILABLE", "Le serveur doit disposer de FFmpeg pour optimiser les médias"));

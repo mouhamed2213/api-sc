@@ -34,7 +34,9 @@ L'upload échoue avec `MEDIA_PROCESSOR_UNAVAILABLE` si FFmpeg n'est pas disponib
 
 Après une mise à jour réussie de la fiche, les objets média qui étaient référencés avant mais ne le sont plus sont supprimés du stockage. Si le nettoyage échoue, l'erreur est journalisée sans annuler la sauvegarde de la fiche.
 
-Les uploads qui n'ont jamais été enregistrés dans une fiche (par exemple si l'utilisateur ferme l'éditeur avant d'enregistrer) ne sont pas encore récupérés automatiquement. Un job périodique de nettoyage des uploads orphelins reste à prévoir.
+Un job périodique démarre 10 minutes après le lancement du serveur puis s’exécute toutes les 24 heures. Il supprime les objets non référencés qui ont plus de 24 heures ; cette période de grâce évite de supprimer un upload pendant que l’utilisateur termine son édition.
+
+La lecture des vidéos prend en charge les requêtes HTTP `Range` afin de permettre le déplacement dans la vidéo sans télécharger systématiquement tout le fichier.
 
 ## Tests
 
