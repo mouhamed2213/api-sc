@@ -24,6 +24,7 @@ import {
   type UpdateFicheInput,
 } from "./fiches.schemas";
 import { AuthUser } from "../../types/user";
+import { MediaService } from "../media/media.service";
 
 
 const isAdmin = (u: AuthUser) => u.role === "ADMIN";
@@ -208,6 +209,7 @@ export const FicheService = {
       );
 
     const input = enforcePlanLimits(sub.plan.limits, normalizeMediaReferences(rawInput)); // 422 si dépassement
+    const previousSnapshot = await loadFull(id);
     const d = input.data;
 
     await prisma.$transaction(
@@ -381,6 +383,23 @@ export const FicheService = {
     );
 
     const updated = await loadFull(id);
+    if (previousSnapshot && updated) {
+      const previousKeys = MediaService.collectStoredMediaKeys(previousSnapshot, id);
+      const currentKeys = MediaService.collectStoredMediaKeys(updated, id);
+      const removedKeys = [...previousKeys].filter(key => !currentKeys.has(key));
+      for (const key of removedKeys) {
+        try {
+          await MediaService.deleteStoredMedia(id, key);
+        } catch (error) {
+          // La sauvegarde est déjà validée : une erreur de nettoyage ne doit pas la faire échouer.
+          logger.warn("Removed fiche media could not be deleted from storage", {
+            ficheId: id,
+            key,
+            error: error instanceof Error ? error.message : String(error),
+          });
+        }
+      }
+    }
     logger.info("Fiche updated", { ficheId: id, userId: user.id });
     return toFicheDto(updated!, sub);
   },

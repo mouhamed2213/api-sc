@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import { MediaService } from "./media.service";
 import {
   mediaMaxBytes,
   resolveMediaMime,
@@ -29,5 +30,21 @@ describe("media validation", () => {
     expect(() =>
       validateMediaSignature(Buffer.from([0x1a, 0x45, 0xdf, 0xa3]), "video/webm")
     ).not.toThrow();
+  });
+});
+
+describe("stored media references", () => {
+  it("collects only media keys belonging to the target fiche", () => {
+    const keys = MediaService.collectStoredMediaKeys({
+      photo: "https://api.example.test/api/media/7/123e4567-e89b-12d3-a456-426614174000.webp",
+      gallery: [
+        { url: "/api/media/7/123e4567-e89b-12d3-a456-426614174001.mp4" },
+        { url: "/api/media/8/123e4567-e89b-12d3-a456-426614174002.jpg" },
+      ],
+    }, 7);
+    expect([...keys].sort()).toEqual([
+      "123e4567-e89b-12d3-a456-426614174000.webp",
+      "123e4567-e89b-12d3-a456-426614174001.mp4",
+    ]);
   });
 });
