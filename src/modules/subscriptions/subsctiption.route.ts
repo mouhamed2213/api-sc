@@ -18,6 +18,11 @@ subscriptionRoute.post(
   validate({ body: upgradeSchema }),
   SubscriptionController.upgradePlan
 );
+subscriptionRoute.post(
+  "/payments/:paymentId/simulate-confirmation",
+  validate({ params: z.object({ paymentId: z.coerce.number().int().positive() }) }),
+  SubscriptionController.confirmSimulatedPayment
+);
 subscriptionRoute.get("/filter", SubscriptionController.filter);
 
 export default subscriptionRoute;
