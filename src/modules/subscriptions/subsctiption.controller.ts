@@ -17,8 +17,12 @@ export const SubscriptionController = {
   }),
 
   upgradePlan: asyncHandler(async (req, res) => {
-    // const planData = await
-    const upgradeRes = await upgrade(1, "PRO");
+    const { ficheId, plan } = req.body as {
+      ficheId: number;
+      plan: "pro" | "signature";
+    };
+    const result = await upgrade(req.user!, ficheId, plan.toUpperCase() as "PRO" | "SIGNATURE");
+    responseSuccess(res, result, 200, "Formule mise à niveau (paiement simulé)");
   }),
 
   filter: asyncHandler(async (req, res) => {
