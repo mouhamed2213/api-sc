@@ -37,6 +37,24 @@ enum SubscriptionStatus {
   CANCELED
 }
 
+enum PaymentProvider {
+  SIMULATION
+
+  WAVE
+
+  ORANGE_MONEY
+}
+
+enum PaymentStatus {
+  PENDING
+
+  SUCCEEDED
+
+  FAILED
+
+  CANCELLED
+}
+
 // Suspension décidée par l'admin. L'expiration, elle, se lit sur l'abonnement (endsAt).
 
 enum StatutFiche {
@@ -219,6 +237,8 @@ model Fiche {
   user User? @relation(fields: [userId], references: [id], onDelete: SetNull)
 
   subscriptions Subscription[]
+
+  payments Payment[]
 
   onglets FicheOnglet[]
 
@@ -653,7 +673,42 @@ model Subscription {
 
   @@index([ficheId, status])
   @@index([endsAt])
+  payments Payment[]
+
   @@map("subscriptions")
+}
+
+model Payment {
+  id Int @id @default(autoincrement())
+
+  ficheId Int
+
+  subscriptionId Int?
+
+  provider PaymentProvider @default(SIMULATION)
+
+  status PaymentStatus @default(PENDING)
+
+  amountFcfa Int
+
+  currency String @default("XOF")
+
+  providerReference String? @unique
+
+  failureReason String?
+
+  paidAt DateTime?
+
+  createdAt DateTime @default(now())
+
+  updatedAt DateTime @updatedAt
+
+  fiche Fiche @relation(fields: [ficheId], references: [id], onDelete: Cascade)
+
+  subscription Subscription? @relation(fields: [subscriptionId], references: [id], onDelete: SetNull)
+
+  @@index([ficheId, status, createdAt])
+  @@map("payments")
 }
 
 
