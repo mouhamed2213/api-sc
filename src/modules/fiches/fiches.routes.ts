@@ -1,5 +1,4 @@
 import { Router } from "express";
-import { asyncHandler } from "../../lib/asyncHandler";
 import { requireAuth } from "../../middlewares/auth";
 import { validate } from "../../middlewares/validate";
 import { FicheController } from "./fiche.controller";
@@ -9,7 +8,6 @@ import {
   slugParam,
   updateFicheSchema,
 } from "./fiches.schemas";
-import * as fiches from "./fiches.service";
 
 export const fichesRouter = Router();
 
@@ -28,13 +26,13 @@ fichesRouter.get("/", FicheController.listFiches);
 fichesRouter.post(
   "/",
   validate({ body: createFicheSchema }),
-FicheController.createFiche
+  FicheController.createFiche
 );
 
 fichesRouter.get(
   "/:id",
   validate({ params: idParam }),
-FicheController.getFiche
+  FicheController.getFiche
 );
 
 fichesRouter.patch(
