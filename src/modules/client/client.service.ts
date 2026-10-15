@@ -6,7 +6,15 @@ export const ClientService = {
     const getFiche = await prisma.fiche.findMany({
       where: { userId: user.id },
       include: {
-        subscriptions: { select: { plan: { select: { type: true } } } },
+        subscriptions: {
+          where: {
+            status: "ACTIVE",
+            OR: [{ endsAt: null }, { endsAt: { gt: new Date() } }],
+          },
+          orderBy: { startsAt: "desc" },
+          take: 1,
+          select: { plan: { select: { type: true } } },
+        },
       },
     });
 
