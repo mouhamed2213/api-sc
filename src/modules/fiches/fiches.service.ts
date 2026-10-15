@@ -97,6 +97,10 @@ export const FicheService = {
     logger.info("Fiche created", { ficheId: fiche.id, userId: user.id });
     return dtoFor(fiche);
   },
+
+
+
+  
   getFiche: async (user: AuthUser, id: number) => {
     const fiche = await loadFull(id);
     if (!fiche) throw notFound("Fiche introuvable");

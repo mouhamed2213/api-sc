@@ -22,6 +22,11 @@ const schema = z.object({
 
   MAILTRAP_API_TOKEN: z.string().min(1, "MAILTRAP_API_TOKEN est requis"),
   SERVER: z.string().default("http://localhost:4000/api"),
+  S3_ENDPOINT: z.string(),
+  S3_ACCESS_KEY_ID: z.string(),
+  S3_SECRET_ACCESS_KEY: z.string(),
+  S3_REGION: z.string(),
+  S3_BUCKET: z.string().default("ficheImage"),
 });
 
 const parsed = schema.safeParse(process.env);
