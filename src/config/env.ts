@@ -27,6 +27,7 @@ const schema = z.object({
   S3_SECRET_ACCESS_KEY: z.string(),
   S3_REGION: z.string(),
   S3_BUCKET: z.string().default("ficheImage"),
+  FFMPEG_PATH: z.string().default("ffmpeg"),
 });
 
 const parsed = schema.safeParse(process.env);

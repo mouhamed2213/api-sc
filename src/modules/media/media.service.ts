@@ -5,6 +5,7 @@ import { forbidden, notFound, unprocessable } from "../../lib/httpError";
 import type { AuthUser } from "../../types/user";
 import { getEffectiveSubscription } from "../subscriptions/subscriptions.service";
 import { S3StorageProvider } from "../../infrastructure/storage/s3.storage";
+import { optimizeMedia } from "./media.processor";
 import {
   MEDIA_FORMATS,
   mediaMaxBytes,
@@ -65,16 +66,16 @@ export const MediaService = {
     }
 
     validateMediaSignature(body, mime);
-    const fileName = `${randomUUID()}.${extension}`;
+    const optimized = await optimizeMedia(body, mime);
+    const finalMime = optimized.mime;
+    const finalFormat = MEDIA_FORMATS[finalMime];
+    if (optimized.body.length > mediaMaxBytes(finalFormat.kind)) {
+      throw unprocessable("MEDIA_TROP_LOURD_APRES_OPTIMISATION", finalFormat.kind === "image" ? "L’image optimisée dépasse 12 Mo" : "La vidéo optimisée dépasse 30 Mo");
+    }
+    const fileName = `${randomUUID()}.${finalFormat.extension}`;
     const storageKey = `fiches/${ficheId}/${fileName}`;
-    await getStorage().put({ key: storageKey, body, contentType: mime });
-
-    return {
-      url: publicUrl(ficheId, fileName),
-      type: kind,
-      alt: "",
-      size: body.length,
-    };
+    await getStorage().put({ key: storageKey, body: optimized.body, contentType: finalMime });
+    return { url: publicUrl(ficheId, fileName), type: finalFormat.kind, alt: "", size: optimized.body.length };
   },
 
   async getPublic(ficheId: number, fileName: string) {
