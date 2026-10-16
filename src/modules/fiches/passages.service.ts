@@ -49,44 +49,46 @@ export const PassageService = {
       return { recorded: false };
     }
 
-    const existing = await prisma.fichePassage.findUnique({
-      where: { idempotencyKey },
-      select: { ficheId: true, source: true },
-    });
-    if (existing) {
-      if (existing.ficheId !== fiche.id || existing.source !== source) {
+    const existing = await prisma.$queryRaw<Array<{ ficheId: number; source: string }>>(
+      Prisma.sql`SELECT "ficheId", "source"::text AS source
+        FROM "fiche_passages"
+        WHERE "idempotencyKey" = ${idempotencyKey}
+        LIMIT 1`,
+    );
+    if (existing[0]) {
+      if (existing[0].ficheId !== fiche.id || existing[0].source !== source) {
         throw conflict("CLE_PASSAGE_REUTILISEE", "Cette clé de passage a déjà été utilisée.");
       }
       return { recorded: false };
     }
 
-    try {
-      await prisma.$transaction(async (tx) => {
-        await tx.fichePassage.create({
-          data: { ficheId: fiche.id, source, idempotencyKey },
-        });
-        await tx.fiche.update({
-          where: { id: fiche.id },
-          data: { scansTotal: { increment: 1 } },
-        });
-      });
-      return { recorded: true };
-    } catch (error) {
-      // Deux requêtes simultanées avec la même clé ne doivent compter qu'une fois.
-      if (error && typeof error === "object" && "code" in error && error.code === "P2002") {
-        const duplicate = await prisma.fichePassage.findUnique({
-          where: { idempotencyKey },
-          select: { ficheId: true, source: true },
-        });
-        if (duplicate?.ficheId === fiche.id && duplicate.source === source) {
+    return prisma.$transaction(async (tx) => {
+      const inserted = await tx.$queryRaw<Array<{ id: number }>>(
+        Prisma.sql`INSERT INTO "fiche_passages" ("ficheId", "source", "idempotencyKey")
+          VALUES (${fiche.id}, ${source}::"FichePassageSource", ${idempotencyKey})
+          ON CONFLICT ("idempotencyKey") DO NOTHING
+          RETURNING "id"`,
+      );
+
+      if (inserted.length === 0) {
+        const duplicate = await tx.$queryRaw<Array<{ ficheId: number; source: string }>>(
+          Prisma.sql`SELECT "ficheId", "source"::text AS source
+            FROM "fiche_passages"
+            WHERE "idempotencyKey" = ${idempotencyKey}
+            LIMIT 1`,
+        );
+        if (duplicate[0]?.ficheId === fiche.id && duplicate[0]?.source === source) {
           return { recorded: false };
         }
-        if (duplicate) {
-          throw conflict("CLE_PASSAGE_REUTILISEE", "Cette clé de passage a déjà été utilisée.");
-        }
+        throw conflict("CLE_PASSAGE_REUTILISEE", "Cette clé de passage a déjà été utilisée.");
       }
-      throw error;
-    }
+
+      await tx.fiche.update({
+        where: { id: fiche.id },
+        data: { scansTotal: { increment: 1 } },
+      });
+      return { recorded: true };
+    });
   },
 
   async stats(user: AuthUser, ficheId: number, filters: PassageFilters) {
