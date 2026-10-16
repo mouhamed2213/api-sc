@@ -28,7 +28,7 @@ function getRange(filters: PassageFilters) {
   }
 
   if (filters.month) {
-    if (!/^\\d{4}-(0[1-9]|1[0-2])$/.test(filters.month)) {
+    if (!/^\d{4}-(0[1-9]|1[0-2])$/.test(filters.month)) {
       throw badRequest("MOIS_INVALIDE", "Le mois doit respecter le format AAAA-MM.");
     }
     const [year, month] = filters.month.split("-").map(Number);
