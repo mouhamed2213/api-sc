@@ -138,8 +138,8 @@ export const recordPassageSchema = z.object({
 
 export const passageStatsQuerySchema = z.object({
   granularity: z.enum(["day", "month"]).default("month"),
-  date: z.string().regex(/^\\d{4}-\\d{2}-\\d{2}$/).optional(),
-  month: z.string().regex(/^\\d{4}-(0[1-9]|1[0-2])$/).optional(),
+  date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
+  month: z.string().regex(/^\d{4}-(0[1-9]|1[0-2])$/).optional(),
 }).refine(value => !(value.date && value.month), {
   message: "Choisissez une date ou un mois, pas les deux.",
 });
