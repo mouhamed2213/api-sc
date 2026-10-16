@@ -10,6 +10,7 @@ import {
   updateFicheSchema,
   recordPassageSchema,
   passageStatsQuerySchema,
+  createRappelSchema,
 } from "./fiches.schemas";
 
 export const fichesRouter = Router();
@@ -26,6 +27,13 @@ fichesRouter.post(
   "/public/:slug/passages",
   validate({ params: slugParam, body: recordPassageSchema }),
   FicheController.recordPublicPassage
+);
+
+// Public — enregistre une demande de rappel pour la fiche.
+fichesRouter.post(
+  "/public/:slug/rappels",
+  validate({ params: slugParam, body: createRappelSchema }),
+  FicheController.createPublicRappel
 );
 
 // Tout le reste exige d'être connecté.
