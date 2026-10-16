@@ -432,6 +432,7 @@ export type FicheWhereInput = {
   enteteCouverture?: Prisma.StringNullableFilter<"Fiche"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Fiche"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Fiche"> | Date | string
+  passages?: Prisma.FichePassageListRelationFilter
   user?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
   subscriptions?: Prisma.SubscriptionListRelationFilter
   payments?: Prisma.PaymentListRelationFilter
@@ -478,6 +479,7 @@ export type FicheOrderByWithRelationInput = {
   enteteCouverture?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  passages?: Prisma.FichePassageOrderByRelationAggregateInput
   user?: Prisma.UserOrderByWithRelationInput
   subscriptions?: Prisma.SubscriptionOrderByRelationAggregateInput
   payments?: Prisma.PaymentOrderByRelationAggregateInput
@@ -527,6 +529,7 @@ export type FicheWhereUniqueInput = Prisma.AtLeast<{
   enteteCouverture?: Prisma.StringNullableFilter<"Fiche"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Fiche"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Fiche"> | Date | string
+  passages?: Prisma.FichePassageListRelationFilter
   user?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
   subscriptions?: Prisma.SubscriptionListRelationFilter
   payments?: Prisma.PaymentListRelationFilter
@@ -647,6 +650,7 @@ export type FicheCreateInput = {
   enteteCouverture?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  passages?: Prisma.FichePassageCreateNestedManyWithoutFicheInput
   user?: Prisma.UserCreateNestedOneWithoutFichesInput
   subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutFicheInput
   payments?: Prisma.PaymentCreateNestedManyWithoutFicheInput
@@ -693,6 +697,7 @@ export type FicheUncheckedCreateInput = {
   enteteCouverture?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  passages?: Prisma.FichePassageUncheckedCreateNestedManyWithoutFicheInput
   subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutFicheInput
   payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutFicheInput
   onglets?: Prisma.FicheOngletUncheckedCreateNestedManyWithoutFicheInput
@@ -736,6 +741,7 @@ export type FicheUpdateInput = {
   enteteCouverture?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  passages?: Prisma.FichePassageUpdateManyWithoutFicheNestedInput
   user?: Prisma.UserUpdateOneWithoutFichesNestedInput
   subscriptions?: Prisma.SubscriptionUpdateManyWithoutFicheNestedInput
   payments?: Prisma.PaymentUpdateManyWithoutFicheNestedInput
@@ -782,6 +788,7 @@ export type FicheUncheckedUpdateInput = {
   enteteCouverture?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  passages?: Prisma.FichePassageUncheckedUpdateManyWithoutFicheNestedInput
   subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutFicheNestedInput
   payments?: Prisma.PaymentUncheckedUpdateManyWithoutFicheNestedInput
   onglets?: Prisma.FicheOngletUncheckedUpdateManyWithoutFicheNestedInput
@@ -1276,6 +1283,20 @@ export type FicheUpdateOneRequiredWithoutDemandeRappelsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.FicheUpdateToOneWithWhereWithoutDemandeRappelsInput, Prisma.FicheUpdateWithoutDemandeRappelsInput>, Prisma.FicheUncheckedUpdateWithoutDemandeRappelsInput>
 }
 
+export type FicheCreateNestedOneWithoutPassagesInput = {
+  create?: Prisma.XOR<Prisma.FicheCreateWithoutPassagesInput, Prisma.FicheUncheckedCreateWithoutPassagesInput>
+  connectOrCreate?: Prisma.FicheCreateOrConnectWithoutPassagesInput
+  connect?: Prisma.FicheWhereUniqueInput
+}
+
+export type FicheUpdateOneRequiredWithoutPassagesNestedInput = {
+  create?: Prisma.XOR<Prisma.FicheCreateWithoutPassagesInput, Prisma.FicheUncheckedCreateWithoutPassagesInput>
+  connectOrCreate?: Prisma.FicheCreateOrConnectWithoutPassagesInput
+  upsert?: Prisma.FicheUpsertWithoutPassagesInput
+  connect?: Prisma.FicheWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.FicheUpdateToOneWithWhereWithoutPassagesInput, Prisma.FicheUpdateWithoutPassagesInput>, Prisma.FicheUncheckedUpdateWithoutPassagesInput>
+}
+
 export type FicheCreateWithoutOngletsInput = {
   slug: string
   prenom: string
@@ -1306,6 +1327,7 @@ export type FicheCreateWithoutOngletsInput = {
   enteteCouverture?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  passages?: Prisma.FichePassageCreateNestedManyWithoutFicheInput
   user?: Prisma.UserCreateNestedOneWithoutFichesInput
   subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutFicheInput
   payments?: Prisma.PaymentCreateNestedManyWithoutFicheInput
@@ -1351,6 +1373,7 @@ export type FicheUncheckedCreateWithoutOngletsInput = {
   enteteCouverture?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  passages?: Prisma.FichePassageUncheckedCreateNestedManyWithoutFicheInput
   subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutFicheInput
   payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutFicheInput
   reseaux?: Prisma.FicheReseauUncheckedCreateNestedManyWithoutFicheInput
@@ -1409,6 +1432,7 @@ export type FicheUpdateWithoutOngletsInput = {
   enteteCouverture?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  passages?: Prisma.FichePassageUpdateManyWithoutFicheNestedInput
   user?: Prisma.UserUpdateOneWithoutFichesNestedInput
   subscriptions?: Prisma.SubscriptionUpdateManyWithoutFicheNestedInput
   payments?: Prisma.PaymentUpdateManyWithoutFicheNestedInput
@@ -1454,6 +1478,7 @@ export type FicheUncheckedUpdateWithoutOngletsInput = {
   enteteCouverture?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  passages?: Prisma.FichePassageUncheckedUpdateManyWithoutFicheNestedInput
   subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutFicheNestedInput
   payments?: Prisma.PaymentUncheckedUpdateManyWithoutFicheNestedInput
   reseaux?: Prisma.FicheReseauUncheckedUpdateManyWithoutFicheNestedInput
@@ -1496,6 +1521,7 @@ export type FicheCreateWithoutReseauxInput = {
   enteteCouverture?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  passages?: Prisma.FichePassageCreateNestedManyWithoutFicheInput
   user?: Prisma.UserCreateNestedOneWithoutFichesInput
   subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutFicheInput
   payments?: Prisma.PaymentCreateNestedManyWithoutFicheInput
@@ -1541,6 +1567,7 @@ export type FicheUncheckedCreateWithoutReseauxInput = {
   enteteCouverture?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  passages?: Prisma.FichePassageUncheckedCreateNestedManyWithoutFicheInput
   subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutFicheInput
   payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutFicheInput
   onglets?: Prisma.FicheOngletUncheckedCreateNestedManyWithoutFicheInput
@@ -1599,6 +1626,7 @@ export type FicheUpdateWithoutReseauxInput = {
   enteteCouverture?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  passages?: Prisma.FichePassageUpdateManyWithoutFicheNestedInput
   user?: Prisma.UserUpdateOneWithoutFichesNestedInput
   subscriptions?: Prisma.SubscriptionUpdateManyWithoutFicheNestedInput
   payments?: Prisma.PaymentUpdateManyWithoutFicheNestedInput
@@ -1644,6 +1672,7 @@ export type FicheUncheckedUpdateWithoutReseauxInput = {
   enteteCouverture?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  passages?: Prisma.FichePassageUncheckedUpdateManyWithoutFicheNestedInput
   subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutFicheNestedInput
   payments?: Prisma.PaymentUncheckedUpdateManyWithoutFicheNestedInput
   onglets?: Prisma.FicheOngletUncheckedUpdateManyWithoutFicheNestedInput
@@ -1686,6 +1715,7 @@ export type FicheCreateWithoutLiensInput = {
   enteteCouverture?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  passages?: Prisma.FichePassageCreateNestedManyWithoutFicheInput
   user?: Prisma.UserCreateNestedOneWithoutFichesInput
   subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutFicheInput
   payments?: Prisma.PaymentCreateNestedManyWithoutFicheInput
@@ -1731,6 +1761,7 @@ export type FicheUncheckedCreateWithoutLiensInput = {
   enteteCouverture?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  passages?: Prisma.FichePassageUncheckedCreateNestedManyWithoutFicheInput
   subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutFicheInput
   payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutFicheInput
   onglets?: Prisma.FicheOngletUncheckedCreateNestedManyWithoutFicheInput
@@ -1789,6 +1820,7 @@ export type FicheUpdateWithoutLiensInput = {
   enteteCouverture?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  passages?: Prisma.FichePassageUpdateManyWithoutFicheNestedInput
   user?: Prisma.UserUpdateOneWithoutFichesNestedInput
   subscriptions?: Prisma.SubscriptionUpdateManyWithoutFicheNestedInput
   payments?: Prisma.PaymentUpdateManyWithoutFicheNestedInput
@@ -1834,6 +1866,7 @@ export type FicheUncheckedUpdateWithoutLiensInput = {
   enteteCouverture?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  passages?: Prisma.FichePassageUncheckedUpdateManyWithoutFicheNestedInput
   subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutFicheNestedInput
   payments?: Prisma.PaymentUncheckedUpdateManyWithoutFicheNestedInput
   onglets?: Prisma.FicheOngletUncheckedUpdateManyWithoutFicheNestedInput
@@ -1876,6 +1909,7 @@ export type FicheCreateWithoutHorairesInput = {
   enteteCouverture?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  passages?: Prisma.FichePassageCreateNestedManyWithoutFicheInput
   user?: Prisma.UserCreateNestedOneWithoutFichesInput
   subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutFicheInput
   payments?: Prisma.PaymentCreateNestedManyWithoutFicheInput
@@ -1921,6 +1955,7 @@ export type FicheUncheckedCreateWithoutHorairesInput = {
   enteteCouverture?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  passages?: Prisma.FichePassageUncheckedCreateNestedManyWithoutFicheInput
   subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutFicheInput
   payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutFicheInput
   onglets?: Prisma.FicheOngletUncheckedCreateNestedManyWithoutFicheInput
@@ -1979,6 +2014,7 @@ export type FicheUpdateWithoutHorairesInput = {
   enteteCouverture?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  passages?: Prisma.FichePassageUpdateManyWithoutFicheNestedInput
   user?: Prisma.UserUpdateOneWithoutFichesNestedInput
   subscriptions?: Prisma.SubscriptionUpdateManyWithoutFicheNestedInput
   payments?: Prisma.PaymentUpdateManyWithoutFicheNestedInput
@@ -2024,6 +2060,7 @@ export type FicheUncheckedUpdateWithoutHorairesInput = {
   enteteCouverture?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  passages?: Prisma.FichePassageUncheckedUpdateManyWithoutFicheNestedInput
   subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutFicheNestedInput
   payments?: Prisma.PaymentUncheckedUpdateManyWithoutFicheNestedInput
   onglets?: Prisma.FicheOngletUncheckedUpdateManyWithoutFicheNestedInput
@@ -2066,6 +2103,7 @@ export type FicheCreateWithoutMediasInput = {
   enteteCouverture?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  passages?: Prisma.FichePassageCreateNestedManyWithoutFicheInput
   user?: Prisma.UserCreateNestedOneWithoutFichesInput
   subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutFicheInput
   payments?: Prisma.PaymentCreateNestedManyWithoutFicheInput
@@ -2111,6 +2149,7 @@ export type FicheUncheckedCreateWithoutMediasInput = {
   enteteCouverture?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  passages?: Prisma.FichePassageUncheckedCreateNestedManyWithoutFicheInput
   subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutFicheInput
   payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutFicheInput
   onglets?: Prisma.FicheOngletUncheckedCreateNestedManyWithoutFicheInput
@@ -2169,6 +2208,7 @@ export type FicheUpdateWithoutMediasInput = {
   enteteCouverture?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  passages?: Prisma.FichePassageUpdateManyWithoutFicheNestedInput
   user?: Prisma.UserUpdateOneWithoutFichesNestedInput
   subscriptions?: Prisma.SubscriptionUpdateManyWithoutFicheNestedInput
   payments?: Prisma.PaymentUpdateManyWithoutFicheNestedInput
@@ -2214,6 +2254,7 @@ export type FicheUncheckedUpdateWithoutMediasInput = {
   enteteCouverture?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  passages?: Prisma.FichePassageUncheckedUpdateManyWithoutFicheNestedInput
   subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutFicheNestedInput
   payments?: Prisma.PaymentUncheckedUpdateManyWithoutFicheNestedInput
   onglets?: Prisma.FicheOngletUncheckedUpdateManyWithoutFicheNestedInput
@@ -2256,6 +2297,7 @@ export type FicheCreateWithoutCatalogueSectionsInput = {
   enteteCouverture?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  passages?: Prisma.FichePassageCreateNestedManyWithoutFicheInput
   user?: Prisma.UserCreateNestedOneWithoutFichesInput
   subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutFicheInput
   payments?: Prisma.PaymentCreateNestedManyWithoutFicheInput
@@ -2301,6 +2343,7 @@ export type FicheUncheckedCreateWithoutCatalogueSectionsInput = {
   enteteCouverture?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  passages?: Prisma.FichePassageUncheckedCreateNestedManyWithoutFicheInput
   subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutFicheInput
   payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutFicheInput
   onglets?: Prisma.FicheOngletUncheckedCreateNestedManyWithoutFicheInput
@@ -2359,6 +2402,7 @@ export type FicheUpdateWithoutCatalogueSectionsInput = {
   enteteCouverture?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  passages?: Prisma.FichePassageUpdateManyWithoutFicheNestedInput
   user?: Prisma.UserUpdateOneWithoutFichesNestedInput
   subscriptions?: Prisma.SubscriptionUpdateManyWithoutFicheNestedInput
   payments?: Prisma.PaymentUpdateManyWithoutFicheNestedInput
@@ -2404,6 +2448,7 @@ export type FicheUncheckedUpdateWithoutCatalogueSectionsInput = {
   enteteCouverture?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  passages?: Prisma.FichePassageUncheckedUpdateManyWithoutFicheNestedInput
   subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutFicheNestedInput
   payments?: Prisma.PaymentUncheckedUpdateManyWithoutFicheNestedInput
   onglets?: Prisma.FicheOngletUncheckedUpdateManyWithoutFicheNestedInput
@@ -2446,6 +2491,7 @@ export type FicheCreateWithoutMenuSectionsInput = {
   enteteCouverture?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  passages?: Prisma.FichePassageCreateNestedManyWithoutFicheInput
   user?: Prisma.UserCreateNestedOneWithoutFichesInput
   subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutFicheInput
   payments?: Prisma.PaymentCreateNestedManyWithoutFicheInput
@@ -2491,6 +2537,7 @@ export type FicheUncheckedCreateWithoutMenuSectionsInput = {
   enteteCouverture?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  passages?: Prisma.FichePassageUncheckedCreateNestedManyWithoutFicheInput
   subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutFicheInput
   payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutFicheInput
   onglets?: Prisma.FicheOngletUncheckedCreateNestedManyWithoutFicheInput
@@ -2549,6 +2596,7 @@ export type FicheUpdateWithoutMenuSectionsInput = {
   enteteCouverture?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  passages?: Prisma.FichePassageUpdateManyWithoutFicheNestedInput
   user?: Prisma.UserUpdateOneWithoutFichesNestedInput
   subscriptions?: Prisma.SubscriptionUpdateManyWithoutFicheNestedInput
   payments?: Prisma.PaymentUpdateManyWithoutFicheNestedInput
@@ -2594,6 +2642,7 @@ export type FicheUncheckedUpdateWithoutMenuSectionsInput = {
   enteteCouverture?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  passages?: Prisma.FichePassageUncheckedUpdateManyWithoutFicheNestedInput
   subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutFicheNestedInput
   payments?: Prisma.PaymentUncheckedUpdateManyWithoutFicheNestedInput
   onglets?: Prisma.FicheOngletUncheckedUpdateManyWithoutFicheNestedInput
@@ -2636,6 +2685,7 @@ export type FicheCreateWithoutBiensInput = {
   enteteCouverture?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  passages?: Prisma.FichePassageCreateNestedManyWithoutFicheInput
   user?: Prisma.UserCreateNestedOneWithoutFichesInput
   subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutFicheInput
   payments?: Prisma.PaymentCreateNestedManyWithoutFicheInput
@@ -2681,6 +2731,7 @@ export type FicheUncheckedCreateWithoutBiensInput = {
   enteteCouverture?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  passages?: Prisma.FichePassageUncheckedCreateNestedManyWithoutFicheInput
   subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutFicheInput
   payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutFicheInput
   onglets?: Prisma.FicheOngletUncheckedCreateNestedManyWithoutFicheInput
@@ -2739,6 +2790,7 @@ export type FicheUpdateWithoutBiensInput = {
   enteteCouverture?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  passages?: Prisma.FichePassageUpdateManyWithoutFicheNestedInput
   user?: Prisma.UserUpdateOneWithoutFichesNestedInput
   subscriptions?: Prisma.SubscriptionUpdateManyWithoutFicheNestedInput
   payments?: Prisma.PaymentUpdateManyWithoutFicheNestedInput
@@ -2784,6 +2836,7 @@ export type FicheUncheckedUpdateWithoutBiensInput = {
   enteteCouverture?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  passages?: Prisma.FichePassageUncheckedUpdateManyWithoutFicheNestedInput
   subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutFicheNestedInput
   payments?: Prisma.PaymentUncheckedUpdateManyWithoutFicheNestedInput
   onglets?: Prisma.FicheOngletUncheckedUpdateManyWithoutFicheNestedInput
@@ -2826,6 +2879,7 @@ export type FicheCreateWithoutUserInput = {
   enteteCouverture?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  passages?: Prisma.FichePassageCreateNestedManyWithoutFicheInput
   subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutFicheInput
   payments?: Prisma.PaymentCreateNestedManyWithoutFicheInput
   onglets?: Prisma.FicheOngletCreateNestedManyWithoutFicheInput
@@ -2870,6 +2924,7 @@ export type FicheUncheckedCreateWithoutUserInput = {
   enteteCouverture?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  passages?: Prisma.FichePassageUncheckedCreateNestedManyWithoutFicheInput
   subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutFicheInput
   payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutFicheInput
   onglets?: Prisma.FicheOngletUncheckedCreateNestedManyWithoutFicheInput
@@ -2976,6 +3031,7 @@ export type FicheCreateWithoutSubscriptionsInput = {
   enteteCouverture?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  passages?: Prisma.FichePassageCreateNestedManyWithoutFicheInput
   user?: Prisma.UserCreateNestedOneWithoutFichesInput
   payments?: Prisma.PaymentCreateNestedManyWithoutFicheInput
   onglets?: Prisma.FicheOngletCreateNestedManyWithoutFicheInput
@@ -3021,6 +3077,7 @@ export type FicheUncheckedCreateWithoutSubscriptionsInput = {
   enteteCouverture?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  passages?: Prisma.FichePassageUncheckedCreateNestedManyWithoutFicheInput
   payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutFicheInput
   onglets?: Prisma.FicheOngletUncheckedCreateNestedManyWithoutFicheInput
   reseaux?: Prisma.FicheReseauUncheckedCreateNestedManyWithoutFicheInput
@@ -3079,6 +3136,7 @@ export type FicheUpdateWithoutSubscriptionsInput = {
   enteteCouverture?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  passages?: Prisma.FichePassageUpdateManyWithoutFicheNestedInput
   user?: Prisma.UserUpdateOneWithoutFichesNestedInput
   payments?: Prisma.PaymentUpdateManyWithoutFicheNestedInput
   onglets?: Prisma.FicheOngletUpdateManyWithoutFicheNestedInput
@@ -3124,6 +3182,7 @@ export type FicheUncheckedUpdateWithoutSubscriptionsInput = {
   enteteCouverture?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  passages?: Prisma.FichePassageUncheckedUpdateManyWithoutFicheNestedInput
   payments?: Prisma.PaymentUncheckedUpdateManyWithoutFicheNestedInput
   onglets?: Prisma.FicheOngletUncheckedUpdateManyWithoutFicheNestedInput
   reseaux?: Prisma.FicheReseauUncheckedUpdateManyWithoutFicheNestedInput
@@ -3166,6 +3225,7 @@ export type FicheCreateWithoutPaymentsInput = {
   enteteCouverture?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  passages?: Prisma.FichePassageCreateNestedManyWithoutFicheInput
   user?: Prisma.UserCreateNestedOneWithoutFichesInput
   subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutFicheInput
   onglets?: Prisma.FicheOngletCreateNestedManyWithoutFicheInput
@@ -3211,6 +3271,7 @@ export type FicheUncheckedCreateWithoutPaymentsInput = {
   enteteCouverture?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  passages?: Prisma.FichePassageUncheckedCreateNestedManyWithoutFicheInput
   subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutFicheInput
   onglets?: Prisma.FicheOngletUncheckedCreateNestedManyWithoutFicheInput
   reseaux?: Prisma.FicheReseauUncheckedCreateNestedManyWithoutFicheInput
@@ -3269,6 +3330,7 @@ export type FicheUpdateWithoutPaymentsInput = {
   enteteCouverture?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  passages?: Prisma.FichePassageUpdateManyWithoutFicheNestedInput
   user?: Prisma.UserUpdateOneWithoutFichesNestedInput
   subscriptions?: Prisma.SubscriptionUpdateManyWithoutFicheNestedInput
   onglets?: Prisma.FicheOngletUpdateManyWithoutFicheNestedInput
@@ -3314,6 +3376,7 @@ export type FicheUncheckedUpdateWithoutPaymentsInput = {
   enteteCouverture?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  passages?: Prisma.FichePassageUncheckedUpdateManyWithoutFicheNestedInput
   subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutFicheNestedInput
   onglets?: Prisma.FicheOngletUncheckedUpdateManyWithoutFicheNestedInput
   reseaux?: Prisma.FicheReseauUncheckedUpdateManyWithoutFicheNestedInput
@@ -3356,6 +3419,7 @@ export type FicheCreateWithoutDemandeRappelsInput = {
   enteteCouverture?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  passages?: Prisma.FichePassageCreateNestedManyWithoutFicheInput
   user?: Prisma.UserCreateNestedOneWithoutFichesInput
   subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutFicheInput
   payments?: Prisma.PaymentCreateNestedManyWithoutFicheInput
@@ -3401,6 +3465,7 @@ export type FicheUncheckedCreateWithoutDemandeRappelsInput = {
   enteteCouverture?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  passages?: Prisma.FichePassageUncheckedCreateNestedManyWithoutFicheInput
   subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutFicheInput
   payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutFicheInput
   onglets?: Prisma.FicheOngletUncheckedCreateNestedManyWithoutFicheInput
@@ -3459,6 +3524,7 @@ export type FicheUpdateWithoutDemandeRappelsInput = {
   enteteCouverture?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  passages?: Prisma.FichePassageUpdateManyWithoutFicheNestedInput
   user?: Prisma.UserUpdateOneWithoutFichesNestedInput
   subscriptions?: Prisma.SubscriptionUpdateManyWithoutFicheNestedInput
   payments?: Prisma.PaymentUpdateManyWithoutFicheNestedInput
@@ -3504,6 +3570,7 @@ export type FicheUncheckedUpdateWithoutDemandeRappelsInput = {
   enteteCouverture?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  passages?: Prisma.FichePassageUncheckedUpdateManyWithoutFicheNestedInput
   subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutFicheNestedInput
   payments?: Prisma.PaymentUncheckedUpdateManyWithoutFicheNestedInput
   onglets?: Prisma.FicheOngletUncheckedUpdateManyWithoutFicheNestedInput
@@ -3514,6 +3581,200 @@ export type FicheUncheckedUpdateWithoutDemandeRappelsInput = {
   catalogueSections?: Prisma.CatalogueSectionUncheckedUpdateManyWithoutFicheNestedInput
   menuSections?: Prisma.MenuSectionUncheckedUpdateManyWithoutFicheNestedInput
   biens?: Prisma.BienUncheckedUpdateManyWithoutFicheNestedInput
+}
+
+export type FicheCreateWithoutPassagesInput = {
+  slug: string
+  prenom: string
+  nom?: string
+  fonction?: string | null
+  entreprise?: string | null
+  photo?: string | null
+  logo?: string | null
+  telephone?: string | null
+  whatsapp?: string | null
+  email?: string | null
+  site?: string | null
+  adresse?: string | null
+  googlePlaceId?: string | null
+  premierBouton?: $Enums.PremierBouton
+  messageWhatsapp?: string | null
+  statut?: $Enums.StatutFiche
+  enLigneSeule?: boolean
+  scansTotal?: number
+  claimCode?: string | null
+  secteur?: $Enums.Secteur | null
+  presentation?: string | null
+  rdvLabel?: string | null
+  rdvUrl?: string | null
+  enteteDisposition?: $Enums.Disposition
+  enteteTaille?: $Enums.Taille
+  enteteTheme?: $Enums.Theme | null
+  enteteCouverture?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  user?: Prisma.UserCreateNestedOneWithoutFichesInput
+  subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutFicheInput
+  payments?: Prisma.PaymentCreateNestedManyWithoutFicheInput
+  onglets?: Prisma.FicheOngletCreateNestedManyWithoutFicheInput
+  reseaux?: Prisma.FicheReseauCreateNestedManyWithoutFicheInput
+  liens?: Prisma.FicheLienCreateNestedManyWithoutFicheInput
+  horaires?: Prisma.FicheHoraireCreateNestedManyWithoutFicheInput
+  medias?: Prisma.FicheMediaCreateNestedManyWithoutFicheInput
+  catalogueSections?: Prisma.CatalogueSectionCreateNestedManyWithoutFicheInput
+  menuSections?: Prisma.MenuSectionCreateNestedManyWithoutFicheInput
+  biens?: Prisma.BienCreateNestedManyWithoutFicheInput
+  demandeRappels?: Prisma.DemandeRappelCreateNestedManyWithoutFicheInput
+}
+
+export type FicheUncheckedCreateWithoutPassagesInput = {
+  id?: number
+  slug: string
+  prenom: string
+  nom?: string
+  fonction?: string | null
+  entreprise?: string | null
+  photo?: string | null
+  logo?: string | null
+  telephone?: string | null
+  whatsapp?: string | null
+  email?: string | null
+  site?: string | null
+  adresse?: string | null
+  googlePlaceId?: string | null
+  premierBouton?: $Enums.PremierBouton
+  messageWhatsapp?: string | null
+  statut?: $Enums.StatutFiche
+  enLigneSeule?: boolean
+  scansTotal?: number
+  userId?: number | null
+  claimCode?: string | null
+  secteur?: $Enums.Secteur | null
+  presentation?: string | null
+  rdvLabel?: string | null
+  rdvUrl?: string | null
+  enteteDisposition?: $Enums.Disposition
+  enteteTaille?: $Enums.Taille
+  enteteTheme?: $Enums.Theme | null
+  enteteCouverture?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutFicheInput
+  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutFicheInput
+  onglets?: Prisma.FicheOngletUncheckedCreateNestedManyWithoutFicheInput
+  reseaux?: Prisma.FicheReseauUncheckedCreateNestedManyWithoutFicheInput
+  liens?: Prisma.FicheLienUncheckedCreateNestedManyWithoutFicheInput
+  horaires?: Prisma.FicheHoraireUncheckedCreateNestedManyWithoutFicheInput
+  medias?: Prisma.FicheMediaUncheckedCreateNestedManyWithoutFicheInput
+  catalogueSections?: Prisma.CatalogueSectionUncheckedCreateNestedManyWithoutFicheInput
+  menuSections?: Prisma.MenuSectionUncheckedCreateNestedManyWithoutFicheInput
+  biens?: Prisma.BienUncheckedCreateNestedManyWithoutFicheInput
+  demandeRappels?: Prisma.DemandeRappelUncheckedCreateNestedManyWithoutFicheInput
+}
+
+export type FicheCreateOrConnectWithoutPassagesInput = {
+  where: Prisma.FicheWhereUniqueInput
+  create: Prisma.XOR<Prisma.FicheCreateWithoutPassagesInput, Prisma.FicheUncheckedCreateWithoutPassagesInput>
+}
+
+export type FicheUpsertWithoutPassagesInput = {
+  update: Prisma.XOR<Prisma.FicheUpdateWithoutPassagesInput, Prisma.FicheUncheckedUpdateWithoutPassagesInput>
+  create: Prisma.XOR<Prisma.FicheCreateWithoutPassagesInput, Prisma.FicheUncheckedCreateWithoutPassagesInput>
+  where?: Prisma.FicheWhereInput
+}
+
+export type FicheUpdateToOneWithWhereWithoutPassagesInput = {
+  where?: Prisma.FicheWhereInput
+  data: Prisma.XOR<Prisma.FicheUpdateWithoutPassagesInput, Prisma.FicheUncheckedUpdateWithoutPassagesInput>
+}
+
+export type FicheUpdateWithoutPassagesInput = {
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  prenom?: Prisma.StringFieldUpdateOperationsInput | string
+  nom?: Prisma.StringFieldUpdateOperationsInput | string
+  fonction?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  entreprise?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  photo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  telephone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  whatsapp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  site?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  adresse?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  googlePlaceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  premierBouton?: Prisma.EnumPremierBoutonFieldUpdateOperationsInput | $Enums.PremierBouton
+  messageWhatsapp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  statut?: Prisma.EnumStatutFicheFieldUpdateOperationsInput | $Enums.StatutFiche
+  enLigneSeule?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  scansTotal?: Prisma.IntFieldUpdateOperationsInput | number
+  claimCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  secteur?: Prisma.NullableEnumSecteurFieldUpdateOperationsInput | $Enums.Secteur | null
+  presentation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  rdvLabel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  rdvUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  enteteDisposition?: Prisma.EnumDispositionFieldUpdateOperationsInput | $Enums.Disposition
+  enteteTaille?: Prisma.EnumTailleFieldUpdateOperationsInput | $Enums.Taille
+  enteteTheme?: Prisma.NullableEnumThemeFieldUpdateOperationsInput | $Enums.Theme | null
+  enteteCouverture?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  user?: Prisma.UserUpdateOneWithoutFichesNestedInput
+  subscriptions?: Prisma.SubscriptionUpdateManyWithoutFicheNestedInput
+  payments?: Prisma.PaymentUpdateManyWithoutFicheNestedInput
+  onglets?: Prisma.FicheOngletUpdateManyWithoutFicheNestedInput
+  reseaux?: Prisma.FicheReseauUpdateManyWithoutFicheNestedInput
+  liens?: Prisma.FicheLienUpdateManyWithoutFicheNestedInput
+  horaires?: Prisma.FicheHoraireUpdateManyWithoutFicheNestedInput
+  medias?: Prisma.FicheMediaUpdateManyWithoutFicheNestedInput
+  catalogueSections?: Prisma.CatalogueSectionUpdateManyWithoutFicheNestedInput
+  menuSections?: Prisma.MenuSectionUpdateManyWithoutFicheNestedInput
+  biens?: Prisma.BienUpdateManyWithoutFicheNestedInput
+  demandeRappels?: Prisma.DemandeRappelUpdateManyWithoutFicheNestedInput
+}
+
+export type FicheUncheckedUpdateWithoutPassagesInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  prenom?: Prisma.StringFieldUpdateOperationsInput | string
+  nom?: Prisma.StringFieldUpdateOperationsInput | string
+  fonction?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  entreprise?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  photo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  telephone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  whatsapp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  site?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  adresse?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  googlePlaceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  premierBouton?: Prisma.EnumPremierBoutonFieldUpdateOperationsInput | $Enums.PremierBouton
+  messageWhatsapp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  statut?: Prisma.EnumStatutFicheFieldUpdateOperationsInput | $Enums.StatutFiche
+  enLigneSeule?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  scansTotal?: Prisma.IntFieldUpdateOperationsInput | number
+  userId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  claimCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  secteur?: Prisma.NullableEnumSecteurFieldUpdateOperationsInput | $Enums.Secteur | null
+  presentation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  rdvLabel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  rdvUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  enteteDisposition?: Prisma.EnumDispositionFieldUpdateOperationsInput | $Enums.Disposition
+  enteteTaille?: Prisma.EnumTailleFieldUpdateOperationsInput | $Enums.Taille
+  enteteTheme?: Prisma.NullableEnumThemeFieldUpdateOperationsInput | $Enums.Theme | null
+  enteteCouverture?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutFicheNestedInput
+  payments?: Prisma.PaymentUncheckedUpdateManyWithoutFicheNestedInput
+  onglets?: Prisma.FicheOngletUncheckedUpdateManyWithoutFicheNestedInput
+  reseaux?: Prisma.FicheReseauUncheckedUpdateManyWithoutFicheNestedInput
+  liens?: Prisma.FicheLienUncheckedUpdateManyWithoutFicheNestedInput
+  horaires?: Prisma.FicheHoraireUncheckedUpdateManyWithoutFicheNestedInput
+  medias?: Prisma.FicheMediaUncheckedUpdateManyWithoutFicheNestedInput
+  catalogueSections?: Prisma.CatalogueSectionUncheckedUpdateManyWithoutFicheNestedInput
+  menuSections?: Prisma.MenuSectionUncheckedUpdateManyWithoutFicheNestedInput
+  biens?: Prisma.BienUncheckedUpdateManyWithoutFicheNestedInput
+  demandeRappels?: Prisma.DemandeRappelUncheckedUpdateManyWithoutFicheNestedInput
 }
 
 export type FicheCreateManyUserInput = {
@@ -3579,6 +3840,7 @@ export type FicheUpdateWithoutUserInput = {
   enteteCouverture?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  passages?: Prisma.FichePassageUpdateManyWithoutFicheNestedInput
   subscriptions?: Prisma.SubscriptionUpdateManyWithoutFicheNestedInput
   payments?: Prisma.PaymentUpdateManyWithoutFicheNestedInput
   onglets?: Prisma.FicheOngletUpdateManyWithoutFicheNestedInput
@@ -3623,6 +3885,7 @@ export type FicheUncheckedUpdateWithoutUserInput = {
   enteteCouverture?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  passages?: Prisma.FichePassageUncheckedUpdateManyWithoutFicheNestedInput
   subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutFicheNestedInput
   payments?: Prisma.PaymentUncheckedUpdateManyWithoutFicheNestedInput
   onglets?: Prisma.FicheOngletUncheckedUpdateManyWithoutFicheNestedInput
@@ -3675,6 +3938,7 @@ export type FicheUncheckedUpdateManyWithoutUserInput = {
  */
 
 export type FicheCountOutputType = {
+  passages: number
   subscriptions: number
   payments: number
   onglets: number
@@ -3689,6 +3953,7 @@ export type FicheCountOutputType = {
 }
 
 export type FicheCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  passages?: boolean | FicheCountOutputTypeCountPassagesArgs
   subscriptions?: boolean | FicheCountOutputTypeCountSubscriptionsArgs
   payments?: boolean | FicheCountOutputTypeCountPaymentsArgs
   onglets?: boolean | FicheCountOutputTypeCountOngletsArgs
@@ -3710,6 +3975,13 @@ export type FicheCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extens
    * Select specific fields to fetch from the FicheCountOutputType
    */
   select?: Prisma.FicheCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * FicheCountOutputType without action
+ */
+export type FicheCountOutputTypeCountPassagesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.FichePassageWhereInput
 }
 
 /**
@@ -3822,6 +4094,7 @@ export type FicheSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   enteteCouverture?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  passages?: boolean | Prisma.Fiche$passagesArgs<ExtArgs>
   user?: boolean | Prisma.Fiche$userArgs<ExtArgs>
   subscriptions?: boolean | Prisma.Fiche$subscriptionsArgs<ExtArgs>
   payments?: boolean | Prisma.Fiche$paymentsArgs<ExtArgs>
@@ -3943,6 +4216,7 @@ export type FicheSelectScalar = {
 
 export type FicheOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "slug" | "prenom" | "nom" | "fonction" | "entreprise" | "photo" | "logo" | "telephone" | "whatsapp" | "email" | "site" | "adresse" | "googlePlaceId" | "premierBouton" | "messageWhatsapp" | "statut" | "enLigneSeule" | "scansTotal" | "userId" | "claimCode" | "secteur" | "presentation" | "rdvLabel" | "rdvUrl" | "enteteDisposition" | "enteteTaille" | "enteteTheme" | "enteteCouverture" | "createdAt" | "updatedAt", ExtArgs["result"]["fiche"]>
 export type FicheInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  passages?: boolean | Prisma.Fiche$passagesArgs<ExtArgs>
   user?: boolean | Prisma.Fiche$userArgs<ExtArgs>
   subscriptions?: boolean | Prisma.Fiche$subscriptionsArgs<ExtArgs>
   payments?: boolean | Prisma.Fiche$paymentsArgs<ExtArgs>
@@ -3967,6 +4241,7 @@ export type FicheIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extens
 export type $FichePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Fiche"
   objects: {
+    passages: Prisma.$FichePassagePayload<ExtArgs>[]
     user: Prisma.$UserPayload<ExtArgs> | null
     subscriptions: Prisma.$SubscriptionPayload<ExtArgs>[]
     payments: Prisma.$PaymentPayload<ExtArgs>[]
@@ -4406,6 +4681,7 @@ readonly fields: FicheFieldRefs;
  */
 export interface Prisma__FicheClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
+  passages<T extends Prisma.Fiche$passagesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Fiche$passagesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FichePassagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   user<T extends Prisma.Fiche$userArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Fiche$userArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   subscriptions<T extends Prisma.Fiche$subscriptionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Fiche$subscriptionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SubscriptionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   payments<T extends Prisma.Fiche$paymentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Fiche$paymentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PaymentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -4876,6 +5152,30 @@ export type FicheDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Interna
    * Limit how many Fiches to delete.
    */
   limit?: number
+}
+
+/**
+ * Fiche.passages
+ */
+export type Fiche$passagesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the FichePassage
+   */
+  select?: Prisma.FichePassageSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the FichePassage
+   */
+  omit?: Prisma.FichePassageOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.FichePassageInclude<ExtArgs> | null
+  where?: Prisma.FichePassageWhereInput
+  orderBy?: Prisma.FichePassageOrderByWithRelationInput | Prisma.FichePassageOrderByWithRelationInput[]
+  cursor?: Prisma.FichePassageWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.FichePassageScalarFieldEnum | Prisma.FichePassageScalarFieldEnum[]
 }
 
 /**

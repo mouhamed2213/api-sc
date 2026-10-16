@@ -134,3 +134,8 @@ export type Payment = Prisma.PaymentModel
  * 
  */
 export type DemandeRappel = Prisma.DemandeRappelModel
+/**
+ * Model FichePassage
+ * 
+ */
+export type FichePassage = Prisma.FichePassageModel

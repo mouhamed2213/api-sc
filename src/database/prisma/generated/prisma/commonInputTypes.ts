@@ -457,6 +457,23 @@ export type EnumPaymentStatusWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedEnumPaymentStatusFilter<$PrismaModel>
 }
 
+export type EnumFichePassageSourceFilter<$PrismaModel = never> = {
+  equals?: $Enums.FichePassageSource | Prisma.EnumFichePassageSourceFieldRefInput<$PrismaModel>
+  in?: $Enums.FichePassageSource[] | Prisma.ListEnumFichePassageSourceFieldRefInput<$PrismaModel>
+  notIn?: $Enums.FichePassageSource[] | Prisma.ListEnumFichePassageSourceFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumFichePassageSourceFilter<$PrismaModel> | $Enums.FichePassageSource
+}
+
+export type EnumFichePassageSourceWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.FichePassageSource | Prisma.EnumFichePassageSourceFieldRefInput<$PrismaModel>
+  in?: $Enums.FichePassageSource[] | Prisma.ListEnumFichePassageSourceFieldRefInput<$PrismaModel>
+  notIn?: $Enums.FichePassageSource[] | Prisma.ListEnumFichePassageSourceFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumFichePassageSourceWithAggregatesFilter<$PrismaModel> | $Enums.FichePassageSource
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumFichePassageSourceFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumFichePassageSourceFilter<$PrismaModel>
+}
+
 export type NestedIntFilter<$PrismaModel = never> = {
   equals?: number | Prisma.IntFieldRefInput<$PrismaModel>
   in?: number[] | Prisma.ListIntFieldRefInput<$PrismaModel>
@@ -911,6 +928,23 @@ export type NestedEnumPaymentStatusWithAggregatesFilter<$PrismaModel = never> = 
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumPaymentStatusFilter<$PrismaModel>
   _max?: Prisma.NestedEnumPaymentStatusFilter<$PrismaModel>
+}
+
+export type NestedEnumFichePassageSourceFilter<$PrismaModel = never> = {
+  equals?: $Enums.FichePassageSource | Prisma.EnumFichePassageSourceFieldRefInput<$PrismaModel>
+  in?: $Enums.FichePassageSource[] | Prisma.ListEnumFichePassageSourceFieldRefInput<$PrismaModel>
+  notIn?: $Enums.FichePassageSource[] | Prisma.ListEnumFichePassageSourceFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumFichePassageSourceFilter<$PrismaModel> | $Enums.FichePassageSource
+}
+
+export type NestedEnumFichePassageSourceWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.FichePassageSource | Prisma.EnumFichePassageSourceFieldRefInput<$PrismaModel>
+  in?: $Enums.FichePassageSource[] | Prisma.ListEnumFichePassageSourceFieldRefInput<$PrismaModel>
+  notIn?: $Enums.FichePassageSource[] | Prisma.ListEnumFichePassageSourceFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumFichePassageSourceWithAggregatesFilter<$PrismaModel> | $Enums.FichePassageSource
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumFichePassageSourceFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumFichePassageSourceFilter<$PrismaModel>
 }
 
 

@@ -63,6 +63,15 @@ export const StatutFiche = {
 export type StatutFiche = (typeof StatutFiche)[keyof typeof StatutFiche]
 
 
+export const FichePassageSource = {
+  QR: 'QR',
+  NFC: 'NFC',
+  DIRECT: 'DIRECT'
+} as const
+
+export type FichePassageSource = (typeof FichePassageSource)[keyof typeof FichePassageSource]
+
+
 export const Secteur = {
   RESTAURANT: 'RESTAURANT',
   IMMOBILIER: 'IMMOBILIER',

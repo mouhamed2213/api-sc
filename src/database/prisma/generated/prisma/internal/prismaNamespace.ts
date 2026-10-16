@@ -415,7 +415,8 @@ export const ModelName = {
   PlanLimit: 'PlanLimit',
   Subscription: 'Subscription',
   Payment: 'Payment',
-  DemandeRappel: 'DemandeRappel'
+  DemandeRappel: 'DemandeRappel',
+  FichePassage: 'FichePassage'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -431,7 +432,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "fiche" | "ficheOnglet" | "ficheReseau" | "ficheLien" | "ficheHoraire" | "ficheMedia" | "catalogueSection" | "catalogueArticle" | "menuSection" | "menuPlat" | "bien" | "bienPhoto" | "user" | "authToken" | "plan" | "planLimit" | "subscription" | "payment" | "demandeRappel"
+    modelProps: "fiche" | "ficheOnglet" | "ficheReseau" | "ficheLien" | "ficheHoraire" | "ficheMedia" | "catalogueSection" | "catalogueArticle" | "menuSection" | "menuPlat" | "bien" | "bienPhoto" | "user" | "authToken" | "plan" | "planLimit" | "subscription" | "payment" | "demandeRappel" | "fichePassage"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1841,6 +1842,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    FichePassage: {
+      payload: Prisma.$FichePassagePayload<ExtArgs>
+      fields: Prisma.FichePassageFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.FichePassageFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FichePassagePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.FichePassageFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FichePassagePayload>
+        }
+        findFirst: {
+          args: Prisma.FichePassageFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FichePassagePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.FichePassageFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FichePassagePayload>
+        }
+        findMany: {
+          args: Prisma.FichePassageFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FichePassagePayload>[]
+        }
+        create: {
+          args: Prisma.FichePassageCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FichePassagePayload>
+        }
+        createMany: {
+          args: Prisma.FichePassageCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.FichePassageCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FichePassagePayload>[]
+        }
+        delete: {
+          args: Prisma.FichePassageDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FichePassagePayload>
+        }
+        update: {
+          args: Prisma.FichePassageUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FichePassagePayload>
+        }
+        deleteMany: {
+          args: Prisma.FichePassageDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.FichePassageUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.FichePassageUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FichePassagePayload>[]
+        }
+        upsert: {
+          args: Prisma.FichePassageUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FichePassagePayload>
+        }
+        aggregate: {
+          args: Prisma.FichePassageAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateFichePassage>
+        }
+        groupBy: {
+          args: Prisma.FichePassageGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.FichePassageGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.FichePassageCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.FichePassageCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -2174,6 +2249,17 @@ export const DemandeRappelScalarFieldEnum = {
 export type DemandeRappelScalarFieldEnum = (typeof DemandeRappelScalarFieldEnum)[keyof typeof DemandeRappelScalarFieldEnum]
 
 
+export const FichePassageScalarFieldEnum = {
+  id: 'id',
+  ficheId: 'ficheId',
+  source: 'source',
+  idempotencyKey: 'idempotencyKey',
+  createdAt: 'createdAt'
+} as const
+
+export type FichePassageScalarFieldEnum = (typeof FichePassageScalarFieldEnum)[keyof typeof FichePassageScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -2450,6 +2536,20 @@ export type ListEnumPaymentStatusFieldRefInput<$PrismaModel> = FieldRefInputType
 
 
 /**
+ * Reference to a field of type 'FichePassageSource'
+ */
+export type EnumFichePassageSourceFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'FichePassageSource'>
+    
+
+
+/**
+ * Reference to a field of type 'FichePassageSource[]'
+ */
+export type ListEnumFichePassageSourceFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'FichePassageSource[]'>
+    
+
+
+/**
  * Reference to a field of type 'Float'
  */
 export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
@@ -2632,6 +2732,7 @@ export type GlobalOmitConfig = {
   subscription?: Prisma.SubscriptionOmit
   payment?: Prisma.PaymentOmit
   demandeRappel?: Prisma.DemandeRappelOmit
+  fichePassage?: Prisma.FichePassageOmit
 }
 
 /* Types for Logging */
