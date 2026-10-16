@@ -62,6 +62,12 @@ fichesRouter.get(
 );
 
 fichesRouter.get(
+  "/:id/rappels",
+  validate({ params: idParam }),
+  FicheController.listRappels
+);
+
+fichesRouter.get(
   "/:id",
   validate({ params: idParam }),
   FicheController.getFiche
