@@ -152,3 +152,9 @@ export const createRappelSchema = z.object({
   nom: text(100).min(2, "Le nom doit contenir au moins 2 caractères."),
   telephone: text(30).min(7).max(25),
 });
+
+
+export const rappelListQuerySchema = z.object({
+  page: z.coerce.number().int().min(1).default(1),
+  limit: z.coerce.number().int().min(1).max(50).default(10),
+});

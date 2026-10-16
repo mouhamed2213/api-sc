@@ -11,6 +11,7 @@ import {
   recordPassageSchema,
   passageStatsQuerySchema,
   createRappelSchema,
+  rappelListQuerySchema,
 } from "./fiches.schemas";
 
 export const fichesRouter = Router();
@@ -41,6 +42,12 @@ fichesRouter.post(
 fichesRouter.use(requireAuth);
 
 fichesRouter.get("/", FicheController.listFiches);
+
+fichesRouter.get(
+  "/rappels",
+  validate({ query: rappelListQuerySchema }),
+  FicheController.listAllRappels
+);
 
 fichesRouter.post(
   "/",
