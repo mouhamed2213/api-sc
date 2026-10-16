@@ -68,7 +68,8 @@ export const ModelName = {
   Plan: 'Plan',
   PlanLimit: 'PlanLimit',
   Subscription: 'Subscription',
-  Payment: 'Payment'
+  Payment: 'Payment',
+  DemandeRappel: 'DemandeRappel'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -368,6 +369,17 @@ export const PaymentScalarFieldEnum = {
 } as const
 
 export type PaymentScalarFieldEnum = (typeof PaymentScalarFieldEnum)[keyof typeof PaymentScalarFieldEnum]
+
+
+export const DemandeRappelScalarFieldEnum = {
+  id: 'id',
+  ficheId: 'ficheId',
+  nom: 'nom',
+  telephone: 'telephone',
+  createdAt: 'createdAt'
+} as const
+
+export type DemandeRappelScalarFieldEnum = (typeof DemandeRappelScalarFieldEnum)[keyof typeof DemandeRappelScalarFieldEnum]
 
 
 export const SortOrder = {

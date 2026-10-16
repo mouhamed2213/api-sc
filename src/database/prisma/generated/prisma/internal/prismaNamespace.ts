@@ -414,7 +414,8 @@ export const ModelName = {
   Plan: 'Plan',
   PlanLimit: 'PlanLimit',
   Subscription: 'Subscription',
-  Payment: 'Payment'
+  Payment: 'Payment',
+  DemandeRappel: 'DemandeRappel'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -430,7 +431,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "fiche" | "ficheOnglet" | "ficheReseau" | "ficheLien" | "ficheHoraire" | "ficheMedia" | "catalogueSection" | "catalogueArticle" | "menuSection" | "menuPlat" | "bien" | "bienPhoto" | "user" | "authToken" | "plan" | "planLimit" | "subscription" | "payment"
+    modelProps: "fiche" | "ficheOnglet" | "ficheReseau" | "ficheLien" | "ficheHoraire" | "ficheMedia" | "catalogueSection" | "catalogueArticle" | "menuSection" | "menuPlat" | "bien" | "bienPhoto" | "user" | "authToken" | "plan" | "planLimit" | "subscription" | "payment" | "demandeRappel"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1766,6 +1767,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    DemandeRappel: {
+      payload: Prisma.$DemandeRappelPayload<ExtArgs>
+      fields: Prisma.DemandeRappelFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.DemandeRappelFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DemandeRappelPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.DemandeRappelFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DemandeRappelPayload>
+        }
+        findFirst: {
+          args: Prisma.DemandeRappelFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DemandeRappelPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.DemandeRappelFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DemandeRappelPayload>
+        }
+        findMany: {
+          args: Prisma.DemandeRappelFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DemandeRappelPayload>[]
+        }
+        create: {
+          args: Prisma.DemandeRappelCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DemandeRappelPayload>
+        }
+        createMany: {
+          args: Prisma.DemandeRappelCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.DemandeRappelCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DemandeRappelPayload>[]
+        }
+        delete: {
+          args: Prisma.DemandeRappelDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DemandeRappelPayload>
+        }
+        update: {
+          args: Prisma.DemandeRappelUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DemandeRappelPayload>
+        }
+        deleteMany: {
+          args: Prisma.DemandeRappelDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.DemandeRappelUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.DemandeRappelUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DemandeRappelPayload>[]
+        }
+        upsert: {
+          args: Prisma.DemandeRappelUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DemandeRappelPayload>
+        }
+        aggregate: {
+          args: Prisma.DemandeRappelAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateDemandeRappel>
+        }
+        groupBy: {
+          args: Prisma.DemandeRappelGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.DemandeRappelGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.DemandeRappelCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.DemandeRappelCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -2086,6 +2161,17 @@ export const PaymentScalarFieldEnum = {
 } as const
 
 export type PaymentScalarFieldEnum = (typeof PaymentScalarFieldEnum)[keyof typeof PaymentScalarFieldEnum]
+
+
+export const DemandeRappelScalarFieldEnum = {
+  id: 'id',
+  ficheId: 'ficheId',
+  nom: 'nom',
+  telephone: 'telephone',
+  createdAt: 'createdAt'
+} as const
+
+export type DemandeRappelScalarFieldEnum = (typeof DemandeRappelScalarFieldEnum)[keyof typeof DemandeRappelScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -2545,6 +2631,7 @@ export type GlobalOmitConfig = {
   planLimit?: Prisma.PlanLimitOmit
   subscription?: Prisma.SubscriptionOmit
   payment?: Prisma.PaymentOmit
+  demandeRappel?: Prisma.DemandeRappelOmit
 }
 
 /* Types for Logging */

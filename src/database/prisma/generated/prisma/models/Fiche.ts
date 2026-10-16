@@ -443,6 +443,7 @@ export type FicheWhereInput = {
   catalogueSections?: Prisma.CatalogueSectionListRelationFilter
   menuSections?: Prisma.MenuSectionListRelationFilter
   biens?: Prisma.BienListRelationFilter
+  demandeRappels?: Prisma.DemandeRappelListRelationFilter
 }
 
 export type FicheOrderByWithRelationInput = {
@@ -488,6 +489,7 @@ export type FicheOrderByWithRelationInput = {
   catalogueSections?: Prisma.CatalogueSectionOrderByRelationAggregateInput
   menuSections?: Prisma.MenuSectionOrderByRelationAggregateInput
   biens?: Prisma.BienOrderByRelationAggregateInput
+  demandeRappels?: Prisma.DemandeRappelOrderByRelationAggregateInput
 }
 
 export type FicheWhereUniqueInput = Prisma.AtLeast<{
@@ -536,6 +538,7 @@ export type FicheWhereUniqueInput = Prisma.AtLeast<{
   catalogueSections?: Prisma.CatalogueSectionListRelationFilter
   menuSections?: Prisma.MenuSectionListRelationFilter
   biens?: Prisma.BienListRelationFilter
+  demandeRappels?: Prisma.DemandeRappelListRelationFilter
 }, "id" | "slug" | "claimCode">
 
 export type FicheOrderByWithAggregationInput = {
@@ -655,6 +658,7 @@ export type FicheCreateInput = {
   catalogueSections?: Prisma.CatalogueSectionCreateNestedManyWithoutFicheInput
   menuSections?: Prisma.MenuSectionCreateNestedManyWithoutFicheInput
   biens?: Prisma.BienCreateNestedManyWithoutFicheInput
+  demandeRappels?: Prisma.DemandeRappelCreateNestedManyWithoutFicheInput
 }
 
 export type FicheUncheckedCreateInput = {
@@ -699,6 +703,7 @@ export type FicheUncheckedCreateInput = {
   catalogueSections?: Prisma.CatalogueSectionUncheckedCreateNestedManyWithoutFicheInput
   menuSections?: Prisma.MenuSectionUncheckedCreateNestedManyWithoutFicheInput
   biens?: Prisma.BienUncheckedCreateNestedManyWithoutFicheInput
+  demandeRappels?: Prisma.DemandeRappelUncheckedCreateNestedManyWithoutFicheInput
 }
 
 export type FicheUpdateInput = {
@@ -742,6 +747,7 @@ export type FicheUpdateInput = {
   catalogueSections?: Prisma.CatalogueSectionUpdateManyWithoutFicheNestedInput
   menuSections?: Prisma.MenuSectionUpdateManyWithoutFicheNestedInput
   biens?: Prisma.BienUpdateManyWithoutFicheNestedInput
+  demandeRappels?: Prisma.DemandeRappelUpdateManyWithoutFicheNestedInput
 }
 
 export type FicheUncheckedUpdateInput = {
@@ -786,6 +792,7 @@ export type FicheUncheckedUpdateInput = {
   catalogueSections?: Prisma.CatalogueSectionUncheckedUpdateManyWithoutFicheNestedInput
   menuSections?: Prisma.MenuSectionUncheckedUpdateManyWithoutFicheNestedInput
   biens?: Prisma.BienUncheckedUpdateManyWithoutFicheNestedInput
+  demandeRappels?: Prisma.DemandeRappelUncheckedUpdateManyWithoutFicheNestedInput
 }
 
 export type FicheCreateManyInput = {
@@ -1255,6 +1262,20 @@ export type FicheUpdateOneRequiredWithoutPaymentsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.FicheUpdateToOneWithWhereWithoutPaymentsInput, Prisma.FicheUpdateWithoutPaymentsInput>, Prisma.FicheUncheckedUpdateWithoutPaymentsInput>
 }
 
+export type FicheCreateNestedOneWithoutDemandeRappelsInput = {
+  create?: Prisma.XOR<Prisma.FicheCreateWithoutDemandeRappelsInput, Prisma.FicheUncheckedCreateWithoutDemandeRappelsInput>
+  connectOrCreate?: Prisma.FicheCreateOrConnectWithoutDemandeRappelsInput
+  connect?: Prisma.FicheWhereUniqueInput
+}
+
+export type FicheUpdateOneRequiredWithoutDemandeRappelsNestedInput = {
+  create?: Prisma.XOR<Prisma.FicheCreateWithoutDemandeRappelsInput, Prisma.FicheUncheckedCreateWithoutDemandeRappelsInput>
+  connectOrCreate?: Prisma.FicheCreateOrConnectWithoutDemandeRappelsInput
+  upsert?: Prisma.FicheUpsertWithoutDemandeRappelsInput
+  connect?: Prisma.FicheWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.FicheUpdateToOneWithWhereWithoutDemandeRappelsInput, Prisma.FicheUpdateWithoutDemandeRappelsInput>, Prisma.FicheUncheckedUpdateWithoutDemandeRappelsInput>
+}
+
 export type FicheCreateWithoutOngletsInput = {
   slug: string
   prenom: string
@@ -1295,6 +1316,7 @@ export type FicheCreateWithoutOngletsInput = {
   catalogueSections?: Prisma.CatalogueSectionCreateNestedManyWithoutFicheInput
   menuSections?: Prisma.MenuSectionCreateNestedManyWithoutFicheInput
   biens?: Prisma.BienCreateNestedManyWithoutFicheInput
+  demandeRappels?: Prisma.DemandeRappelCreateNestedManyWithoutFicheInput
 }
 
 export type FicheUncheckedCreateWithoutOngletsInput = {
@@ -1338,6 +1360,7 @@ export type FicheUncheckedCreateWithoutOngletsInput = {
   catalogueSections?: Prisma.CatalogueSectionUncheckedCreateNestedManyWithoutFicheInput
   menuSections?: Prisma.MenuSectionUncheckedCreateNestedManyWithoutFicheInput
   biens?: Prisma.BienUncheckedCreateNestedManyWithoutFicheInput
+  demandeRappels?: Prisma.DemandeRappelUncheckedCreateNestedManyWithoutFicheInput
 }
 
 export type FicheCreateOrConnectWithoutOngletsInput = {
@@ -1396,6 +1419,7 @@ export type FicheUpdateWithoutOngletsInput = {
   catalogueSections?: Prisma.CatalogueSectionUpdateManyWithoutFicheNestedInput
   menuSections?: Prisma.MenuSectionUpdateManyWithoutFicheNestedInput
   biens?: Prisma.BienUpdateManyWithoutFicheNestedInput
+  demandeRappels?: Prisma.DemandeRappelUpdateManyWithoutFicheNestedInput
 }
 
 export type FicheUncheckedUpdateWithoutOngletsInput = {
@@ -1439,6 +1463,7 @@ export type FicheUncheckedUpdateWithoutOngletsInput = {
   catalogueSections?: Prisma.CatalogueSectionUncheckedUpdateManyWithoutFicheNestedInput
   menuSections?: Prisma.MenuSectionUncheckedUpdateManyWithoutFicheNestedInput
   biens?: Prisma.BienUncheckedUpdateManyWithoutFicheNestedInput
+  demandeRappels?: Prisma.DemandeRappelUncheckedUpdateManyWithoutFicheNestedInput
 }
 
 export type FicheCreateWithoutReseauxInput = {
@@ -1481,6 +1506,7 @@ export type FicheCreateWithoutReseauxInput = {
   catalogueSections?: Prisma.CatalogueSectionCreateNestedManyWithoutFicheInput
   menuSections?: Prisma.MenuSectionCreateNestedManyWithoutFicheInput
   biens?: Prisma.BienCreateNestedManyWithoutFicheInput
+  demandeRappels?: Prisma.DemandeRappelCreateNestedManyWithoutFicheInput
 }
 
 export type FicheUncheckedCreateWithoutReseauxInput = {
@@ -1524,6 +1550,7 @@ export type FicheUncheckedCreateWithoutReseauxInput = {
   catalogueSections?: Prisma.CatalogueSectionUncheckedCreateNestedManyWithoutFicheInput
   menuSections?: Prisma.MenuSectionUncheckedCreateNestedManyWithoutFicheInput
   biens?: Prisma.BienUncheckedCreateNestedManyWithoutFicheInput
+  demandeRappels?: Prisma.DemandeRappelUncheckedCreateNestedManyWithoutFicheInput
 }
 
 export type FicheCreateOrConnectWithoutReseauxInput = {
@@ -1582,6 +1609,7 @@ export type FicheUpdateWithoutReseauxInput = {
   catalogueSections?: Prisma.CatalogueSectionUpdateManyWithoutFicheNestedInput
   menuSections?: Prisma.MenuSectionUpdateManyWithoutFicheNestedInput
   biens?: Prisma.BienUpdateManyWithoutFicheNestedInput
+  demandeRappels?: Prisma.DemandeRappelUpdateManyWithoutFicheNestedInput
 }
 
 export type FicheUncheckedUpdateWithoutReseauxInput = {
@@ -1625,6 +1653,7 @@ export type FicheUncheckedUpdateWithoutReseauxInput = {
   catalogueSections?: Prisma.CatalogueSectionUncheckedUpdateManyWithoutFicheNestedInput
   menuSections?: Prisma.MenuSectionUncheckedUpdateManyWithoutFicheNestedInput
   biens?: Prisma.BienUncheckedUpdateManyWithoutFicheNestedInput
+  demandeRappels?: Prisma.DemandeRappelUncheckedUpdateManyWithoutFicheNestedInput
 }
 
 export type FicheCreateWithoutLiensInput = {
@@ -1667,6 +1696,7 @@ export type FicheCreateWithoutLiensInput = {
   catalogueSections?: Prisma.CatalogueSectionCreateNestedManyWithoutFicheInput
   menuSections?: Prisma.MenuSectionCreateNestedManyWithoutFicheInput
   biens?: Prisma.BienCreateNestedManyWithoutFicheInput
+  demandeRappels?: Prisma.DemandeRappelCreateNestedManyWithoutFicheInput
 }
 
 export type FicheUncheckedCreateWithoutLiensInput = {
@@ -1710,6 +1740,7 @@ export type FicheUncheckedCreateWithoutLiensInput = {
   catalogueSections?: Prisma.CatalogueSectionUncheckedCreateNestedManyWithoutFicheInput
   menuSections?: Prisma.MenuSectionUncheckedCreateNestedManyWithoutFicheInput
   biens?: Prisma.BienUncheckedCreateNestedManyWithoutFicheInput
+  demandeRappels?: Prisma.DemandeRappelUncheckedCreateNestedManyWithoutFicheInput
 }
 
 export type FicheCreateOrConnectWithoutLiensInput = {
@@ -1768,6 +1799,7 @@ export type FicheUpdateWithoutLiensInput = {
   catalogueSections?: Prisma.CatalogueSectionUpdateManyWithoutFicheNestedInput
   menuSections?: Prisma.MenuSectionUpdateManyWithoutFicheNestedInput
   biens?: Prisma.BienUpdateManyWithoutFicheNestedInput
+  demandeRappels?: Prisma.DemandeRappelUpdateManyWithoutFicheNestedInput
 }
 
 export type FicheUncheckedUpdateWithoutLiensInput = {
@@ -1811,6 +1843,7 @@ export type FicheUncheckedUpdateWithoutLiensInput = {
   catalogueSections?: Prisma.CatalogueSectionUncheckedUpdateManyWithoutFicheNestedInput
   menuSections?: Prisma.MenuSectionUncheckedUpdateManyWithoutFicheNestedInput
   biens?: Prisma.BienUncheckedUpdateManyWithoutFicheNestedInput
+  demandeRappels?: Prisma.DemandeRappelUncheckedUpdateManyWithoutFicheNestedInput
 }
 
 export type FicheCreateWithoutHorairesInput = {
@@ -1853,6 +1886,7 @@ export type FicheCreateWithoutHorairesInput = {
   catalogueSections?: Prisma.CatalogueSectionCreateNestedManyWithoutFicheInput
   menuSections?: Prisma.MenuSectionCreateNestedManyWithoutFicheInput
   biens?: Prisma.BienCreateNestedManyWithoutFicheInput
+  demandeRappels?: Prisma.DemandeRappelCreateNestedManyWithoutFicheInput
 }
 
 export type FicheUncheckedCreateWithoutHorairesInput = {
@@ -1896,6 +1930,7 @@ export type FicheUncheckedCreateWithoutHorairesInput = {
   catalogueSections?: Prisma.CatalogueSectionUncheckedCreateNestedManyWithoutFicheInput
   menuSections?: Prisma.MenuSectionUncheckedCreateNestedManyWithoutFicheInput
   biens?: Prisma.BienUncheckedCreateNestedManyWithoutFicheInput
+  demandeRappels?: Prisma.DemandeRappelUncheckedCreateNestedManyWithoutFicheInput
 }
 
 export type FicheCreateOrConnectWithoutHorairesInput = {
@@ -1954,6 +1989,7 @@ export type FicheUpdateWithoutHorairesInput = {
   catalogueSections?: Prisma.CatalogueSectionUpdateManyWithoutFicheNestedInput
   menuSections?: Prisma.MenuSectionUpdateManyWithoutFicheNestedInput
   biens?: Prisma.BienUpdateManyWithoutFicheNestedInput
+  demandeRappels?: Prisma.DemandeRappelUpdateManyWithoutFicheNestedInput
 }
 
 export type FicheUncheckedUpdateWithoutHorairesInput = {
@@ -1997,6 +2033,7 @@ export type FicheUncheckedUpdateWithoutHorairesInput = {
   catalogueSections?: Prisma.CatalogueSectionUncheckedUpdateManyWithoutFicheNestedInput
   menuSections?: Prisma.MenuSectionUncheckedUpdateManyWithoutFicheNestedInput
   biens?: Prisma.BienUncheckedUpdateManyWithoutFicheNestedInput
+  demandeRappels?: Prisma.DemandeRappelUncheckedUpdateManyWithoutFicheNestedInput
 }
 
 export type FicheCreateWithoutMediasInput = {
@@ -2039,6 +2076,7 @@ export type FicheCreateWithoutMediasInput = {
   catalogueSections?: Prisma.CatalogueSectionCreateNestedManyWithoutFicheInput
   menuSections?: Prisma.MenuSectionCreateNestedManyWithoutFicheInput
   biens?: Prisma.BienCreateNestedManyWithoutFicheInput
+  demandeRappels?: Prisma.DemandeRappelCreateNestedManyWithoutFicheInput
 }
 
 export type FicheUncheckedCreateWithoutMediasInput = {
@@ -2082,6 +2120,7 @@ export type FicheUncheckedCreateWithoutMediasInput = {
   catalogueSections?: Prisma.CatalogueSectionUncheckedCreateNestedManyWithoutFicheInput
   menuSections?: Prisma.MenuSectionUncheckedCreateNestedManyWithoutFicheInput
   biens?: Prisma.BienUncheckedCreateNestedManyWithoutFicheInput
+  demandeRappels?: Prisma.DemandeRappelUncheckedCreateNestedManyWithoutFicheInput
 }
 
 export type FicheCreateOrConnectWithoutMediasInput = {
@@ -2140,6 +2179,7 @@ export type FicheUpdateWithoutMediasInput = {
   catalogueSections?: Prisma.CatalogueSectionUpdateManyWithoutFicheNestedInput
   menuSections?: Prisma.MenuSectionUpdateManyWithoutFicheNestedInput
   biens?: Prisma.BienUpdateManyWithoutFicheNestedInput
+  demandeRappels?: Prisma.DemandeRappelUpdateManyWithoutFicheNestedInput
 }
 
 export type FicheUncheckedUpdateWithoutMediasInput = {
@@ -2183,6 +2223,7 @@ export type FicheUncheckedUpdateWithoutMediasInput = {
   catalogueSections?: Prisma.CatalogueSectionUncheckedUpdateManyWithoutFicheNestedInput
   menuSections?: Prisma.MenuSectionUncheckedUpdateManyWithoutFicheNestedInput
   biens?: Prisma.BienUncheckedUpdateManyWithoutFicheNestedInput
+  demandeRappels?: Prisma.DemandeRappelUncheckedUpdateManyWithoutFicheNestedInput
 }
 
 export type FicheCreateWithoutCatalogueSectionsInput = {
@@ -2225,6 +2266,7 @@ export type FicheCreateWithoutCatalogueSectionsInput = {
   medias?: Prisma.FicheMediaCreateNestedManyWithoutFicheInput
   menuSections?: Prisma.MenuSectionCreateNestedManyWithoutFicheInput
   biens?: Prisma.BienCreateNestedManyWithoutFicheInput
+  demandeRappels?: Prisma.DemandeRappelCreateNestedManyWithoutFicheInput
 }
 
 export type FicheUncheckedCreateWithoutCatalogueSectionsInput = {
@@ -2268,6 +2310,7 @@ export type FicheUncheckedCreateWithoutCatalogueSectionsInput = {
   medias?: Prisma.FicheMediaUncheckedCreateNestedManyWithoutFicheInput
   menuSections?: Prisma.MenuSectionUncheckedCreateNestedManyWithoutFicheInput
   biens?: Prisma.BienUncheckedCreateNestedManyWithoutFicheInput
+  demandeRappels?: Prisma.DemandeRappelUncheckedCreateNestedManyWithoutFicheInput
 }
 
 export type FicheCreateOrConnectWithoutCatalogueSectionsInput = {
@@ -2326,6 +2369,7 @@ export type FicheUpdateWithoutCatalogueSectionsInput = {
   medias?: Prisma.FicheMediaUpdateManyWithoutFicheNestedInput
   menuSections?: Prisma.MenuSectionUpdateManyWithoutFicheNestedInput
   biens?: Prisma.BienUpdateManyWithoutFicheNestedInput
+  demandeRappels?: Prisma.DemandeRappelUpdateManyWithoutFicheNestedInput
 }
 
 export type FicheUncheckedUpdateWithoutCatalogueSectionsInput = {
@@ -2369,6 +2413,7 @@ export type FicheUncheckedUpdateWithoutCatalogueSectionsInput = {
   medias?: Prisma.FicheMediaUncheckedUpdateManyWithoutFicheNestedInput
   menuSections?: Prisma.MenuSectionUncheckedUpdateManyWithoutFicheNestedInput
   biens?: Prisma.BienUncheckedUpdateManyWithoutFicheNestedInput
+  demandeRappels?: Prisma.DemandeRappelUncheckedUpdateManyWithoutFicheNestedInput
 }
 
 export type FicheCreateWithoutMenuSectionsInput = {
@@ -2411,6 +2456,7 @@ export type FicheCreateWithoutMenuSectionsInput = {
   medias?: Prisma.FicheMediaCreateNestedManyWithoutFicheInput
   catalogueSections?: Prisma.CatalogueSectionCreateNestedManyWithoutFicheInput
   biens?: Prisma.BienCreateNestedManyWithoutFicheInput
+  demandeRappels?: Prisma.DemandeRappelCreateNestedManyWithoutFicheInput
 }
 
 export type FicheUncheckedCreateWithoutMenuSectionsInput = {
@@ -2454,6 +2500,7 @@ export type FicheUncheckedCreateWithoutMenuSectionsInput = {
   medias?: Prisma.FicheMediaUncheckedCreateNestedManyWithoutFicheInput
   catalogueSections?: Prisma.CatalogueSectionUncheckedCreateNestedManyWithoutFicheInput
   biens?: Prisma.BienUncheckedCreateNestedManyWithoutFicheInput
+  demandeRappels?: Prisma.DemandeRappelUncheckedCreateNestedManyWithoutFicheInput
 }
 
 export type FicheCreateOrConnectWithoutMenuSectionsInput = {
@@ -2512,6 +2559,7 @@ export type FicheUpdateWithoutMenuSectionsInput = {
   medias?: Prisma.FicheMediaUpdateManyWithoutFicheNestedInput
   catalogueSections?: Prisma.CatalogueSectionUpdateManyWithoutFicheNestedInput
   biens?: Prisma.BienUpdateManyWithoutFicheNestedInput
+  demandeRappels?: Prisma.DemandeRappelUpdateManyWithoutFicheNestedInput
 }
 
 export type FicheUncheckedUpdateWithoutMenuSectionsInput = {
@@ -2555,6 +2603,7 @@ export type FicheUncheckedUpdateWithoutMenuSectionsInput = {
   medias?: Prisma.FicheMediaUncheckedUpdateManyWithoutFicheNestedInput
   catalogueSections?: Prisma.CatalogueSectionUncheckedUpdateManyWithoutFicheNestedInput
   biens?: Prisma.BienUncheckedUpdateManyWithoutFicheNestedInput
+  demandeRappels?: Prisma.DemandeRappelUncheckedUpdateManyWithoutFicheNestedInput
 }
 
 export type FicheCreateWithoutBiensInput = {
@@ -2597,6 +2646,7 @@ export type FicheCreateWithoutBiensInput = {
   medias?: Prisma.FicheMediaCreateNestedManyWithoutFicheInput
   catalogueSections?: Prisma.CatalogueSectionCreateNestedManyWithoutFicheInput
   menuSections?: Prisma.MenuSectionCreateNestedManyWithoutFicheInput
+  demandeRappels?: Prisma.DemandeRappelCreateNestedManyWithoutFicheInput
 }
 
 export type FicheUncheckedCreateWithoutBiensInput = {
@@ -2640,6 +2690,7 @@ export type FicheUncheckedCreateWithoutBiensInput = {
   medias?: Prisma.FicheMediaUncheckedCreateNestedManyWithoutFicheInput
   catalogueSections?: Prisma.CatalogueSectionUncheckedCreateNestedManyWithoutFicheInput
   menuSections?: Prisma.MenuSectionUncheckedCreateNestedManyWithoutFicheInput
+  demandeRappels?: Prisma.DemandeRappelUncheckedCreateNestedManyWithoutFicheInput
 }
 
 export type FicheCreateOrConnectWithoutBiensInput = {
@@ -2698,6 +2749,7 @@ export type FicheUpdateWithoutBiensInput = {
   medias?: Prisma.FicheMediaUpdateManyWithoutFicheNestedInput
   catalogueSections?: Prisma.CatalogueSectionUpdateManyWithoutFicheNestedInput
   menuSections?: Prisma.MenuSectionUpdateManyWithoutFicheNestedInput
+  demandeRappels?: Prisma.DemandeRappelUpdateManyWithoutFicheNestedInput
 }
 
 export type FicheUncheckedUpdateWithoutBiensInput = {
@@ -2741,6 +2793,7 @@ export type FicheUncheckedUpdateWithoutBiensInput = {
   medias?: Prisma.FicheMediaUncheckedUpdateManyWithoutFicheNestedInput
   catalogueSections?: Prisma.CatalogueSectionUncheckedUpdateManyWithoutFicheNestedInput
   menuSections?: Prisma.MenuSectionUncheckedUpdateManyWithoutFicheNestedInput
+  demandeRappels?: Prisma.DemandeRappelUncheckedUpdateManyWithoutFicheNestedInput
 }
 
 export type FicheCreateWithoutUserInput = {
@@ -2783,6 +2836,7 @@ export type FicheCreateWithoutUserInput = {
   catalogueSections?: Prisma.CatalogueSectionCreateNestedManyWithoutFicheInput
   menuSections?: Prisma.MenuSectionCreateNestedManyWithoutFicheInput
   biens?: Prisma.BienCreateNestedManyWithoutFicheInput
+  demandeRappels?: Prisma.DemandeRappelCreateNestedManyWithoutFicheInput
 }
 
 export type FicheUncheckedCreateWithoutUserInput = {
@@ -2826,6 +2880,7 @@ export type FicheUncheckedCreateWithoutUserInput = {
   catalogueSections?: Prisma.CatalogueSectionUncheckedCreateNestedManyWithoutFicheInput
   menuSections?: Prisma.MenuSectionUncheckedCreateNestedManyWithoutFicheInput
   biens?: Prisma.BienUncheckedCreateNestedManyWithoutFicheInput
+  demandeRappels?: Prisma.DemandeRappelUncheckedCreateNestedManyWithoutFicheInput
 }
 
 export type FicheCreateOrConnectWithoutUserInput = {
@@ -2931,6 +2986,7 @@ export type FicheCreateWithoutSubscriptionsInput = {
   catalogueSections?: Prisma.CatalogueSectionCreateNestedManyWithoutFicheInput
   menuSections?: Prisma.MenuSectionCreateNestedManyWithoutFicheInput
   biens?: Prisma.BienCreateNestedManyWithoutFicheInput
+  demandeRappels?: Prisma.DemandeRappelCreateNestedManyWithoutFicheInput
 }
 
 export type FicheUncheckedCreateWithoutSubscriptionsInput = {
@@ -2974,6 +3030,7 @@ export type FicheUncheckedCreateWithoutSubscriptionsInput = {
   catalogueSections?: Prisma.CatalogueSectionUncheckedCreateNestedManyWithoutFicheInput
   menuSections?: Prisma.MenuSectionUncheckedCreateNestedManyWithoutFicheInput
   biens?: Prisma.BienUncheckedCreateNestedManyWithoutFicheInput
+  demandeRappels?: Prisma.DemandeRappelUncheckedCreateNestedManyWithoutFicheInput
 }
 
 export type FicheCreateOrConnectWithoutSubscriptionsInput = {
@@ -3032,6 +3089,7 @@ export type FicheUpdateWithoutSubscriptionsInput = {
   catalogueSections?: Prisma.CatalogueSectionUpdateManyWithoutFicheNestedInput
   menuSections?: Prisma.MenuSectionUpdateManyWithoutFicheNestedInput
   biens?: Prisma.BienUpdateManyWithoutFicheNestedInput
+  demandeRappels?: Prisma.DemandeRappelUpdateManyWithoutFicheNestedInput
 }
 
 export type FicheUncheckedUpdateWithoutSubscriptionsInput = {
@@ -3075,6 +3133,7 @@ export type FicheUncheckedUpdateWithoutSubscriptionsInput = {
   catalogueSections?: Prisma.CatalogueSectionUncheckedUpdateManyWithoutFicheNestedInput
   menuSections?: Prisma.MenuSectionUncheckedUpdateManyWithoutFicheNestedInput
   biens?: Prisma.BienUncheckedUpdateManyWithoutFicheNestedInput
+  demandeRappels?: Prisma.DemandeRappelUncheckedUpdateManyWithoutFicheNestedInput
 }
 
 export type FicheCreateWithoutPaymentsInput = {
@@ -3117,6 +3176,7 @@ export type FicheCreateWithoutPaymentsInput = {
   catalogueSections?: Prisma.CatalogueSectionCreateNestedManyWithoutFicheInput
   menuSections?: Prisma.MenuSectionCreateNestedManyWithoutFicheInput
   biens?: Prisma.BienCreateNestedManyWithoutFicheInput
+  demandeRappels?: Prisma.DemandeRappelCreateNestedManyWithoutFicheInput
 }
 
 export type FicheUncheckedCreateWithoutPaymentsInput = {
@@ -3160,6 +3220,7 @@ export type FicheUncheckedCreateWithoutPaymentsInput = {
   catalogueSections?: Prisma.CatalogueSectionUncheckedCreateNestedManyWithoutFicheInput
   menuSections?: Prisma.MenuSectionUncheckedCreateNestedManyWithoutFicheInput
   biens?: Prisma.BienUncheckedCreateNestedManyWithoutFicheInput
+  demandeRappels?: Prisma.DemandeRappelUncheckedCreateNestedManyWithoutFicheInput
 }
 
 export type FicheCreateOrConnectWithoutPaymentsInput = {
@@ -3218,6 +3279,7 @@ export type FicheUpdateWithoutPaymentsInput = {
   catalogueSections?: Prisma.CatalogueSectionUpdateManyWithoutFicheNestedInput
   menuSections?: Prisma.MenuSectionUpdateManyWithoutFicheNestedInput
   biens?: Prisma.BienUpdateManyWithoutFicheNestedInput
+  demandeRappels?: Prisma.DemandeRappelUpdateManyWithoutFicheNestedInput
 }
 
 export type FicheUncheckedUpdateWithoutPaymentsInput = {
@@ -3253,6 +3315,197 @@ export type FicheUncheckedUpdateWithoutPaymentsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutFicheNestedInput
+  onglets?: Prisma.FicheOngletUncheckedUpdateManyWithoutFicheNestedInput
+  reseaux?: Prisma.FicheReseauUncheckedUpdateManyWithoutFicheNestedInput
+  liens?: Prisma.FicheLienUncheckedUpdateManyWithoutFicheNestedInput
+  horaires?: Prisma.FicheHoraireUncheckedUpdateManyWithoutFicheNestedInput
+  medias?: Prisma.FicheMediaUncheckedUpdateManyWithoutFicheNestedInput
+  catalogueSections?: Prisma.CatalogueSectionUncheckedUpdateManyWithoutFicheNestedInput
+  menuSections?: Prisma.MenuSectionUncheckedUpdateManyWithoutFicheNestedInput
+  biens?: Prisma.BienUncheckedUpdateManyWithoutFicheNestedInput
+  demandeRappels?: Prisma.DemandeRappelUncheckedUpdateManyWithoutFicheNestedInput
+}
+
+export type FicheCreateWithoutDemandeRappelsInput = {
+  slug: string
+  prenom: string
+  nom?: string
+  fonction?: string | null
+  entreprise?: string | null
+  photo?: string | null
+  logo?: string | null
+  telephone?: string | null
+  whatsapp?: string | null
+  email?: string | null
+  site?: string | null
+  adresse?: string | null
+  googlePlaceId?: string | null
+  premierBouton?: $Enums.PremierBouton
+  messageWhatsapp?: string | null
+  statut?: $Enums.StatutFiche
+  enLigneSeule?: boolean
+  scansTotal?: number
+  claimCode?: string | null
+  secteur?: $Enums.Secteur | null
+  presentation?: string | null
+  rdvLabel?: string | null
+  rdvUrl?: string | null
+  enteteDisposition?: $Enums.Disposition
+  enteteTaille?: $Enums.Taille
+  enteteTheme?: $Enums.Theme | null
+  enteteCouverture?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  user?: Prisma.UserCreateNestedOneWithoutFichesInput
+  subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutFicheInput
+  payments?: Prisma.PaymentCreateNestedManyWithoutFicheInput
+  onglets?: Prisma.FicheOngletCreateNestedManyWithoutFicheInput
+  reseaux?: Prisma.FicheReseauCreateNestedManyWithoutFicheInput
+  liens?: Prisma.FicheLienCreateNestedManyWithoutFicheInput
+  horaires?: Prisma.FicheHoraireCreateNestedManyWithoutFicheInput
+  medias?: Prisma.FicheMediaCreateNestedManyWithoutFicheInput
+  catalogueSections?: Prisma.CatalogueSectionCreateNestedManyWithoutFicheInput
+  menuSections?: Prisma.MenuSectionCreateNestedManyWithoutFicheInput
+  biens?: Prisma.BienCreateNestedManyWithoutFicheInput
+}
+
+export type FicheUncheckedCreateWithoutDemandeRappelsInput = {
+  id?: number
+  slug: string
+  prenom: string
+  nom?: string
+  fonction?: string | null
+  entreprise?: string | null
+  photo?: string | null
+  logo?: string | null
+  telephone?: string | null
+  whatsapp?: string | null
+  email?: string | null
+  site?: string | null
+  adresse?: string | null
+  googlePlaceId?: string | null
+  premierBouton?: $Enums.PremierBouton
+  messageWhatsapp?: string | null
+  statut?: $Enums.StatutFiche
+  enLigneSeule?: boolean
+  scansTotal?: number
+  userId?: number | null
+  claimCode?: string | null
+  secteur?: $Enums.Secteur | null
+  presentation?: string | null
+  rdvLabel?: string | null
+  rdvUrl?: string | null
+  enteteDisposition?: $Enums.Disposition
+  enteteTaille?: $Enums.Taille
+  enteteTheme?: $Enums.Theme | null
+  enteteCouverture?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutFicheInput
+  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutFicheInput
+  onglets?: Prisma.FicheOngletUncheckedCreateNestedManyWithoutFicheInput
+  reseaux?: Prisma.FicheReseauUncheckedCreateNestedManyWithoutFicheInput
+  liens?: Prisma.FicheLienUncheckedCreateNestedManyWithoutFicheInput
+  horaires?: Prisma.FicheHoraireUncheckedCreateNestedManyWithoutFicheInput
+  medias?: Prisma.FicheMediaUncheckedCreateNestedManyWithoutFicheInput
+  catalogueSections?: Prisma.CatalogueSectionUncheckedCreateNestedManyWithoutFicheInput
+  menuSections?: Prisma.MenuSectionUncheckedCreateNestedManyWithoutFicheInput
+  biens?: Prisma.BienUncheckedCreateNestedManyWithoutFicheInput
+}
+
+export type FicheCreateOrConnectWithoutDemandeRappelsInput = {
+  where: Prisma.FicheWhereUniqueInput
+  create: Prisma.XOR<Prisma.FicheCreateWithoutDemandeRappelsInput, Prisma.FicheUncheckedCreateWithoutDemandeRappelsInput>
+}
+
+export type FicheUpsertWithoutDemandeRappelsInput = {
+  update: Prisma.XOR<Prisma.FicheUpdateWithoutDemandeRappelsInput, Prisma.FicheUncheckedUpdateWithoutDemandeRappelsInput>
+  create: Prisma.XOR<Prisma.FicheCreateWithoutDemandeRappelsInput, Prisma.FicheUncheckedCreateWithoutDemandeRappelsInput>
+  where?: Prisma.FicheWhereInput
+}
+
+export type FicheUpdateToOneWithWhereWithoutDemandeRappelsInput = {
+  where?: Prisma.FicheWhereInput
+  data: Prisma.XOR<Prisma.FicheUpdateWithoutDemandeRappelsInput, Prisma.FicheUncheckedUpdateWithoutDemandeRappelsInput>
+}
+
+export type FicheUpdateWithoutDemandeRappelsInput = {
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  prenom?: Prisma.StringFieldUpdateOperationsInput | string
+  nom?: Prisma.StringFieldUpdateOperationsInput | string
+  fonction?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  entreprise?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  photo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  telephone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  whatsapp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  site?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  adresse?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  googlePlaceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  premierBouton?: Prisma.EnumPremierBoutonFieldUpdateOperationsInput | $Enums.PremierBouton
+  messageWhatsapp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  statut?: Prisma.EnumStatutFicheFieldUpdateOperationsInput | $Enums.StatutFiche
+  enLigneSeule?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  scansTotal?: Prisma.IntFieldUpdateOperationsInput | number
+  claimCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  secteur?: Prisma.NullableEnumSecteurFieldUpdateOperationsInput | $Enums.Secteur | null
+  presentation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  rdvLabel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  rdvUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  enteteDisposition?: Prisma.EnumDispositionFieldUpdateOperationsInput | $Enums.Disposition
+  enteteTaille?: Prisma.EnumTailleFieldUpdateOperationsInput | $Enums.Taille
+  enteteTheme?: Prisma.NullableEnumThemeFieldUpdateOperationsInput | $Enums.Theme | null
+  enteteCouverture?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  user?: Prisma.UserUpdateOneWithoutFichesNestedInput
+  subscriptions?: Prisma.SubscriptionUpdateManyWithoutFicheNestedInput
+  payments?: Prisma.PaymentUpdateManyWithoutFicheNestedInput
+  onglets?: Prisma.FicheOngletUpdateManyWithoutFicheNestedInput
+  reseaux?: Prisma.FicheReseauUpdateManyWithoutFicheNestedInput
+  liens?: Prisma.FicheLienUpdateManyWithoutFicheNestedInput
+  horaires?: Prisma.FicheHoraireUpdateManyWithoutFicheNestedInput
+  medias?: Prisma.FicheMediaUpdateManyWithoutFicheNestedInput
+  catalogueSections?: Prisma.CatalogueSectionUpdateManyWithoutFicheNestedInput
+  menuSections?: Prisma.MenuSectionUpdateManyWithoutFicheNestedInput
+  biens?: Prisma.BienUpdateManyWithoutFicheNestedInput
+}
+
+export type FicheUncheckedUpdateWithoutDemandeRappelsInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  prenom?: Prisma.StringFieldUpdateOperationsInput | string
+  nom?: Prisma.StringFieldUpdateOperationsInput | string
+  fonction?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  entreprise?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  photo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  telephone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  whatsapp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  site?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  adresse?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  googlePlaceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  premierBouton?: Prisma.EnumPremierBoutonFieldUpdateOperationsInput | $Enums.PremierBouton
+  messageWhatsapp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  statut?: Prisma.EnumStatutFicheFieldUpdateOperationsInput | $Enums.StatutFiche
+  enLigneSeule?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  scansTotal?: Prisma.IntFieldUpdateOperationsInput | number
+  userId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  claimCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  secteur?: Prisma.NullableEnumSecteurFieldUpdateOperationsInput | $Enums.Secteur | null
+  presentation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  rdvLabel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  rdvUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  enteteDisposition?: Prisma.EnumDispositionFieldUpdateOperationsInput | $Enums.Disposition
+  enteteTaille?: Prisma.EnumTailleFieldUpdateOperationsInput | $Enums.Taille
+  enteteTheme?: Prisma.NullableEnumThemeFieldUpdateOperationsInput | $Enums.Theme | null
+  enteteCouverture?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutFicheNestedInput
+  payments?: Prisma.PaymentUncheckedUpdateManyWithoutFicheNestedInput
   onglets?: Prisma.FicheOngletUncheckedUpdateManyWithoutFicheNestedInput
   reseaux?: Prisma.FicheReseauUncheckedUpdateManyWithoutFicheNestedInput
   liens?: Prisma.FicheLienUncheckedUpdateManyWithoutFicheNestedInput
@@ -3336,6 +3589,7 @@ export type FicheUpdateWithoutUserInput = {
   catalogueSections?: Prisma.CatalogueSectionUpdateManyWithoutFicheNestedInput
   menuSections?: Prisma.MenuSectionUpdateManyWithoutFicheNestedInput
   biens?: Prisma.BienUpdateManyWithoutFicheNestedInput
+  demandeRappels?: Prisma.DemandeRappelUpdateManyWithoutFicheNestedInput
 }
 
 export type FicheUncheckedUpdateWithoutUserInput = {
@@ -3379,6 +3633,7 @@ export type FicheUncheckedUpdateWithoutUserInput = {
   catalogueSections?: Prisma.CatalogueSectionUncheckedUpdateManyWithoutFicheNestedInput
   menuSections?: Prisma.MenuSectionUncheckedUpdateManyWithoutFicheNestedInput
   biens?: Prisma.BienUncheckedUpdateManyWithoutFicheNestedInput
+  demandeRappels?: Prisma.DemandeRappelUncheckedUpdateManyWithoutFicheNestedInput
 }
 
 export type FicheUncheckedUpdateManyWithoutUserInput = {
@@ -3430,6 +3685,7 @@ export type FicheCountOutputType = {
   catalogueSections: number
   menuSections: number
   biens: number
+  demandeRappels: number
 }
 
 export type FicheCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -3443,6 +3699,7 @@ export type FicheCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.
   catalogueSections?: boolean | FicheCountOutputTypeCountCatalogueSectionsArgs
   menuSections?: boolean | FicheCountOutputTypeCountMenuSectionsArgs
   biens?: boolean | FicheCountOutputTypeCountBiensArgs
+  demandeRappels?: boolean | FicheCountOutputTypeCountDemandeRappelsArgs
 }
 
 /**
@@ -3525,6 +3782,13 @@ export type FicheCountOutputTypeCountBiensArgs<ExtArgs extends runtime.Types.Ext
   where?: Prisma.BienWhereInput
 }
 
+/**
+ * FicheCountOutputType without action
+ */
+export type FicheCountOutputTypeCountDemandeRappelsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.DemandeRappelWhereInput
+}
+
 
 export type FicheSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -3569,6 +3833,7 @@ export type FicheSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   catalogueSections?: boolean | Prisma.Fiche$catalogueSectionsArgs<ExtArgs>
   menuSections?: boolean | Prisma.Fiche$menuSectionsArgs<ExtArgs>
   biens?: boolean | Prisma.Fiche$biensArgs<ExtArgs>
+  demandeRappels?: boolean | Prisma.Fiche$demandeRappelsArgs<ExtArgs>
   _count?: boolean | Prisma.FicheCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["fiche"]>
 
@@ -3689,6 +3954,7 @@ export type FicheInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   catalogueSections?: boolean | Prisma.Fiche$catalogueSectionsArgs<ExtArgs>
   menuSections?: boolean | Prisma.Fiche$menuSectionsArgs<ExtArgs>
   biens?: boolean | Prisma.Fiche$biensArgs<ExtArgs>
+  demandeRappels?: boolean | Prisma.Fiche$demandeRappelsArgs<ExtArgs>
   _count?: boolean | Prisma.FicheCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type FicheIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -3712,6 +3978,7 @@ export type $FichePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     catalogueSections: Prisma.$CatalogueSectionPayload<ExtArgs>[]
     menuSections: Prisma.$MenuSectionPayload<ExtArgs>[]
     biens: Prisma.$BienPayload<ExtArgs>[]
+    demandeRappels: Prisma.$DemandeRappelPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
@@ -4150,6 +4417,7 @@ export interface Prisma__FicheClient<T, Null = never, ExtArgs extends runtime.Ty
   catalogueSections<T extends Prisma.Fiche$catalogueSectionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Fiche$catalogueSectionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CatalogueSectionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   menuSections<T extends Prisma.Fiche$menuSectionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Fiche$menuSectionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$MenuSectionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   biens<T extends Prisma.Fiche$biensArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Fiche$biensArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BienPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  demandeRappels<T extends Prisma.Fiche$demandeRappelsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Fiche$demandeRappelsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DemandeRappelPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -4867,6 +5135,30 @@ export type Fiche$biensArgs<ExtArgs extends runtime.Types.Extensions.InternalArg
   take?: number
   skip?: number
   distinct?: Prisma.BienScalarFieldEnum | Prisma.BienScalarFieldEnum[]
+}
+
+/**
+ * Fiche.demandeRappels
+ */
+export type Fiche$demandeRappelsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the DemandeRappel
+   */
+  select?: Prisma.DemandeRappelSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the DemandeRappel
+   */
+  omit?: Prisma.DemandeRappelOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.DemandeRappelInclude<ExtArgs> | null
+  where?: Prisma.DemandeRappelWhereInput
+  orderBy?: Prisma.DemandeRappelOrderByWithRelationInput | Prisma.DemandeRappelOrderByWithRelationInput[]
+  cursor?: Prisma.DemandeRappelWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.DemandeRappelScalarFieldEnum | Prisma.DemandeRappelScalarFieldEnum[]
 }
 
 /**

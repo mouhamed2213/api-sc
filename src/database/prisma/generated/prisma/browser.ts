@@ -107,3 +107,8 @@ export type Subscription = Prisma.SubscriptionModel
  * 
  */
 export type Payment = Prisma.PaymentModel
+/**
+ * Model DemandeRappel
+ * 
+ */
+export type DemandeRappel = Prisma.DemandeRappelModel

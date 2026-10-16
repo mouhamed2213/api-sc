@@ -259,6 +259,7 @@ model Fiche {
   @@index([userId])
   @@index([statut])
   @@map("fiches")
+  demandeRappels DemandeRappel[]
 }
 
 // Ordre, visibilité et titre des blocs (data.onglets)
@@ -740,18 +741,18 @@ model Payment {
 
 // }
 
-// model DemandeRappel { // le bloc « Être rappelé » n'enregistre rien aujourd'hui
+model DemandeRappel { // le bloc « Être rappelé » n'enregistre rien aujourd'hui
 
-// id Int @id @default(autoincrement())
+id Int @id @default(autoincrement())
 
-// ficheId Int
+ficheId Int
 
-// nom String
+nom String
 
-// telephone String
+telephone String
 
-// createdAt DateTime @default(now())
+createdAt DateTime @default(now())
 
-// fiche Fiche @relation(fields: [ficheId], references: [id], onDelete: Cascade)
+fiche Fiche @relation(fields: [ficheId], references: [id], onDelete: Cascade)
 
-// }
+}
