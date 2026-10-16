@@ -1,5 +1,5 @@
 import { Router, raw } from "express";
-import { requireAuth } from "../../middlewares/auth";
+import { optionalAuth, requireAuth } from "../../middlewares/auth";
 import { validate } from "../../middlewares/validate";
 import { MediaController } from "../media/media.controller";
 import { FicheController } from "./fiche.controller";
@@ -25,6 +25,7 @@ fichesRouter.get(
 // Public — enregistre une ouverture réelle avec une clé d'idempotence par chargement.
 fichesRouter.post(
   "/public/:slug/passages",
+  optionalAuth,
   validate({ params: slugParam, body: recordPassageSchema }),
   FicheController.recordPublicPassage
 );
