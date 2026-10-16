@@ -129,7 +129,7 @@ export const FicheService = {
     id: number,
     rawInput: UpdateFicheInput
   ) => {
-    const fiche = await prisma.fiche.findUnique({ where: { id } });
+    const fiche = await loadFull(id);
     if (!fiche) throw notFound("Fiche introuvable");
     assertAccess(user, fiche);
 
@@ -153,7 +153,16 @@ export const FicheService = {
         "L'abonnement de cette fiche a expiré : la modification est bloquée"
       );
 
-    const input = enforcePlanLimits(sub.plan.limits, rawInput); // 422 si dépassement
+    const input = enforcePlanLimits(
+      sub.plan.limits,
+      rawInput,
+      fiche.onglets.map(o => ({
+        type: o.type,
+        titre: o.titre,
+        visible: o.visible,
+        position: o.position,
+      }))
+    ); // 422 si dépassement
     const d = input.data;
 
     await prisma.$transaction(
