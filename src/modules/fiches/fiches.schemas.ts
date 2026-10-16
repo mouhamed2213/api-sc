@@ -146,3 +146,9 @@ export const passageStatsQuerySchema = z.object({
 
 export const idParam = z.object({ id: z.coerce.number().int().positive() });
 export const slugParam = z.object({ slug: z.string().min(1).max(80) });
+
+
+export const createRappelSchema = z.object({
+  nom: text(100).min(2, "Le nom doit contenir au moins 2 caractères."),
+  telephone: text(30).min(7).max(25),
+});
