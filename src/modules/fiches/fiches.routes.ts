@@ -1,5 +1,5 @@
 import { Router, raw } from "express";
-import { requireAuth } from "../../middlewares/auth";
+import { optionalAuth, requireAuth } from "../../middlewares/auth";
 import { validate } from "../../middlewares/validate";
 import { MediaController } from "../media/media.controller";
 import { FicheController } from "./fiche.controller";
@@ -10,6 +10,7 @@ import {
   updateFicheSchema,
   recordPassageSchema,
   passageStatsQuerySchema,
+  createRappelSchema,
 } from "./fiches.schemas";
 
 export const fichesRouter = Router();
@@ -24,8 +25,16 @@ fichesRouter.get(
 // Public — enregistre une ouverture réelle avec une clé d'idempotence par chargement.
 fichesRouter.post(
   "/public/:slug/passages",
+  optionalAuth,
   validate({ params: slugParam, body: recordPassageSchema }),
   FicheController.recordPublicPassage
+);
+
+// Public — enregistre une demande de rappel pour la fiche.
+fichesRouter.post(
+  "/public/:slug/rappels",
+  validate({ params: slugParam, body: createRappelSchema }),
+  FicheController.createPublicRappel
 );
 
 // Tout le reste exige d'être connecté.
@@ -51,6 +60,12 @@ fichesRouter.get(
   "/:id/stats",
   validate({ params: idParam, query: passageStatsQuerySchema }),
   FicheController.getPassageStats
+);
+
+fichesRouter.get(
+  "/:id/rappels",
+  validate({ params: idParam }),
+  FicheController.listRappels
 );
 
 fichesRouter.get(

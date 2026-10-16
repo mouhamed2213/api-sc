@@ -749,20 +749,17 @@ model Payment {
 
 // }
 
-model DemandeRappel { // le bloc « Être rappelé » n'enregistre rien aujourd'hui
+model DemandeRappel {
 
-id Int @id @default(autoincrement())
+  id        Int      @id @default(autoincrement())
+  ficheId   Int
+  nom       String
+  telephone String
+  createdAt DateTime @default(now())
 
-ficheId Int
+  fiche Fiche @relation(fields: [ficheId], references: [id], onDelete: Cascade)
 
-nom String
-
-telephone String
-
-createdAt DateTime @default(now())
-
-fiche Fiche @relation(fields: [ficheId], references: [id], onDelete: Cascade)
-
+  @@index([ficheId, createdAt])
 }
 
 

@@ -40,12 +40,23 @@ function getRange(filters: PassageFilters) {
 }
 
 export const PassageService = {
-  async record(slug: string, source: PassageSource, idempotencyKey: string) {
+  async record(
+    slug: string,
+    source: PassageSource,
+    idempotencyKey: string,
+    user?: AuthUser,
+  ) {
     const fiche = await prisma.fiche.findUnique({
       where: { slug },
-      select: { id: true, statut: true },
+      select: { id: true, userId: true, statut: true },
     });
     if (!fiche || fiche.statut !== "ACTIVE") {
+      return { recorded: false };
+    }
+
+    // La fiche ouverte par son propriétaire connecté ne génère aucun passage.
+    // Cette règle est vérifiée côté serveur et ne dépend pas d'un paramètre d'URL.
+    if (user && fiche.userId === user.id) {
       return { recorded: false };
     }
 

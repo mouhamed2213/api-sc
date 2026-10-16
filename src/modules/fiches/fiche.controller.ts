@@ -1,14 +1,25 @@
 import { asyncHandler } from "../../lib/asyncHandler";
 import { FicheService } from "./fiches.service";
 import { PassageService, type PassageSource } from "./passages.service";
+import { RappelService } from "./rappels.service";
 
 export const FicheController = {
+  createPublicRappel: asyncHandler(async (req, res) => {
+    const result = await RappelService.createPublic(String(req.params.slug), req.body);
+    res.status(201).json({ ok: true, demande: result });
+  }),
+
+  listRappels: asyncHandler(async (req, res) => {
+    res.json({ rappels: await RappelService.listForFiche(req.user!, Number(req.params.id)) });
+  }),
+
   recordPublicPassage: asyncHandler(async (req, res) => {
     const source = String(req.body.source).toUpperCase() as PassageSource;
     const result = await PassageService.record(
       String(req.params.slug),
       source,
       String(req.body.idempotencyKey),
+      req.user,
     );
     res.status(result.recorded ? 201 : 200).json({ ok: true, ...result });
   }),
