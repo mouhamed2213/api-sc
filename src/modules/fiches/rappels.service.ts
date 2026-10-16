@@ -50,4 +50,35 @@ export const RappelService = {
     ]);
     return { ficheId, total, demandes };
   },
+
+  async listForUser(user: AuthUser, page: number, limit: number) {
+    const where = { fiche: { userId: user.id } };
+    const [total, demandes] = await prisma.$transaction([
+      prisma.demandeRappel.count({ where }),
+      prisma.demandeRappel.findMany({
+        where,
+        select: {
+          id: true,
+          nom: true,
+          telephone: true,
+          createdAt: true,
+          fiche: {
+            select: { id: true, slug: true, prenom: true, nom: true },
+          },
+        },
+        orderBy: { createdAt: "desc" },
+        skip: (page - 1) * limit,
+        take: limit,
+      }),
+    ]);
+    return {
+      demandes,
+      pagination: {
+        page,
+        limit,
+        total,
+        totalPages: Math.ceil(total / limit),
+      },
+    };
+  },
 };
