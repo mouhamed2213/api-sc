@@ -8,6 +8,8 @@ import {
   idParam,
   slugParam,
   updateFicheSchema,
+  recordPassageSchema,
+  passageStatsQuerySchema,
 } from "./fiches.schemas";
 
 export const fichesRouter = Router();
@@ -17,6 +19,13 @@ fichesRouter.get(
   "/public/:slug",
   validate({ params: slugParam }),
   FicheController.getPublicFiche
+);
+
+// Public — enregistre une ouverture réelle avec une clé d'idempotence par chargement.
+fichesRouter.post(
+  "/public/:slug/passages",
+  validate({ params: slugParam, body: recordPassageSchema }),
+  FicheController.recordPublicPassage
 );
 
 // Tout le reste exige d'être connecté.
@@ -36,6 +45,12 @@ fichesRouter.post(
   validate({ params: idParam }),
   raw({ type: () => true, limit: "30mb" }),
   MediaController.upload
+);
+
+fichesRouter.get(
+  "/:id/stats",
+  validate({ params: idParam, query: passageStatsQuerySchema }),
+  FicheController.getPassageStats
 );
 
 fichesRouter.get(

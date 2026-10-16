@@ -131,5 +131,18 @@ export const createFicheSchema = z.object({
 });
 export type CreateFicheInput = z.infer<typeof createFicheSchema>;
 
+export const recordPassageSchema = z.object({
+  source: z.enum(["qr", "nfc", "direct"]),
+  idempotencyKey: z.string().min(16).max(64).regex(/^[a-zA-Z0-9_-]+$/),
+});
+
+export const passageStatsQuerySchema = z.object({
+  granularity: z.enum(["day", "month"]).default("month"),
+  date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
+  month: z.string().regex(/^\d{4}-(0[1-9]|1[0-2])$/).optional(),
+}).refine(value => !(value.date && value.month), {
+  message: "Choisissez une date ou un mois, pas les deux.",
+});
+
 export const idParam = z.object({ id: z.coerce.number().int().positive() });
 export const slugParam = z.object({ slug: z.string().min(1).max(80) });

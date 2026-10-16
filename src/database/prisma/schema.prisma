@@ -63,6 +63,12 @@ enum StatutFiche {
   SUSPENDUE
 }
 
+enum FichePassageSource {
+  QR
+  NFC
+  DIRECT
+}
+
 enum Secteur {
   RESTAURANT
 
@@ -203,6 +209,8 @@ model Fiche {
   enLigneSeule Boolean @default(false) // affiche le badge « Créée gratuitement avec Support Connecté »
 
   scansTotal Int @default(0)
+
+  passages FichePassage[]
 
   // Propriétaire
 
@@ -755,4 +763,19 @@ createdAt DateTime @default(now())
 
 fiche Fiche @relation(fields: [ficheId], references: [id], onDelete: Cascade)
 
+}
+
+
+// Événement individuel d'ouverture publique d'une fiche.
+model FichePassage {
+  id             Int               @id @default(autoincrement())
+  ficheId        Int
+  source         FichePassageSource
+  idempotencyKey String            @unique @db.VarChar(64)
+  createdAt      DateTime          @default(now())
+  fiche          Fiche             @relation(fields: [ficheId], references: [id], onDelete: Cascade)
+
+  @@index([ficheId, createdAt])
+  @@index([ficheId, source, createdAt])
+  @@map("fiche_passages")
 }
