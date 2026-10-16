@@ -1,7 +1,31 @@
 import { asyncHandler } from "../../lib/asyncHandler";
 import { FicheService } from "./fiches.service";
+import { PassageService, type PassageSource } from "./passages.service";
 
 export const FicheController = {
+  recordPublicPassage: asyncHandler(async (req, res) => {
+    const source = String(req.body.source).toUpperCase() as PassageSource;
+    const result = await PassageService.record(
+      String(req.params.slug),
+      source,
+      String(req.body.idempotencyKey),
+    );
+    res.status(result.recorded ? 201 : 200).json({ ok: true, ...result });
+  }),
+
+  getPassageStats: asyncHandler(async (req, res) => {
+    const result = await PassageService.stats(
+      req.user!,
+      Number(req.params.id),
+      {
+        granularity: req.query.granularity === "day" ? "day" : "month",
+        ...(typeof req.query.date === "string" ? { date: req.query.date } : {}),
+        ...(typeof req.query.month === "string" ? { month: req.query.month } : {}),
+      },
+    );
+    res.json({ stats: result });
+  }),
+
   getPublicFiche: asyncHandler(async (req, res) => {
     res.json({
       fiche: await FicheService.getPublicFiche(String(req.params.slug)),
