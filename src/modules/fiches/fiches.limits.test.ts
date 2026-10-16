@@ -41,7 +41,7 @@ const currentTabs = [
 ];
 
 const updateWithTabs = (onglets: Array<{ type: "presentation" | "reseaux" | "localisation" | "texte"; titre?: string; visible?: boolean }>) =>
-  ({ data: { onglets } }) as UpdateFicheInput;
+  ({ data: { onglets: onglets.map(o => ({ visible: true, ...o })) } }) as UpdateFicheInput;
 
 describe("enforcePlanLimits — capacités des onglets", () => {
   it("refuse un nouveau bloc si canAdd est false", () => {
