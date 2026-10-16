@@ -114,17 +114,24 @@ export const PassageService = {
       `,
     );
 
+    // Use a fixed SQL expression for both SELECT and GROUP BY.
+    // Parameterizing the date_trunc field twice can produce distinct SQL
+    // parameters, so PostgreSQL no longer recognizes the expressions as equal.
+    const periodExpression =
+      filters.granularity === "day"
+        ? Prisma.sql`date_trunc('day', "createdAt")`
+        : Prisma.sql`date_trunc('month', "createdAt")`;
     const format = filters.granularity === "day" ? "YYYY-MM-DD" : "YYYY-MM";
     const historyRows = await prisma.$queryRaw<Array<{ period: string; source: string; total: number }>>(
       Prisma.sql`
         SELECT
-          to_char(date_trunc(${filters.granularity}, "createdAt"), ${format}) AS period,
+          to_char(${periodExpression}, ${format}) AS period,
           "source"::text AS source,
           COUNT(*)::int AS total
         FROM "fiche_passages"
         WHERE "ficheId" = ${ficheId} ${rangeClause}
-        GROUP BY date_trunc(${filters.granularity}, "createdAt"), "source"
-        ORDER BY date_trunc(${filters.granularity}, "createdAt") ASC
+        GROUP BY ${periodExpression}, "source"
+        ORDER BY period ASC
       `,
     );
 
