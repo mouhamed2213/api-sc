@@ -186,11 +186,65 @@ export function enforcePlanLimits(
           : `${limits.maxCustomTabs} onglets libres maximum`
       );
 
-    // Nettoyage silencieux : on ignore ce que la formule ne permet pas.
+    // Les capacites structurelles sont validees contre les onglets persistants.
+    const existing = [...currentTabs].sort((a, b) => a.position - b.position);
+    const baseline = existing.length
+      ? existing.map(t => ({ type: t.type.toUpperCase(), titre: t.titre ?? "", visible: t.visible }))
+      : limits.tabsAutorises.map(type => ({ type, titre: "", visible: true }));
+    const oldCounts = new Map<string, number>();
+    const newCounts = new Map<string, number>();
+    for (const tab of baseline) oldCounts.set(tab.type, (oldCounts.get(tab.type) ?? 0) + 1);
+    for (const tab of onglets) {
+      const type = tab.type.toUpperCase();
+      newCounts.set(type, (newCounts.get(type) ?? 0) + 1);
+    }
+
+    if (!limits.canAdd) {
+      for (const [type, count] of newCounts) {
+        if (count > (oldCounts.get(type) ?? 0))
+          add("data.onglets", "L'ajout du bloc « " + type.toLowerCase() + " » n'est pas disponible avec cette formule");
+      }
+    }
+
+    if (!limits.canHide) {
+      for (const [type, count] of oldCounts) {
+        if ((newCounts.get(type) ?? 0) < count)
+          add("data.onglets", "Le retrait ou masquage du bloc « " + type.toLowerCase() + " » n'est pas disponible avec cette formule");
+      }
+      onglets.forEach((o, i) => {
+        if (o.visible === false)
+          add("data.onglets[" + i + "].visible", "Le masquage des blocs n'est pas disponible avec cette formule");
+      });
+    }
+
+    if (!limits.canReorder) {
+      const submittedExisting = onglets.map(o => o.type.toUpperCase()).filter(type => (oldCounts.get(type) ?? 0) > 0);
+      const expectedOrder = baseline.map(t => t.type).filter(type => submittedExisting.includes(type));
+      if (submittedExisting.join("|") !== expectedOrder.join("|"))
+        add("data.onglets", "La réorganisation des blocs n'est pas disponible avec cette formule");
+    }
+
+    if (!limits.canRename) {
+      const titlesByType = new Map<string, string[]>();
+      baseline.forEach(tab => {
+        const titles = titlesByType.get(tab.type) ?? [];
+        titles.push(tab.titre);
+        titlesByType.set(tab.type, titles);
+      });
+      const titleIndexes = new Map<string, number>();
+      onglets.forEach((o, i) => {
+        const type = o.type.toUpperCase();
+        const index = titleIndexes.get(type) ?? 0;
+        titleIndexes.set(type, index + 1);
+        const expected = titlesByType.get(type)?.[index] ?? "";
+        if ((o.titre ?? "") !== expected)
+          add("data.onglets[" + i + "].titre", "Le renommage des blocs n'est pas disponible avec cette formule");
+      });
+    }
+
+    // Les tentatives interdites sont rejetees en 422, jamais corrigees silencieusement.
     onglets = onglets.map(o => ({
       ...o,
-      visible: limits.canHide ? o.visible : true,
-      titre: limits.canRename ? o.titre : undefined,
       contenu: o.type === "texte" ? o.contenu : undefined,
     }));
   }
