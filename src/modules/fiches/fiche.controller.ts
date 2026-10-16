@@ -19,6 +19,7 @@ export const FicheController = {
       String(req.params.slug),
       source,
       String(req.body.idempotencyKey),
+      req.user,
     );
     res.status(result.recorded ? 201 : 200).json({ ok: true, ...result });
   }),
