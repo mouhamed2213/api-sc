@@ -69,7 +69,7 @@ describe("enforcePlanLimits — capacités des onglets", () => {
   });
 
   it("autorise ces opérations lorsque la formule accorde les capacités", () => {
-    const signature = { ...baseLimits, canAdd: true, canReorder: true, canHide: true, canRename: true, maxCustomTabs: 4 } as PlanLimit;
+    const signature = { ...baseLimits, tabsAutorises: ["PRESENTATION", "RESEAUX", "LOCALISATION", "TEXTE"], canAdd: true, canReorder: true, canHide: true, canRename: true, maxCustomTabs: 4 } as PlanLimit;
     expect(() => enforcePlanLimits(signature, updateWithTabs([
       { type: "reseaux", visible: false, titre: "Mes réseaux" },
       { type: "presentation" },
