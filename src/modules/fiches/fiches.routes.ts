@@ -1,5 +1,6 @@
-import { Router } from "express";
+import express, { Router } from "express";
 import { asyncHandler } from "../../lib/asyncHandler";
+import { env } from "../../config/env";
 import { requireAuth } from "../../middlewares/auth";
 import { validate } from "../../middlewares/validate";
 import { FicheController } from "./fiche.controller";
@@ -41,4 +42,10 @@ fichesRouter.patch(
   "/:id",
   validate({ params: idParam, body: updateFicheSchema }),
   FicheController.updateFiche
+);
+
+fichesRouter.post(
+  "/:id/media",
+  express.raw({ type: ["image/*", "video/*"], limit: env.MEDIA_MAX_BYTES }),
+  FicheController.uploadMedia
 );

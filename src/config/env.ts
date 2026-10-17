@@ -18,6 +18,10 @@ const schema = z.object({
     .default("false")
     .transform(v => v === "true"),
   MAX_FICHES_PER_USER: z.coerce.number().int().positive().default(3),
+  SEAWEEDFS_FILER_URL: z.string().url().optional(),
+  SEAWEEDFS_PUBLIC_URL: z.string().url().optional(),
+  SEAWEEDFS_MEDIA_COLLECTION: z.string().min(1).default("support-connecte"),
+  MEDIA_MAX_BYTES: z.coerce.number().int().positive().default(12 * 1024 * 1024),
 
   MAILTRAP_API_TOKEN: z.string().min(1, "MAILTRAP_API_TOKEN est requis"),
   SERVER: z.string().default("http://localhost:4000/api"),

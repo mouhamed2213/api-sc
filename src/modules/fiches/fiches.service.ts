@@ -120,6 +120,22 @@ export const FicheService = {
     return dtoFor(fiche);
   },
 
+  assertCanModify: async (user: AuthUser, id: number) => {
+    const fiche = await prisma.fiche.findUnique({ where: { id } });
+    if (!fiche) throw notFound("Fiche introuvable");
+    assertAccess(user, fiche);
+    if (!isAdmin(user)) {
+      if (fiche.statut === "SUSPENDUE")
+        throw forbidden("FICHE_SUSPENDUE", "Cette fiche est suspendue : modification impossible");
+      if (env.REQUIRE_EMAIL_VERIFICATION && !user.emailVerified)
+        throw forbidden("EMAIL_NON_VERIFIE", "Confirme ton adresse e-mail avant de modifier ta fiche");
+    }
+    const sub = await getEffectiveSubscription(id);
+    if (!sub?.plan.limits)
+      throw forbidden("ABONNEMENT_EXPIRE", "L'abonnement de cette fiche a expiré : la modification est bloquée");
+    return { fiche, sub };
+  },
+
   // ───────── Mise à jour (cœur de la sécurité) ─────────
 
   updateFiche: async (
@@ -127,31 +143,11 @@ export const FicheService = {
     id: number,
     rawInput: UpdateFicheInput
   ) => {
+    const { sub } = await FicheService.assertCanModify(user, id);
     const fiche = await prisma.fiche.findUnique({ where: { id } });
     if (!fiche) throw notFound("Fiche introuvable");
-    assertAccess(user, fiche);
 
-    if (!isAdmin(user)) {
-      if (fiche.statut === "SUSPENDUE")
-        throw forbidden(
-          "FICHE_SUSPENDUE",
-          "Cette fiche est suspendue : modification impossible"
-        );
-      if (env.REQUIRE_EMAIL_VERIFICATION && !user.emailVerified)
-        throw forbidden(
-          "EMAIL_NON_VERIFIE",
-          "Confirme ton adresse e-mail avant de modifier ta fiche"
-        );
-    }
-
-    const sub = await getEffectiveSubscription(id);
-    if (!sub?.plan.limits)
-      throw forbidden(
-        "ABONNEMENT_EXPIRE",
-        "L'abonnement de cette fiche a expiré : la modification est bloquée"
-      );
-
-    const input = enforcePlanLimits(sub.plan.limits, rawInput); // 422 si dépassement
+    const input = enforcePlanLimits(sub.plan.limits!, rawInput); // 422 si dépassement
     const d = input.data;
 
     await prisma.$transaction(
