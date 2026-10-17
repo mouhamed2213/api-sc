@@ -34,6 +34,9 @@ export const MediaController = {
       res.setHeader("Content-Range", media.contentRange);
     }
     res.setHeader("X-Content-Type-Options", "nosniff");
+    // helmet() pose « same-origin » par défaut : le navigateur bloquerait alors <img src="http://api…/api/media/…">
+    // dès que le front est sur une autre origine (ex. :5173 → :4000). Ces médias sont publics par conception.
+    res.setHeader("Cross-Origin-Resource-Policy", "cross-origin");
     if (media.contentLength !== undefined) {
       res.setHeader("Content-Length", String(media.contentLength));
     }
