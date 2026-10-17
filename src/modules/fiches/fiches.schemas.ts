@@ -2,7 +2,8 @@ import { z } from 'zod';
 
 // ───────── Briques réutilisables ─────────
 // Seules les URL http(s), tel:, mailto:, ancres et chemins relatifs sont acceptées (pas de « javascript: »).
-const SAFE_URL = /^(https?:\/\/|tel:|mailto:|#|\/)/i;
+// `/(?!\/)` : un chemin relatif, mais pas « //hote » (URL relative au protocole = redirection vers un autre site).
+const SAFE_URL = /^(https?:\/\/|tel:|mailto:|#|\/(?!\/))/i;
 const url = z
   .string()
   .trim()

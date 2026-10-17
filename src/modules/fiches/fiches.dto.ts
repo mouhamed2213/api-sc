@@ -1,6 +1,7 @@
 import type { Prisma } from '../../database/prisma/generated/prisma/client';
 import { env } from '../../config/env';
 import type { EffectiveSubscription } from '../subscriptions/subscriptions.service';
+import { toPlanCapabilities } from './plan-capabilities';
 
 // Tout ce qu'il faut charger pour reconstruire l'objet attendu par le front.
 export const ficheInclude = {
@@ -37,6 +38,8 @@ export function toFicheDto(f: FicheFull, sub: EffectiveSubscription | null) {
     formule: sub ? lower(sub.plan.type) : 'essentielle', // repli d'affichage si l'abonnement a expiré
     statut: lower(f.statut),
     expiree: sub === null,
+    // Droits réels de la formule (table plan_limits) ; null si expirée : le front retombe sur son repli.
+    planCapabilities: sub?.plan.limits ? toPlanCapabilities(sub.plan, sub.plan.limits) : null,
     enLigneSeule: f.enLigneSeule,
     prenom: f.prenom,
     nom: f.nom,

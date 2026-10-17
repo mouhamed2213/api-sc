@@ -58,9 +58,9 @@ export const MediaService = {
         kind === "image" ? "Une image ne peut pas dépasser 12 Mo" : "Une vidéo ne peut pas dépasser 30 Mo"
       );
     }
-    if (kind === "image" && limits.maxPhotos < 1) {
-      throw forbidden("FORMULE_SANS_PHOTOS", "Les photos ne sont pas disponibles avec cette formule");
-    }
+    // Pas de contrôle de quota sur les images : elles servent aussi à la photo de profil, au logo et à la
+    // couverture, autorisés dans toutes les formules (Essentielle comprise, maxPhotos = 0 pour la galerie).
+    // Le quota de la galerie est vérifié à l'enregistrement de la fiche (enforcePlanLimits).
     if (kind === "video" && limits.maxVideos < 1) {
       throw forbidden("FORMULE_SANS_VIDEOS", "Les vidéos ne sont pas disponibles avec cette formule");
     }
