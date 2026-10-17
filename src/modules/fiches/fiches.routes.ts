@@ -2,6 +2,7 @@ import { Router, raw } from "express";
 import { optionalAuth, requireAuth } from "../../middlewares/auth";
 import { validate } from "../../middlewares/validate";
 import { MediaController } from "../media/media.controller";
+import { mediaUploadQuery } from "../media/media.validation";
 import { FicheController } from "./fiche.controller";
 import {
   createFicheSchema,
@@ -58,7 +59,7 @@ fichesRouter.post(
 // L'upload utilise le corps binaire du fichier, pas du JSON/base64.
 fichesRouter.post(
   "/:id/media",
-  validate({ params: idParam }),
+  validate({ params: idParam, query: mediaUploadQuery }),
   raw({ type: () => true, limit: "30mb" }),
   MediaController.upload
 );

@@ -5,10 +5,12 @@ import { forbidden, notFound, unprocessable } from "../../lib/httpError";
 import type { AuthUser } from "../../types/user";
 import { getEffectiveSubscription } from "../subscriptions/subscriptions.service";
 import { S3StorageProvider } from "../../infrastructure/storage/s3.storage";
-import { optimizeMedia } from "./media.processor";
+import { optimizeMedia, probeDurationSeconds } from "./media.processor";
 import {
   MEDIA_FORMATS,
+  assertMenuVideoDuration,
   mediaMaxBytes,
+  type MediaPurpose,
   resolveMediaMime,
   validateMediaSignature,
 } from "./media.validation";
@@ -28,7 +30,7 @@ function publicUrl(ficheId: number, fileName: string) {
 }
 
 export const MediaService = {
-  async upload(user: AuthUser, ficheId: number, body: Buffer, rawMime?: string) {
+  async upload(user: AuthUser, ficheId: number, body: Buffer, rawMime?: string, purpose?: MediaPurpose) {
     if (!Buffer.isBuffer(body) || body.length === 0) {
       throw unprocessable("FICHIER_VIDE", "Le fichier envoyé est vide");
     }
@@ -66,6 +68,13 @@ export const MediaService = {
     }
 
     validateMediaSignature(body, mime);
+    if (kind === "video" && purpose === "menu") {
+      if (!limits.hasMenu || !limits.menuVideoPerItem) {
+        throw forbidden("FORMULE_SANS_VIDEO_MENU", "Les vidéos de menu ne sont pas disponibles avec cette formule");
+      }
+      // Même règle que l'éditeur (30 s), mais appliquée ici : le navigateur n'est pas une garantie.
+      assertMenuVideoDuration(await probeDurationSeconds(body, mime), limits.maxMenuVideoSeconds);
+    }
     const optimized = await optimizeMedia(body, mime);
     const finalMime = optimized.mime;
     const finalFormat = MEDIA_FORMATS[finalMime];

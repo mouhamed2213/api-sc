@@ -2,6 +2,7 @@ import type { Request, Response } from "express";
 import { asyncHandler } from "../../lib/asyncHandler";
 import { HttpError } from "../../lib/httpError";
 import { MediaService } from "./media.service";
+import type { MediaPurpose } from "./media.validation";
 
 export const MediaController = {
   upload: asyncHandler(async (req: Request, res: Response) => {
@@ -13,7 +14,8 @@ export const MediaController = {
       req.user!,
       Number(req.params.id),
       req.body,
-      Array.isArray(contentType) ? contentType[0] : contentType
+      Array.isArray(contentType) ? contentType[0] : contentType,
+      req.query.purpose as MediaPurpose
     );
     res.status(201).json({ media });
   }),

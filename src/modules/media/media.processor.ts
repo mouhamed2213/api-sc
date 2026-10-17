@@ -3,7 +3,7 @@ import { mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { HttpError } from "../../lib/httpError";
-import type { SupportedMediaMime } from "./media.validation";
+import { parseProbeDuration, type SupportedMediaMime } from "./media.validation";
 
 export interface ProcessedMedia { body: Buffer; mime: SupportedMediaMime; }
 
@@ -40,5 +40,32 @@ export async function optimizeMedia(body: Buffer, mime: SupportedMediaMime, ffmp
     const optimized = await readFile(outputPath);
     if (!optimized.length) throw new HttpError(422, "OPTIMISATION_MEDIA_ECHOUEE", "Le fichier optimisé est vide");
     return optimized.length < body.length ? { body: optimized, mime: outputMime } : { body, mime };
+  } finally { await rm(directory, { recursive: true, force: true }); }
+}
+
+const probePathFor = (ffmpegPath: string) =>
+  process.env.FFPROBE_PATH || (/ffmpeg$/.test(ffmpegPath) ? ffmpegPath.replace(/ffmpeg$/, "ffprobe") : "ffprobe");
+
+/** Durée d'une vidéo en secondes (ffprobe, sans shell) ; `null` si elle est illisible. */
+export async function probeDurationSeconds(body: Buffer, mime: SupportedMediaMime, ffmpegPath = process.env.FFMPEG_PATH || "ffmpeg"): Promise<number | null> {
+  const directory = await mkdtemp(join(tmpdir(), "support-connecte-probe-"));
+  const inputPath = join(directory, mime === "video/webm" ? "input.webm" : "input.mp4");
+  try {
+    await writeFile(inputPath, body);
+    const stdout = await new Promise<string>((resolve, reject) => {
+      const child = spawn(probePathFor(ffmpegPath), ["-v", "error", "-show_entries", "format=duration", "-of", "default=noprint_wrappers=1:nokey=1", inputPath], { stdio: ["ignore", "pipe", "ignore"] });
+      let out = "";
+      child.stdout.setEncoding("utf8");
+      child.stdout.on("data", chunk => { out = (out + chunk).slice(0, 200); });
+      child.once("error", error => {
+        if ("code" in error && error.code === "ENOENT") {
+          reject(new HttpError(503, "MEDIA_PROCESSOR_UNAVAILABLE", "Le serveur doit disposer de FFprobe (livré avec FFmpeg) pour vérifier les vidéos"));
+          return;
+        }
+        reject(error);
+      });
+      child.once("close", code => code === 0 ? resolve(out) : resolve(""));
+    });
+    return parseProbeDuration(stdout);
   } finally { await rm(directory, { recursive: true, force: true }); }
 }

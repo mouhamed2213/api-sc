@@ -6,6 +6,29 @@ export const publicMediaParams = z.object({
   key: z.string().regex(/^[0-9a-f-]{36}\.(jpg|png|webp|mp4|webm)$/i),
 });
 
+// `purpose=menu` : vidéo d'un plat du menu interactif, soumise à une durée maximale (plan_limits.maxMenuVideoSeconds).
+export const mediaUploadQuery = z.object({ purpose: z.enum(["menu"]).optional() });
+export type MediaPurpose = z.infer<typeof mediaUploadQuery>["purpose"];
+
+/** Lit la durée (secondes) affichée par `ffprobe -show_entries format=duration`. */
+export function parseProbeDuration(output: string): number | null {
+  const value = Number.parseFloat(output.trim().split(/\r?\n/)[0] ?? "");
+  return Number.isFinite(value) && value >= 0 ? value : null;
+}
+
+/** Tolérance de 0,5 s, comme le contrôle fait côté navigateur. */
+export function assertMenuVideoDuration(seconds: number | null, maxSeconds: number) {
+  if (seconds === null) {
+    throw unprocessable("DUREE_VIDEO_INCONNUE", "Impossible de lire la durée de la vidéo");
+  }
+  if (seconds > maxSeconds + 0.5) {
+    throw unprocessable(
+      "VIDEO_TROP_LONGUE",
+      `Une vidéo de menu ne peut pas dépasser ${maxSeconds} secondes`
+    );
+  }
+}
+
 export const MEDIA_FORMATS = {
   "image/jpeg": { extension: "jpg", kind: "image" },
   "image/png": { extension: "png", kind: "image" },
