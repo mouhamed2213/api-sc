@@ -23,6 +23,7 @@ Variables de configuration utilisées :
 - `S3_REGION` : région attendue par le service S3.
 - `S3_BUCKET` : bucket utilisé.
 - `FFMPEG_PATH` : chemin du binaire FFmpeg, par défaut `ffmpeg`.
+- `FFPROBE_PATH` : chemin de FFprobe (livré avec FFmpeg), par défaut déduit de `FFMPEG_PATH`. Sert à vérifier la durée des vidéos de menu.
 
 ## Dépendance d'optimisation
 
@@ -41,3 +42,17 @@ La lecture des vidéos prend en charge les requêtes HTTP `Range` afin de permet
 ## Tests
 
 Les tests unitaires de `media.validation.ts` couvrent les formats MIME, les signatures, les limites de taille et l'extraction des références. Exécuter `npm test`, puis `npm run typecheck` et `npm run build` dans l'environnement backend. Le pipeline réel doit aussi être testé avec SeaweedFS et FFmpeg installés.
+
+## Vidéos de menu (`?purpose=menu`)
+
+`POST /api/fiches/:id/media?purpose=menu` : le serveur lit la durée avec FFprobe et refuse (422 `VIDEO_TROP_LONGUE`) toute
+vidéo qui dépasse `plan_limits.maxMenuVideoSeconds` (tolérance 0,5 s). Formule sans menu ou sans vidéo par plat : 403
+`FORMULE_SANS_VIDEO_MENU`. Sans `purpose`, aucune limite de durée (vidéos de galerie).
+
+Les images ne sont plus bloquées par `maxPhotos` : elles servent aussi à la photo de profil, au logo et à la couverture.
+Le quota de la galerie est contrôlé à l'enregistrement de la fiche (`PATCH /api/fiches/:id`).
+
+## Contrôle de version (`PATCH /api/fiches/:id`)
+
+La fiche expose `updatedAt`. Le client peut renvoyer `baseUpdatedAt` (la valeur qu'il a lue) : si la fiche a changé entre-temps,
+le serveur répond 409 `CONFLIT_VERSION` sans rien écrire. Le champ est facultatif (absent = pas de contrôle).
