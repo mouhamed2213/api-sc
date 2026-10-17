@@ -10,7 +10,7 @@ import type {
   Theme,
 } from "../../database/prisma/generated/prisma/client";
 import { prisma } from "../../database/prisma/prisma-client";
-import { HttpError, forbidden, notFound } from "../../lib/httpError";
+import { HttpError, conflict, forbidden, notFound } from "../../lib/httpError";
 import { logger } from "../../lib/logger";
 import {
   getEffectiveSubscription,
@@ -212,6 +212,7 @@ export const FicheService = {
     const input = enforcePlanLimits(sub.plan.limits, normalizeMediaReferences(rawInput)); // 422 si dépassement
     const previousSnapshot = await loadFull(id);
     const d = input.data;
+    const baseVersion = rawInput.baseUpdatedAt ? new Date(rawInput.baseUpdatedAt) : null;
 
     await prisma.$transaction(
       async tx => {
@@ -245,7 +246,17 @@ export const FicheService = {
           enteteTheme: d?.entete?.theme ? up<Theme>(d.entete.theme) : undefined,
           enteteCouverture: nullIfEmpty(d?.entete?.couverture),
         };
-        await tx.fiche.update({ where: { id }, data: scalar });
+        // Écriture conditionnelle : si la fiche a changé depuis le chargement de l'éditeur (autre onglet, autre
+        // appareil, admin), on n'écrase pas. Le test et l'écriture sont dans la même requête SQL : pas de course.
+        const written = await tx.fiche.updateMany({
+          where: { id, ...(baseVersion ? { updatedAt: baseVersion } : {}) },
+          data: { ...scalar, updatedAt: new Date() },
+        });
+        if (written.count === 0)
+          throw conflict(
+            "CONFLIT_VERSION",
+            "Cette fiche a été modifiée ailleurs depuis son ouverture. Rechargez-la pour voir la dernière version."
+          );
 
         // Règle : une liste fournie REMPLACE l'existante ; une liste absente n'est pas touchée.
         if (d?.reseauxSociaux) {

@@ -55,6 +55,8 @@ export function toFicheDto(f: FicheFull, sub: EffectiveSubscription | null) {
     googlePlaceId: s(f.googlePlaceId),
     dateEcheance: sub?.endsAt ? sub.endsAt.toISOString().slice(0, 10) : null,
     scansTotal: f.scansTotal,
+    // Version de la fiche : renvoyée par l'éditeur (baseUpdatedAt) pour détecter une modification concurrente.
+    updatedAt: f.updatedAt.toISOString(),
     data: {
       secteur: f.secteur ? lower(f.secteur) : undefined,
       premierBouton: lower(f.premierBouton),

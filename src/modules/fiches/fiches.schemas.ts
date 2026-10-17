@@ -116,6 +116,8 @@ export const updateFicheSchema = z
     adresse: text(250),
     googlePlaceId: text(200),
     data: dataSchema,
+    // Version vue par le client au chargement (champ `updatedAt` de la fiche). Facultatif : absent = pas de contrôle.
+    baseUpdatedAt: z.string().datetime(),
   })
   .partial();
 
